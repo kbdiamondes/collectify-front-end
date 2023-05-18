@@ -4,24 +4,26 @@ import { SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from "react
 export default function LoginScreen(){
     return(
         <SafeAreaView>
-            <Text style={styles.textStyleSubheader}>Back</Text>
-            <Text style={styles.textStyleHeader}>Login</Text>
+            <View style={styles.container}>
+                <Text style={styles.textStyleSubheader}>Back</Text>
+                <Text style={styles.textStyleHeader}>Login</Text>
 
-            <View style={styles.buttonUnfilledContainer}>
-                <Pressable style={styles.buttonUnfilled}>
-                    <Text style={styles.buttonUnfilledLabel}>No account yet? Register Now!</Text>
-                </Pressable>
-            </View>
+                <View style={styles.buttonUnfilledContainer}>
+                    <Pressable style={styles.buttonUnfilled}>
+                        <Text style={styles.buttonUnfilledLabel}>No account yet? Register Now!</Text>
+                    </Pressable>
+                </View>
 
 
-            <Text style={styles.textStyleSmallest}>Forgot Password?</Text>
+                <Text style={styles.textStyleSmallest}>Forgot Password?</Text>
 
-            <TextInput style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
-            <TextInput style={styles.textBoxStyle} placeholder="Enter password" ></TextInput>
-            <View style={styles.buttonContainer}>
-                <Pressable style={styles.button} onPressIn={()=>alert("Logged")}>
-                    <Text style={styles.buttonLabel}>Login</Text>
-                </Pressable>
+                <TextInput style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
+                <TextInput style={styles.textBoxStyle} placeholder="Enter password" ></TextInput>
+                <View style={styles.buttonContainer}>
+                    <Pressable style={styles.button} onPressIn={()=>alert("Logged")}>
+                        <Text style={styles.buttonLabel}>Login</Text>
+                    </Pressable>
+                </View>
             </View>
         </SafeAreaView>
     );
@@ -29,6 +31,14 @@ export default function LoginScreen(){
 }
 
 const styles = StyleSheet.create({
+    container: {
+        justifyContent: 'flex-start', 
+        alignItem: 'flext-start', 
+        paddingTop: 80, 
+        paddingLeft: 35,
+        paddingRight: 35, 
+        paddingBottom: 80
+    }, 
     textStyleSubheader:{
         paddingTop: 35, 
         paddingBottom: 25
