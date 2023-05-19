@@ -1,24 +1,23 @@
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
 
-type PaymentProps = {
+type TransactionHistoryProps = {
     key:number, 
-    itemName:String; 
+    personName:String; 
     itemCollectible: number; 
+    transactionDate: String; 
 }
 
-export default function DuePaymentList(props: PaymentProps){
+export default function DuePaymentList(props: TransactionHistoryProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                 <View style={styles.square}/>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636'}}>{props.itemName}</Text>
-                        <Text style={{color: '#92A0A8'}}>Php {props.itemCollectible}</Text>                                  
+                        <Text style={{color:'#363636',fontSize: 14}}>{props.personName}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: 12}}>{props.transactionDate}</Text>                                  
                     </View>
-                <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPress={()=>alert("hello")}>
-                        <Text style={styles.buttonLabel}>Pay</Text>
-                    </Pressable>
+                <View style={styles.priceContainer}>
+                        <Text style={styles.priceLabel}>Php {props.itemCollectible}</Text>
                 </View>
             </View>
             
@@ -48,13 +47,13 @@ const styles = StyleSheet.create({
     itemText: {
         maxWidth: '80%', 
     }, 
-    buttonContainer: {
-        width: 50, 
+    priceContainer: {
+        width: 80, 
         height: 40,
-        backgroundColor:'#2C85E7',
-        marginLeft: 80,
+        marginLeft: 100, 
         justifyContent:'space-evenly',
-        borderRadius: 5
+        borderRadius: 5,
+        maxWidth: '80%'
     }, 
     button:{
         borderRadius: 10 ,
@@ -64,8 +63,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         flexDirection: 'row'
     },
-    buttonLabel:{
-        color: '#fff', 
-        fontSize: 12
+    priceLabel:{
+        color: '#363636', 
+        fontSize: 15,
+        fontWeight: 'bold'
     },
 }); 

@@ -1,16 +1,7 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 import DuePaymentList from './Lists/DuePaymentList';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Login from '../Login';
+
 import React, { useState } from 'react';
-
-function bottomNavigator (){
-    const Tab = createBottomTabNavigator(); 
-
-    <Tab.Navigator>
-        <Tab.Screen name="Login" component={Login}/>
-    </Tab.Navigator>
-}
 
 const dueItems = [
     {

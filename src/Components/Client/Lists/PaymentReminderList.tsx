@@ -1,23 +1,24 @@
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
+import {Ionicons} from '@expo/vector-icons'; 
 
-type PaymentProps = {
+type PaymentReminderProps = {
     key:number, 
-    itemName:String; 
-    itemCollectible: number; 
+    collectorName:String; 
+    messageStatus: String; 
 }
 
-export default function DuePaymentList(props: PaymentProps){
+export default function PaymentReminderList(props: PaymentReminderProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                 <View style={styles.square}/>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636'}}>{props.itemName}</Text>
-                        <Text style={{color: '#92A0A8'}}>Php {props.itemCollectible}</Text>                                  
+                        <Text style={{color:'#363636', fontSize: 14}}>{props.collectorName}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: 12}}>{props.messageStatus}</Text>                                  
                     </View>
                 <View style={styles.buttonContainer}>
                     <Pressable style={styles.button} onPress={()=>alert("hello")}>
-                        <Text style={styles.buttonLabel}>Pay</Text>
+                        <Text style={styles.buttonLabel}>Reply</Text>
                     </Pressable>
                 </View>
             </View>
@@ -51,8 +52,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         width: 50, 
         height: 40,
-        backgroundColor:'#2C85E7',
-        marginLeft: 80,
+        marginLeft: 166,
         justifyContent:'space-evenly',
         borderRadius: 5
     }, 
@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     buttonLabel:{
-        color: '#fff', 
-        fontSize: 12
+        color: '#363636', 
+        fontSize: 15,
+        fontWeight: 'bold'
     },
 }); 
