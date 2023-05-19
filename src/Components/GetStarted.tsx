@@ -1,8 +1,20 @@
-import { Link } from 'expo-router';
+
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, SafeAreaView, View, Text, Image, Pressable} from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { CheckScreenNavigationprop } from "../../App";
+
+
 
 const PlaceHolderImage = require('../../assets/vector-1-welcome.png');
+/* Solution for no need to type check the routes and their parameters
+interface NavigationProps{
+    navigation: NativeStackNavigationProp<any>
+}
+*/
 export default function GetStarted(){
+    //Const is declared to use the useNavigation hook to have access on "navigation" object
+    const navigation = useNavigation<CheckScreenNavigationprop>(); 
     return(
         <SafeAreaView>
                 <View style={styles.container}>
@@ -13,8 +25,9 @@ export default function GetStarted(){
             <Text style={styles.textHeader}>Welcome</Text>
             <Text style={styles.textMultiline}>Record, track, and collect payments from clients with ease. </Text>
 
+          
             <View style={styles.buttonContainer}>
-                <Pressable style={styles.button}>
+                <Pressable style={styles.button} onPress={()=>navigation.navigate('Login')}>
                         <Text style={styles.buttonLabel}>Get Started</Text>
                 </Pressable>
             </View>
@@ -94,12 +107,12 @@ const styles = StyleSheet.create({
     }, 
 
     widget:{
-        borderRadius: 10 ,
+        borderRadius: 15 ,
         width: '100%', 
         height: '100%', 
         alignItems: 'center', 
         justifyContent: 'center', 
-        flexDirection: 'row'
+        flexDirection: 'row', 
     },
 
     widgetLabel:{
