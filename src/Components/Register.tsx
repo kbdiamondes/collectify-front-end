@@ -18,8 +18,8 @@ export default function Login(){
                 <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Full Name" ></TextInput>
                 <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Email Address" ></TextInput>
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPressIn={()=>alert("Logged")}>
-                        <Text style={styles.buttonLabel}>Login</Text>
+                    <Pressable style={styles.button} onPressIn={()=>alert("Registered'")}>
+                        <Text style={styles.buttonLabel}>Register</Text>
                     </Pressable>
                 </View>                
             </View>
@@ -31,11 +31,9 @@ export default function Login(){
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'flex-start', 
-        alignItem: 'flext-start', 
-        paddingTop: 80, 
-        paddingLeft: 35,
-        paddingRight: 35, 
-        paddingBottom: 80
+        alignItem: 'flext-start',  
+        paddingHorizontal: 35,
+        paddingVertical: 80
     }, 
     textStyleSubheader:{
         paddingTop: 35, 

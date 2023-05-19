@@ -35,7 +35,7 @@ export default function GetStarted(){
 
             <View style={styles.widgetContainer}>
                 <View style={styles.widget}>
-                    <Text style={styles.widgetLabel}>Thomas just saved $37.52 by   lowering his ADT Security bill.</Text>
+                    <Text style={styles.widgetLabel}>Thomas just saved $37.52 by lowering his ADT Security bill.</Text>
                 </View>    
             </View>
         
@@ -54,8 +54,7 @@ const styles = StyleSheet.create({
         fontSize:55,
         fontWeight: 'bold', 
         paddingTop: 360, 
-        paddingLeft: 35, 
-        paddingRight: 35, 
+        paddingHorizontal: 35, 
         color: '#203949'
     }, 
 
@@ -64,8 +63,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         flexDirection: 'row', 
         paddingTop: 7, 
-        paddingLeft: 35, 
-        paddingRight: 35, 
+        paddingHorizontal: 35, 
         color: '#707070'
 
     },
