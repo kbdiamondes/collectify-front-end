@@ -31,7 +31,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5F7F9',
         padding: 21, 
         borderRadius: 10, 
-        marginBottom: 20
+        marginBottom: 20,
+        shadowColor: '#000', 
+        shadowOffset: {
+            width:0,
+            height: 2,
+        },
+        shadowRadius: 4,
+        elevation: 2
     },
     itemLeft:{
         flexDirection:'row',
