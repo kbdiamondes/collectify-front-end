@@ -32,10 +32,10 @@ export default function App(){
       <Stack.Screen name="GetStarted" component={GetStarted} options={{headerShown:false}}/>
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
-      <Stack.Screen name="DuePayments" component={TabNavigator} options={{title:'Due Payments', headerTitleAlign: 'center'}}/>
-      <Stack.Screen name="ScheduledPayments" component={TabNavigator} options={{title:'Scheduled Payments', headerTitleAlign: 'center'}}/>
-      <Stack.Screen name="PaymentReminders" component={TabNavigator} options={{title:'Payment Reminders', headerTitleAlign: 'center'}}/>
-      <Stack.Screen name="TransactionHistory" component={TabNavigator} options={{title:'Transaction History', headerTitleAlign: 'center'}}/>
+      <Stack.Screen name="DuePayments" component={TabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
+      <Stack.Screen name="ScheduledPayments" component={TabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="PaymentReminders" component={TabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="TransactionHistory" component={TabNavigator} options={{headerShown: false}}/>
     </Stack.Navigator>
   </NavigationContainer>
   );

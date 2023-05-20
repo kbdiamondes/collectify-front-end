@@ -25,7 +25,7 @@ export default function Login(){
                 <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
                 <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" ></TextInput>
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPressIn={()=>navigation.navigate('DuePayments')}>
+                    <Pressable style={styles.button} onPressIn={()=>navigation.push('DuePayments')}>
                         <Text style={styles.buttonLabel}>Login</Text>
                     </Pressable>
                 </View>               
