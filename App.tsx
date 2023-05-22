@@ -8,6 +8,7 @@ import DuePayments from './src/Components/Client/DuePayments';
 import { TabNavigator } from './src/Components/Client/ClientTabNavigator';
 import { CollectorTabNavigator } from './src/Components/Collector/CollectorTabNavigator';
 import TellMeAboutYourself from './src/Components/TellMe';
+import { ResellerTabNavigator } from './src/Components/Reseller/ResellerTabNavigator';
 
 const Stack = createNativeStackNavigator<RootStackParamList>(); 
 
@@ -25,7 +26,9 @@ type RootStackParamList = {
   FollowUp: undefined;
   Assurance: undefined; 
   TellUsMoreAboutYourself: undefined; 
-
+  SoldItems: undefined; 
+  MyCollectors: undefined; 
+  SendCollectors: undefined; 
 };
 
 //used for typechecking upon navigating screens to see if Screen name is not void
@@ -46,6 +49,9 @@ export default function App(){
       <Stack.Screen name="Collect" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="FollowUp" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="MyCollectors" component={ResellerTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="SendCollectors" component={ResellerTabNavigator} options={{headerShown: false}}/>
     </Stack.Navigator>
   </NavigationContainer>
   );

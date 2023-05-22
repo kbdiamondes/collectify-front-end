@@ -17,7 +17,7 @@ export default function TellMeAboutYourself(){
                 <Text style={styles.textMultiline}>Select the business model that apply to you from the cards below</Text>               
             </View>
             <View style={styles.containerBottom} >
-                <Pressable onPress={()=>navigation.navigate('DuePayments')}>
+                <Pressable onPress={()=>navigation.navigate('SoldItems')}>
                     <View style={styles.box}> 
                         <View style={styles.imageContainer}>    
                                 <Image source={ResellImagePlaceHolder}/>
