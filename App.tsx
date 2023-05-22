@@ -27,8 +27,8 @@ type RootStackParamList = {
   Assurance: undefined; 
   TellUsMoreAboutYourself: undefined; 
   SoldItems: undefined; 
-  MyCollectors: undefined; 
-  SendCollectors: undefined; 
+  MyCollector: undefined; 
+  SendCollector: undefined; 
 };
 
 //used for typechecking upon navigating screens to see if Screen name is not void
@@ -50,8 +50,8 @@ export default function App(){
       <Stack.Screen name="FollowUp" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="MyCollectors" component={ResellerTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="SendCollectors" component={ResellerTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="MyCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="SendCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
     </Stack.Navigator>
   </NavigationContainer>
   );

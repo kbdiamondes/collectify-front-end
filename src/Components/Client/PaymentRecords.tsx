@@ -51,7 +51,7 @@ export default function PaymentRecords(){
         <SafeAreaView>
             <ScrollView>
             <View style={styles.container}>
-                <Text style={styles.textHeader} >Recent Payments</Text>
+                <Text style={styles.textHeader} >Recent Payment Records</Text>
                 {
                     recentPaymentRecords.map((item, index)=>{
                         return <PaymentRecordLists key={index} collectorName={item.collectorName} transactionDate={item.transactionDate} recentMessage={item.recentMessage}/>
