@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     priceContainer: {
         width: 80, 
         height: 40,
-        marginLeft: 100, 
+        marginLeft: 80,
         justifyContent:'space-evenly',
         borderRadius: 5,
         maxWidth: '80%'

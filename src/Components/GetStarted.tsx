@@ -32,12 +32,6 @@ export default function GetStarted(){
                 </Pressable>
             </View>
             
-
-            <View style={styles.widgetContainer}>
-                <View style={styles.widget}>
-                    <Text style={styles.widgetLabel}>Thomas just saved $37.52 by lowering his ADT Security bill.</Text>
-                </View>    
-            </View>
         
         </SafeAreaView>
     );
@@ -94,13 +88,13 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer:{
-        width: 214, 
+        width: 330, 
         height: 65, 
         backgroundColor: '#707070',
         alignItems: 'center', 
         justifyContent: 'center', 
         borderRadius: 5, 
-        marginLeft: 90, 
+        marginHorizontal:35, 
         marginTop: 138
     }, 
 
@@ -127,6 +121,7 @@ const styles = StyleSheet.create({
         borderRadius: 5, 
         marginLeft: 55, 
         marginTop: 65,
+        marginBottom: 25, 
     }, 
 
 });

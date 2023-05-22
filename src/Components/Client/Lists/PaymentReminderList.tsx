@@ -57,10 +57,9 @@ const styles = StyleSheet.create({
         maxWidth: '80%', 
     }, 
     buttonContainer: {
-        width: 50, 
+        width: 40, 
         height: 40,
-        marginLeft: 166,
-        justifyContent:'space-evenly',
+        marginLeft: 140,
         borderRadius: 5
     }, 
     button:{

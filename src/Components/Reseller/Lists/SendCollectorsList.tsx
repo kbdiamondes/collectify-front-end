@@ -56,10 +56,10 @@ const styles = StyleSheet.create({
         maxWidth: '80%', 
     }, 
     buttonContainer: {
-        width: 60, 
+        width: 65, 
         height: 40,
         backgroundColor:'#2C85E7',
-        marginLeft: 105,
+        marginLeft: 90,
         justifyContent:'space-evenly',
         borderRadius: 5
     }, 

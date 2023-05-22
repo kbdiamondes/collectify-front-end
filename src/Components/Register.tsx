@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
     textBoxStyle:{
         color:'#363636', 
-        width: 340, 
+        width: 320, 
         height: 50, 
         paddingLeft: 20,
         borderColor: '#F0F2F4', 
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer:{
-        width: 340, 
+        width: 320, 
         height: 48, 
         backgroundColor: '#2C85E7',
         alignItems: 'center', 

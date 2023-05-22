@@ -1,5 +1,5 @@
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { View, Text, Image, StyleSheet, Pressable} from "react-native";
+import { View, Text, Image, StyleSheet, Pressable, ScrollView} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 
@@ -11,11 +11,13 @@ export default function TellMeAboutYourself(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     return(
         <SafeAreaProvider>
+            
             <View style={styles.containerTop}>
                 
                 <Text style={styles.textHeader}>Tell us about yourself</Text> 
                 <Text style={styles.textMultiline}>Select the business model that apply to you from the cards below</Text>               
             </View>
+            <ScrollView>
             <View style={styles.containerBottom} >
                 <Pressable onPress={()=>navigation.navigate('SoldItems')}>
                     <View style={styles.box}> 
@@ -44,10 +46,11 @@ export default function TellMeAboutYourself(){
                         <Text style={styles.containerTextHeader}>I want to Collect</Text>
                     </View>
                 </Pressable>
-
+                
             </View>
+            </ScrollView>
 
-            
+         
           
         </SafeAreaProvider>
     );
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
     box:{
         width: 257, 
         height: 170, 
-        marginHorizontal: 75,
+        marginHorizontal: 69,
         marginBottom: 15, 
         marginTop: 18, 
         backgroundColor: '#FFFFFF', 

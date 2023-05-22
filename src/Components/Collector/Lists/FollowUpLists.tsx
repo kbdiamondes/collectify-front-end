@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
         maxWidth: '80%', 
     }, 
     followupContainer: {
-        width: 80, 
+        width: 75, 
         height: 40,
-        marginLeft: 130, 
+        marginLeft: 105, 
         justifyContent:'space-evenly',
         borderRadius: 5,
         maxWidth: '80%'

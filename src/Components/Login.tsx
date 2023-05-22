@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     },
 
     textBoxStyle:{
-        width: 340, 
+        width: 320, 
         height: 50, 
         paddingLeft: 20,
         borderColor: '#F0F2F4', 
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer:{
-        width: 340, 
+        width: 318, 
         height: 48, 
         backgroundColor: '#2C85E7',
         alignItems: 'center', 
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     },
 
     buttonUnfilledContainer:{
-        width: 340, 
+        width: 318, 
         height: 48, 
         backgroundColor: '#fff',
         alignItems: 'center', 

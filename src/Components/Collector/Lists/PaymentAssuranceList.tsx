@@ -18,7 +18,7 @@ export default function PaymentAssuranceList(props: PaymentAssuranceProps){
                         <Text style={{color: '#92A0A8', fontSize: 12}}>{props.responseStatus}</Text>                                  
                     </View>
                 <View style={styles.followupContainer}>
-                        <Ionicons name="arrow-forward" marginLeft={45} size={25}/>
+                        <Ionicons name="arrow-forward" marginLeft={35} size={25}/>
                 </View>
             </View>
             
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     followupContainer: {
         width: 80, 
         height: 40,
-        marginLeft: 130, 
+        marginLeft: 110, 
         justifyContent:'space-evenly',
         borderRadius: 5,
         maxWidth: '80%'

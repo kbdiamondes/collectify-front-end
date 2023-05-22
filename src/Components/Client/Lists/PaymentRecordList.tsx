@@ -55,9 +55,9 @@ const styles = StyleSheet.create({
         maxWidth: '80%', 
     }, 
     dateContainer: {
-        width: 50, 
+        width: 55, 
         height: 40,
-        marginLeft: 80,
+        marginLeft: 70,
     }, 
     dateLabel:{
         color: '#92A0A8', 
