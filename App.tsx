@@ -6,6 +6,8 @@ import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-na
 import Register from './src/Components/Register';
 import DuePayments from './src/Components/Client/DuePayments';
 import { TabNavigator } from './src/Components/Client/ClientTabNavigator';
+import { CollectorTabNavigator } from './src/Components/Collector/CollectorTabNavigator';
+import TellMeAboutYourself from './src/Components/TellMe';
 
 const Stack = createNativeStackNavigator<RootStackParamList>(); 
 
@@ -19,6 +21,10 @@ type RootStackParamList = {
   PaymentReminders: undefined; 
   TransactionHistory: undefined; 
   PaymentRecrods: undefined; 
+  Collect: undefined; 
+  FollowUp: undefined;
+  Assurance: undefined; 
+  TellUsMoreAboutYourself: undefined; 
 
 };
 
@@ -29,6 +35,7 @@ export default function App(){
   return(
     <NavigationContainer theme={MyTheme}>
     <Stack.Navigator initialRouteName="GetStarted">
+      <Stack.Screen name="TellUsMoreAboutYourself" component={TellMeAboutYourself} options={{headerShown:false}}/>
       <Stack.Screen name="GetStarted" component={GetStarted} options={{headerShown:false}}/>
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
@@ -36,6 +43,9 @@ export default function App(){
       <Stack.Screen name="ScheduledPayments" component={TabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="PaymentReminders" component={TabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="TransactionHistory" component={TabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="Collect" component={CollectorTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="FollowUp" component={CollectorTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
     </Stack.Navigator>
   </NavigationContainer>
   );

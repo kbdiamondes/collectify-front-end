@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
-import {Ionicons} from '@expo/vector-icons'
+
 export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
 
@@ -25,7 +25,7 @@ export default function Login(){
                 <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
                 <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" ></TextInput>
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPressIn={()=>navigation.push('DuePayments')}>
+                    <Pressable style={styles.button} onPressIn={()=>navigation.push('TellUsMoreAboutYourself')}>
                         <Text style={styles.buttonLabel}>Login</Text>
                     </Pressable>
                 </View>               
