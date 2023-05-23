@@ -9,6 +9,7 @@ import { TabNavigator } from './src/Components/Client/ClientTabNavigator';
 import { CollectorTabNavigator } from './src/Components/Collector/CollectorTabNavigator';
 import TellMeAboutYourself from './src/Components/TellMe';
 import { ResellerTabNavigator } from './src/Components/Reseller/ResellerTabNavigator';
+import TestApp from './src/Services/TestAxios';
 
 const Stack = createNativeStackNavigator<RootStackParamList>(); 
 
@@ -36,6 +37,23 @@ export type CheckScreenNavigationprop = NativeStackNavigationProp<RootStackParam
 
 export default function App(){
   return(
+      <TestApp/>
+  );
+}
+
+//Theme for the STACK
+const MyTheme = {
+  dark: false,
+  colors: {
+    primary: 'rgb(255, 45, 85)',
+    background: 'rgb(255, 255, 255)',
+    card: 'rgb(21,98,199)',
+    text: 'rgb(255, 255, 255)',
+    border: 'rgb(199, 199, 204)',
+    notification: 'rgb(255, 69, 58)',
+  },
+};
+/*
     <NavigationContainer theme={MyTheme}>
     <Stack.Navigator initialRouteName="GetStarted">
       <Stack.Screen name="TellUsMoreAboutYourself" component={TellMeAboutYourself} options={{headerShown:false}}/>
@@ -54,21 +72,4 @@ export default function App(){
       <Stack.Screen name="SendCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
     </Stack.Navigator>
   </NavigationContainer>
-  );
-}
-
-//Theme for the STACK
-const MyTheme = {
-  dark: false,
-  colors: {
-    primary: 'rgb(255, 45, 85)',
-    background: 'rgb(255, 255, 255)',
-    card: 'rgb(21,98,199)',
-    text: 'rgb(255, 255, 255)',
-    border: 'rgb(199, 199, 204)',
-    notification: 'rgb(255, 69, 58)',
-  },
-};
-/*
-
 */
