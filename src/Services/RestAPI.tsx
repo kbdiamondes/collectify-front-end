@@ -10,10 +10,17 @@ export interface IUser {
 
 }
 
-export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, boolean, string, IUser | any] => {
+export interface IDuePayments{
+    itemName: string; 
+    requiredCollectible: number; 
+    dueStatus: Boolean
+}
+
+export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, boolean, string, IUser | any, IDuePayments | any] => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [target_user, setUser] = useState<IUser[]>(); 
+    const [target_dues, setDues] = useState<IDuePayments[]>(); 
 
 
     function sendRequest(config: AxiosRequestConfig<any>) {
@@ -24,6 +31,7 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, boolean, 
                 setError('');
                 console.log(response);
                 setUser(response.data); //YOU NEED TO ADD THIS TO PUT ALL RESPONSES TO THE USESTATE
+                setDues(response.data)
             })
             .catch((error) => {
                 setError(error.message);
@@ -35,6 +43,6 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, boolean, 
 
 
 
-    return [sendRequest, loading, error, target_user];
+    return [sendRequest, loading, error, target_user, target_dues];
 
 }
