@@ -1,53 +1,34 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList} from 'react-native';
 import DuePaymentList from './Lists/SendCollectorsList';
 
-import React, { useState } from 'react';
+import React, { Key, useEffect, useState } from 'react';
 import SendCollectorsList from './Lists/SendCollectorsList';
-
-const indebtPerson = [
-    {
-        personName: 'Merilyn Monroe', 
-        itemCollectibles: 2500
-    },
-    {
-        personName: 'Merilyn Monroe', 
-        itemCollectibles: 2500
-    },
-    {
-        personName: 'Merilyn Monroe', 
-        itemCollectibles: 2500
-    },
-    {
-        personName: 'Merilyn Monroe', 
-        itemCollectibles: 2500
-    },
-    {
-        personName: 'Merilyn Monroe', 
-        itemCollectibles: 2500
-    },
-    {
-        personName: 'Merilyn Monroe', 
-        itemCollectibles: 2500
-    },
-]
-
+import { IClient, RestAPI } from '../../Services/RestAPI';
 
 export default function SendCollectors(){
-    
+    const [sendRequest, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
+
+    useEffect(() => {
+        sendRequest({ 
+            method: 'GET', 
+            url: "http://192.168.1.6:8080/client"
+        })
+    },[] )
 
     return(
 
         <SafeAreaView>
-            <ScrollView>
             <View style={styles.container}>
                 <Text style={styles.textHeader} >Assign Collectors</Text>
-                {
-                    indebtPerson.map((item, index)=>{
-                        return <SendCollectorsList key={index} personName={item.personName} itemCollectible={item.itemCollectibles}/>
-                    })
-                }
-            </View>    
-            </ScrollView>     
+                <FlatList
+                    data={client_user}
+                    keyExtractor={(client: IClient) => client.client_id.toString()}
+                    renderItem={({ item: client }) => (
+                        <SendCollectorsList client_id={client.client_id} fullname={client.fullName}/>
+
+                    )}
+                />
+            </View>       
         </SafeAreaView>
 
     );
@@ -66,3 +47,33 @@ const styles = StyleSheet.create({
         marginBottom: 10
     }
 });
+
+
+
+/* WORKING
+                <FlatList
+                    data={client_user}
+                    keyExtractor={(client: IClient) => client.client_id.toString()}
+                    renderItem={({ item: client }) => (
+                        <SendCollectorsList
+                        client_id={client.client_id}
+                        fullname={client.fullName}
+                        />
+                    )}
+                />
+
+*/
+                /*
+                {
+                    client_user?.map((client:IClient)=>{
+                        return <SendCollectorsList client_id={client.client_id} fullname={client.fullName}/>
+                    })
+                }
+                */
+/*
+                {
+                    indebtPerson.map((item, index)=>{
+                        return <SendCollectorsList key={index} personName={item.personName} itemCollectible={item.itemCollectibles}/>
+                    })
+                }
+*/

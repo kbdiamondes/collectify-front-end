@@ -1,22 +1,25 @@
+import { useNavigation } from '@react-navigation/native';
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
+import { CheckScreenNavigationprop } from '../../../../App';
 
 type SendCollectorListProps = {
-    key:number, 
-    personName: String, 
-    itemCollectible: number
+    client_id: number,
+    fullname: String, 
+    //itemCollectible: number
 }
 
 export default function SendCollectorsList(props: SendCollectorListProps){
+    const navigation = useNavigation<CheckScreenNavigationprop>(); 
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                 <View style={styles.square}/>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636'}}>{props.personName}</Text>
-                        <Text style={{color: '#92A0A8'}}>Php {props.itemCollectible}</Text>                                  
+                        <Text style={{color:'#363636'}}>{props.fullname}</Text>
+                        <Text style={{color: '#92A0A8'}}>Php 2500</Text>                                  
                     </View>
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPress={()=>alert("hello")}>
+                    <Pressable style={styles.button} onPress={()=>navigation.navigate('AssignCollector')}>
                         <Text style={styles.buttonLabel}>Send</Text>
                     </Pressable>
                 </View>
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
         width: 65, 
         height: 40,
         backgroundColor:'#2C85E7',
-        marginLeft: 90,
+        marginLeft: 50,
         justifyContent:'space-evenly',
         borderRadius: 5
     }, 
