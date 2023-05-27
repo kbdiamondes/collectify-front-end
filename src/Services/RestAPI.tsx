@@ -47,9 +47,9 @@ export interface IReseller{
 
 export interface IData{
     paymentDues: number, 
-    reseller: {reseller_id: number} [],
-    collector: {collector_id: number} [],
-    client: {client_id: number}[]; 
+    reseller: {reseller_id: number} ,
+    collector: {collector_id: number} ,
+    client: {client_id: number}; 
 
 }
 
@@ -64,7 +64,7 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
     function sendRequest(config: AxiosRequestConfig<any>) {
         setLoading(true);
 
-        axios(config)
+         axios(config)
             .then((response) => {
                 setError('');
                 console.log(response);
@@ -85,17 +85,19 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
             const config = {
               headers: {
                 'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*",
               },
             };
           
             axios
-              .post("http://192.168.1.6:8080/sendCollector", body, config)
+              .post("http://192.168.1.6:8080/sendCollectors", body, config)
               .then((response) => {
                 setData(response.data);
                 console.log(response.data)
               })
               .catch((error) => {
                 setError(error.response.data.message);
+                console.log(error.response.data.message);
               })
               .finally(() => {
                 setLoading(false);

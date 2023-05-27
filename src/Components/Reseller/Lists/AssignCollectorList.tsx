@@ -31,11 +31,9 @@ export default function AssignCollectorList(props: AssignCollectorProps){
         alert("Client ID: " + client_id + "\nCollector ID: " + props.collector_id); 
         assignCollector({
             paymentDues: paymentDues,
-            reseller: [{ reseller_id: reseller_id }],
-            collector: [{ collector_id: props.collector_id }],
-            client: [{ client_id: client_id }],
-
-           
+            reseller: { reseller_id: reseller_id },
+            collector: { collector_id: props.collector_id },
+            client: { client_id: client_id },
           });
           console.log("Payment Dues: " + paymentDues);
           console.log("Reseller ID: " + reseller_id);
