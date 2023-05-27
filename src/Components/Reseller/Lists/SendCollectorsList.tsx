@@ -6,6 +6,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 type SendCollectorListProps = {
     client_id: number,
     fullname: String, 
+    //requiredCollectible: number
 }
 
 
@@ -14,7 +15,7 @@ export default function SendCollectorsList(props: SendCollectorListProps){
 
     //function to navigate to AssignCollectorScreen and pass data
     const gotoAssignCollector = () => {
-        navigation.navigate('AssignCollector', {otherParam:props.client_id});
+        navigation.navigate('AssignCollector', {otherParam1:props.client_id});
     }
 
     return(

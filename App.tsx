@@ -31,7 +31,7 @@ export type RootStackParamList = {
   MyCollector: undefined; 
   SendCollector: undefined; 
   //assigned AssignCollector to receive data from SendCollector
-  AssignCollector: {otherParam: any}; 
+  AssignCollector: {otherParam1: any}; 
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>(); 

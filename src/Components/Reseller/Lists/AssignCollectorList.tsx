@@ -3,26 +3,47 @@ import {Ionicons} from '@expo/vector-icons';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../../../../App';
 import { useState } from 'react';
+import { RestAPI } from '../../../Services/RestAPI';
 
 
 type AssignCollectorProps = {
     collector_id:number, 
     collectorname: String; 
     collectoraddress: String; 
+    //OnSend is a function that accepts a number parameter coming from the AssignCollectorList component being mapped
+    onSend: (collectorId: number) => void;
 }
 
 export default function AssignCollectorList(props: AssignCollectorProps){
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
+
     //required for type checking of parameters and used for navigation & passing data
     //receiving end
-    const otherParam = useRoute<RouteProp<RootStackParamList, 'AssignCollector'>>().params.otherParam;
-    
-    const [clientid, setClientID] = useState(otherParam);
+    const selected_clientid = useRoute<RouteProp<RootStackParamList, 'AssignCollector'>>().params.otherParam1;
+    const [client_id, setClientID] = useState(selected_clientid);
+    let paymentDues = 2500;
+    let reseller_id=1;
 
+    //the function for the button that also uses the "Onsend" function to get the on clicked collector_id
+    const assignCollectorSubmit = ()=> {
+        //alert("Client ID: " + clientid + "\nPayment Dues: Php " + paymentDues);
+        props.onSend(props.collector_id);
+        alert("Client ID: " + client_id + "\nCollector ID: " + props.collector_id); 
+        assignCollector({
+            paymentDues: paymentDues,
+            reseller: [{ reseller_id: reseller_id }],
+            collector: [{ collector_id: props.collector_id }],
+            client: [{ client_id: client_id }],
 
-
-    const assignCollector = ()=> {
-        alert("Client ID: " + clientid);
+           
+          });
+          console.log("Payment Dues: " + paymentDues);
+          console.log("Reseller ID: " + reseller_id);
+          console.log( "Collector ID: " + props.collector_id);
+          console.log("Client ID: " + client_id);
     }
+
+    
 
     return(
 
@@ -34,7 +55,7 @@ export default function AssignCollectorList(props: AssignCollectorProps){
                 </View>
                 <View style={styles.textRightContainer}>
                     <View style={styles.textRightContainer}>
-                        <Pressable onPress={assignCollector}>
+                        <Pressable onPress={assignCollectorSubmit}>
                             <Ionicons name="send" color='#000000' size={20}/>
                         </Pressable>
                     </View>

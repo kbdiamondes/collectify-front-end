@@ -45,12 +45,21 @@ export interface IReseller{
     email: String, 
 }
 
-export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, boolean, string, IClient | any, IReseller | any, ICollector | any] => {
+export interface IData{
+    paymentDues: number, 
+    reseller: {reseller_id: number} [],
+    collector: {collector_id: number} [],
+    client: {client_id: number}[]; 
+
+}
+
+export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any] => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [client_user, setClientUser] = useState<IClient[]>([]); 
     const [reseller_user, setResellerUser] = useState<IReseller[]>(); 
     const [collector_user, setCollectorUser] = useState<ICollector[]>(); 
+    const [data, setData] = useState<IData[]>();
 
     function sendRequest(config: AxiosRequestConfig<any>) {
         setLoading(true);
@@ -69,10 +78,35 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, boolean, 
             .finally(() => setLoading(false))
     }
 
+        //POST - USER
+        function assignCollector(idata: IData) {
+            setLoading(true);
+            const body = JSON.stringify(idata);
+            const config = {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            };
+          
+            axios
+              .post("http://192.168.1.6:8080/sendCollector", body, config)
+              .then((response) => {
+                setData(response.data);
+                console.log(response.data)
+              })
+              .catch((error) => {
+                setError(error.response.data.message);
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          }
+          
+
     
 
 
 
-    return [sendRequest, loading, error,  client_user, reseller_user, collector_user];
+    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user];
 
 }

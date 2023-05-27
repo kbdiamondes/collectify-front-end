@@ -1,11 +1,11 @@
 import { SafeAreaView,View,  StyleSheet, Text, ScrollView, Pressable, Button, FlatList } from "react-native";
-import AssignCollectorList from "./Lists/AssignCollectorList";
 import {Ionicons} from '@expo/vector-icons'; 
 import { RouteProp, useRoute, useNavigation } from "@react-navigation/native";
 import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
-import { Key, useEffect } from "react";
+import { Key, useEffect, useState } from "react";
 import { ICollector, RestAPI } from "../../Services/RestAPI";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import AssignCollectorList from "./Lists/AssignCollectorList";
 
 /*
 const availableCollectors = [
@@ -53,9 +53,16 @@ type AssignCollectorProps = {
     route: RouteProp<RootStackParamList, 'AssignCollector'>
 }*/
 
+
+
+
+
+
+
 //naa ni siyay parameter dapat (client_id)
 export default function AssignCollectorScreen(){
-    const [sendRequest, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
+
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
@@ -65,7 +72,13 @@ export default function AssignCollectorScreen(){
 
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     
+    //Function to receive the collector ID that is mapped on the Flatlist
+    const handleSendButton = (collectorId: number) => {
+        // Do something with the collector ID
+        console.log('Clicked collector ID:', collectorId);
+      };
 
+      
     return(
         <SafeAreaView style={styles.container}>
             <View>
@@ -79,7 +92,8 @@ export default function AssignCollectorScreen(){
                     data={client_user}
                     keyExtractor={(collector: ICollector) => collector.collector_id.toString()}
                     renderItem={({ item: collector}) => (
-                        <AssignCollectorList collector_id={collector.collector_id} collectorname={collector.fullName} collectoraddress={collector.address}/>
+                        
+                        <AssignCollectorList collector_id={collector.collector_id} collectorname={collector.fullName} collectoraddress={collector.address} onSend={handleSendButton}/>
 
                     )}
                 />
@@ -102,6 +116,9 @@ export default function AssignCollectorScreen(){
     ); 
 
 }
+
+
+
 
 const styles = StyleSheet.create({
     container:{
@@ -148,7 +165,6 @@ const styles = StyleSheet.create({
         color: '#fff', 
         fontWeight: 'bold'
     },
-
 })
 
 

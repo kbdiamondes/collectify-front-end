@@ -7,7 +7,7 @@ import { IClient, RestAPI } from '../../Services/RestAPI';
 
 
 export default function SendCollectors(){
-    const [sendRequest, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
 
     useEffect(() => {
         sendRequest({ 
@@ -25,7 +25,7 @@ export default function SendCollectors(){
                     data={client_user}
                     keyExtractor={(client: IClient) => client.client_id.toString()}
                     renderItem={({ item: client }) => (
-                        <SendCollectorsList client_id={client.client_id} fullname={client.fullName}/>
+                        <SendCollectorsList client_id={client.client_id} fullname={client.fullName} />
 
                     )}
                 />
