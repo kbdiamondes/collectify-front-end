@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
+import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent, Modal, Alert} from 'react-native'
 import {Ionicons} from '@expo/vector-icons'; 
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../../../../App';
@@ -17,6 +17,8 @@ type AssignCollectorProps = {
 export default function AssignCollectorList(props: AssignCollectorProps){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
 
+
+    const [modalVisible, setModalVisible] = useState(false);
     //required for type checking of parameters and used for navigation & passing data
     //receiving end
     const selected_clientid = useRoute<RouteProp<RootStackParamList, 'AssignCollector'>>().params.otherParam1;
@@ -28,7 +30,8 @@ export default function AssignCollectorList(props: AssignCollectorProps){
     const assignCollectorSubmit = ()=> {
         //alert("Client ID: " + clientid + "\nPayment Dues: Php " + paymentDues);
         props.onSend(props.collector_id);
-        alert("Client ID: " + client_id + "\nCollector ID: " + props.collector_id); 
+        //alert("Client ID: " + client_id + "\nCollector ID: " + props.collector_id); 
+
         assignCollector({
             paymentDues: paymentDues,
             reseller: { reseller_id: reseller_id },
@@ -39,6 +42,27 @@ export default function AssignCollectorList(props: AssignCollectorProps){
           console.log("Reseller ID: " + reseller_id);
           console.log( "Collector ID: " + props.collector_id);
           console.log("Client ID: " + client_id);
+
+          if(!error){
+            Alert.alert('Collector Assignment', 'Successful!', [
+                {
+                  text: 'Close',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]);
+          }else{
+            Alert.alert('Collector Assignment', 'Failed!', [
+                {
+                  text: 'Close',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]);
+          }
+
     }
 
     
@@ -97,3 +121,48 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
 }); 
+
+
+const styles2 = StyleSheet.create({
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 22,
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: 'white',
+      borderRadius: 20,
+      padding: 35,
+      alignItems: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    button: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+    },
+    buttonOpen: {
+      backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+      backgroundColor: '#2196F3',
+    },
+    textStyle: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: 'center',
+    },
+  });
