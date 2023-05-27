@@ -1,8 +1,8 @@
 import React from 'react'; 
 import GetStarted from './src/Components/GetStarted';
 import Login from './src/Components/Login';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-navigation/native-stack';
+import { DefaultTheme, NavigationContainer, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp, createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import Register from './src/Components/Register';
 import DuePayments from './src/Components/Client/DuePayments';
 import { TabNavigator } from './src/Components/Client/ClientTabNavigator';
@@ -12,9 +12,8 @@ import { ResellerTabNavigator } from './src/Components/Reseller/ResellerTabNavig
 import TestApp from './src/Services/TestAxios';
 import AssignCollectorScreen from './src/Components/Reseller/AssignCollector';
 
-const Stack = createNativeStackNavigator<RootStackParamList>(); 
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Login: undefined;
   GetStarted: undefined;
   Register: undefined;
@@ -31,11 +30,15 @@ type RootStackParamList = {
   SoldItems: undefined; 
   MyCollector: undefined; 
   SendCollector: undefined; 
-  AssignCollector: undefined; 
+  //assigned AssignCollector to receive data from SendCollector
+  AssignCollector: {otherParam: any}; 
 };
+
+const Stack = createNativeStackNavigator<RootStackParamList>(); 
 
 //used for typechecking upon navigating screens to see if Screen name is not void
 export type CheckScreenNavigationprop = NativeStackNavigationProp<RootStackParamList>; 
+
 
 export default function App(){
   return(
@@ -55,7 +58,8 @@ export default function App(){
       <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="MyCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SendCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{headerShown: false}}/>
+      <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{ headerShown: false}}/>
+
     </Stack.Navigator>
   </NavigationContainer>
   );
@@ -74,5 +78,5 @@ const MyTheme = {
   },
 };
 /*
-
+<Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{headerShown: false}}/>
 */

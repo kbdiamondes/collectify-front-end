@@ -1,13 +1,29 @@
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
 import {Ionicons} from '@expo/vector-icons'; 
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { RootStackParamList } from '../../../../App';
+import { useState } from 'react';
 
 
 type AssignCollectorProps = {
-    collectorname: string; 
-    collectoraddress: string; 
+    collector_id:number, 
+    collectorname: String; 
+    collectoraddress: String; 
 }
 
 export default function AssignCollectorList(props: AssignCollectorProps){
+    //required for type checking of parameters and used for navigation & passing data
+    //receiving end
+    const otherParam = useRoute<RouteProp<RootStackParamList, 'AssignCollector'>>().params.otherParam;
+    
+    const [clientid, setClientID] = useState(otherParam);
+
+
+
+    const assignCollector = ()=> {
+        alert("Client ID: " + clientid);
+    }
+
     return(
 
         <View style={styles.item}>
@@ -18,7 +34,7 @@ export default function AssignCollectorList(props: AssignCollectorProps){
                 </View>
                 <View style={styles.textRightContainer}>
                     <View style={styles.textRightContainer}>
-                        <Pressable onPress={()=>alert("pressed!")}>
+                        <Pressable onPress={assignCollector}>
                             <Ionicons name="send" color='#000000' size={20}/>
                         </Pressable>
                     </View>
@@ -49,7 +65,7 @@ const styles = StyleSheet.create({
     textRightContainer: {
         width: 130, 
         height: 40,
-        paddingLeft: 100, 
+        paddingLeft: 50, 
         justifyContent:'space-evenly',
         borderRadius: 5
     }, 

@@ -1,9 +1,13 @@
-import { SafeAreaView,View,  StyleSheet, Text, ScrollView, Pressable, Button } from "react-native";
+import { SafeAreaView,View,  StyleSheet, Text, ScrollView, Pressable, Button, FlatList } from "react-native";
 import AssignCollectorList from "./Lists/AssignCollectorList";
 import {Ionicons} from '@expo/vector-icons'; 
-import { useNavigation } from "@react-navigation/native";
-import { CheckScreenNavigationprop } from "../../../App";
+import { RouteProp, useRoute, useNavigation } from "@react-navigation/native";
+import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
+import { Key, useEffect } from "react";
+import { ICollector, RestAPI } from "../../Services/RestAPI";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+/*
 const availableCollectors = [
     {
         collectorname: "John Doe", 
@@ -35,27 +39,52 @@ const availableCollectors = [
     }, 
 
 ]
+*/
+/*
+interface RouteProps{
+    route: {params: {otherParam:string}}; 
+}
 
+type AssignCollectorProps = NativeStackScreenProps<RootStackParamList, 'AssignCollector'>;
+//type AssignCollectorProps = RouteProp<RootStackParamList, 'AssignCollector'>;
+
+/*
+type AssignCollectorProps = {
+    route: RouteProp<RootStackParamList, 'AssignCollector'>
+}*/
 
 //naa ni siyay parameter dapat (client_id)
 export default function AssignCollectorScreen(){
-
+    const [sendRequest, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
+    useEffect(() => {
+        sendRequest({ 
+            method: 'GET', 
+            url: "http://192.168.1.6:8080/collector"
+        })
+    },[] )
 
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     
+
     return(
         <SafeAreaView style={styles.container}>
             <View>
                 <Text style={styles.header}>Assign Collector</Text>
                 <Text style={styles.subheader} >Prioritize your deals by assigning collectors to borrowers whom you have lent to.</Text>
 
-                <ScrollView style={{height: '55%', paddingVertical: 25, marginTop: 17, marginBottom: 17}}>
-                {
-                    availableCollectors.map((item, index)=>{
-                        return <AssignCollectorList key={index} collectorname={item.collectorname} collectoraddress={item.collectoraddress}/>; 
-                    })
-                }
-                </ScrollView>
+                
+
+                <FlatList
+                    style={{height: '56%', paddingVertical: 5, marginTop: 12, marginBottom: 17}}
+                    data={client_user}
+                    keyExtractor={(collector: ICollector) => collector.collector_id.toString()}
+                    renderItem={({ item: collector}) => (
+                        <AssignCollectorList collector_id={collector.collector_id} collectorname={collector.fullName} collectoraddress={collector.address}/>
+
+                    )}
+                />
+
+                
                 <Text style={styles.reminder}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Select only available collectors.</Text>
                 <Text style={styles.reminder}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Make sure to assign collectors with relevant expertise to the task.</Text>
                 <Text style={styles.reminder}><Ionicons name="close-circle" color='#97231E' size={15}/>   Please review before assigning a collector for this task.</Text>
@@ -121,3 +150,17 @@ const styles = StyleSheet.create({
     },
 
 })
+
+
+
+
+/*
+//<ScrollView alwaysBounceVertical={false} style={{height: '56%', paddingVertical: 5, marginTop: 12, marginBottom: 17}}>
+
+                {
+                    availableCollectors.map((item, index)=>{
+                        return <AssignCollectorList key={index} collectorname={item.collectorname} collectoraddress={item.collectoraddress}/>; 
+                    })
+                }
+
+                */

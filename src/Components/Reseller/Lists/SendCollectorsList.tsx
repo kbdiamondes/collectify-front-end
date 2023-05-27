@@ -1,15 +1,22 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
-import { CheckScreenNavigationprop } from '../../../../App';
+import { CheckScreenNavigationprop, RootStackParamList } from '../../../../App';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 type SendCollectorListProps = {
     client_id: number,
     fullname: String, 
-    //itemCollectible: number
 }
+
 
 export default function SendCollectorsList(props: SendCollectorListProps){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
+
+    //function to navigate to AssignCollectorScreen and pass data
+    const gotoAssignCollector = () => {
+        navigation.navigate('AssignCollector', {otherParam:props.client_id});
+    }
+
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
@@ -19,7 +26,7 @@ export default function SendCollectorsList(props: SendCollectorListProps){
                         <Text style={{color: '#92A0A8'}}>Php 2500</Text>                                  
                     </View>
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPress={()=>navigation.navigate('AssignCollector')}>
+                    <Pressable style={styles.button} onPress={gotoAssignCollector}>
                         <Text style={styles.buttonLabel}>Send</Text>
                     </Pressable>
                 </View>
