@@ -11,6 +11,7 @@ import TellMeAboutYourself from './src/Components/TellMe';
 import { ResellerTabNavigator } from './src/Components/Reseller/ResellerTabNavigator';
 import TestApp from './src/Services/TestAxios';
 import AssignCollectorScreen from './src/Components/Reseller/AssignCollector';
+import PaymentForm from './src/Components/Client/PaymentForm';
 
 
 export type RootStackParamList = {
@@ -30,6 +31,7 @@ export type RootStackParamList = {
   SoldItems: undefined; 
   MyCollector: undefined; 
   SendCollector: undefined; 
+  PaymentForm: undefined;
   //assigned AssignCollector to receive data from SendCollector
   AssignCollector: {otherParam1: any}; 
 };
@@ -59,6 +61,7 @@ export default function App(){
       <Stack.Screen name="MyCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SendCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{ headerShown: false}}/>
+      <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
 
     </Stack.Navigator>
   </NavigationContainer>

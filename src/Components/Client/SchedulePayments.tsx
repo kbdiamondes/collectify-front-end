@@ -3,21 +3,8 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 
 import React, { useState } from 'react';
 import ScheduledPaymentsList from './Lists/ScheduledPaymentsList';
+import scheduledItems from '../../../JsonData/items.json'
 
-const scheduledItems = [
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555, 
-        itemStatus: 'Unpaid',
-        scheduledDate: 'January 16, 2023'
-    },
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555, 
-        itemStatus: 'Unpaid',
-        scheduledDate: 'January 16, 2023'
-    },
-]
 export default function SchedulePayments(){
     
 

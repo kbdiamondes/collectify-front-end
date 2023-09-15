@@ -2,53 +2,14 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 import DuePaymentList from './Lists/DuePaymentList';
 
 import React, { useState } from 'react';
+import dueItems from '../../../JsonData/items.json'
 
-const dueItems = [
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-        {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-]
 
 
 export default function DuePayments(){
     
+    
+
 
     return(
 

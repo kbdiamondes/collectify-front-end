@@ -1,4 +1,7 @@
-import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
+import { useState } from 'react';
+import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent, TextInput, Modal} from 'react-native'
+import { useNavigation } from "@react-navigation/native";
+import { CheckScreenNavigationprop } from '../../../../App';
 
 type PaymentProps = {
     key:number, 
@@ -6,17 +9,22 @@ type PaymentProps = {
     itemCollectible: number; 
 }
 
+
 export default function DuePaymentList(props: PaymentProps){
+
+    const [itemCollectible, setitemCollectible] = useState(props.itemCollectible);
+    const navigation = useNavigation<CheckScreenNavigationprop>();
+
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                 <View style={styles.square}/>
                     <View style={styles.itemText}>
                         <Text style={{color:'#363636'}}>{props.itemName}</Text>
-                        <Text style={{color: '#92A0A8'}}>Php {props.itemCollectible}</Text>                                  
+                        <Text style={{color: '#92A0A8'}}>Php {itemCollectible}</Text>                                  
                     </View>
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPress={()=>alert("hello")}>
+                    <Pressable style={styles.button} onPress={()=>navigation.navigate('PaymentForm')}>
                         <Text style={styles.buttonLabel}>Pay</Text>
                     </Pressable>
                 </View>
