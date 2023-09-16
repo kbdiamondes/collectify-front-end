@@ -21,13 +21,14 @@ type NativeTransitionEvent = TransitionEvent;
 type NativeUIEvent = UIEvent;
 type NativeWheelEvent = WheelEvent;
 type Booleanish = boolean | 'true' | 'false';
+type CrossOrigin = 'anonymous' | 'use-credentials' | '' | undefined;
 
 declare const UNDEFINED_VOID_ONLY: unique symbol;
 // Destructors are only allowed to return void.
 type Destructor = () => void | { [UNDEFINED_VOID_ONLY]: never };
 type VoidOrUndefinedOnly = void | { [UNDEFINED_VOID_ONLY]: never };
 
-// eslint-disable-next-line export-just-namespace
+// eslint-disable-next-line @definitelytyped/export-just-namespace
 export = React;
 export as namespace React;
 
@@ -44,8 +45,20 @@ declare namespace React {
     type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
 
     type JSXElementConstructor<P> =
-        | ((props: P) => ReactElement<any, any> | null)
-        | (new (props: P) => Component<any, any>);
+        | ((
+              props: P,
+              /**
+               * @deprecated https://legacy.react/ts5.0js.org/docs/legacy-context.html#referencing-context-in-stateless-function-components
+               */
+              deprecatedLegacyContext?: any,
+          ) => ReactElement<any, any> | null)
+        | (new (
+              props: P,
+              /**
+               * @deprecated https://legacy.reactjs.org/docs/legacy-context.html#referencing-context-in-lifecycle-methods
+               */
+              deprecatedLegacyContext?: any,
+          ) => Component<any, any>);
 
     interface RefObject<T> {
         readonly current: T | null;
@@ -205,8 +218,28 @@ declare namespace React {
      * @deprecated Use either `ReactNode[]` if you need an array or `Iterable<ReactNode>` if its passed to a host component.
      */
     interface ReactNodeArray extends ReadonlyArray<ReactNode> {}
+    /**
+     * WARNING: Not related to `React.Fragment`.
+     * @deprecated - This type is not relevant when using React. Inline the type instead to make the intent clear.
+     */
     type ReactFragment = Iterable<ReactNode>;
-    type ReactNode = ReactElement | string | number | ReactFragment | ReactPortal | boolean | null | undefined;
+
+    /**
+     * For internal usage only.
+     * Different release channels declare additional types of ReactNode this particular release channel accepts.
+     * App or library types should never augment this interface.
+     */
+    interface DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_REACT_NODES {}
+    type ReactNode =
+        | ReactElement
+        | string
+        | number
+        | Iterable<ReactNode>
+        | ReactPortal
+        | boolean
+        | null
+        | undefined
+        | DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_REACT_NODES[keyof DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_REACT_NODES];
 
     //
     // Top Level API
@@ -326,7 +359,7 @@ declare namespace React {
         /**
          * **NOTE**: Exotic components are not callable.
          */
-        (props: P): (ReactElement|null);
+        (props: P): (ReactElement | null);
         readonly $$typeof: symbol;
     }
 
@@ -1350,6 +1383,9 @@ declare namespace React {
     interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes<T> {
     }
 
+    interface SVGLineElementAttributes<T> extends SVGProps<T> {}
+    interface SVGTextElementAttributes<T> extends SVGProps<T> {}
+
     interface DOMAttributes<T> {
         children?: ReactNode | undefined;
         dangerouslySetInnerHTML?: {
@@ -1576,6 +1612,16 @@ declare namespace React {
          */
         'aria-autocomplete'?: 'none' | 'inline' | 'list' | 'both' | undefined;
         /** Indicates an element is being modified and that assistive technologies MAY want to wait until the modifications are complete before exposing them to the user. */
+        /**
+         * Defines a string value that labels the current element, which is intended to be converted into Braille.
+         * @see aria-label.
+         */
+        'aria-braillelabel'?: string | undefined;
+        /**
+         * Defines a human-readable, author-localized abbreviated description for the role of an element, which is intended to be converted into Braille.
+         * @see aria-roledescription.
+         */
+        'aria-brailleroledescription'?: string | undefined;
         'aria-busy'?: Booleanish | undefined;
         /**
          * Indicates the current "checked" state of checkboxes, radio buttons, and other widgets.
@@ -1593,6 +1639,11 @@ declare namespace React {
          */
         'aria-colindex'?: number | undefined;
         /**
+         * Defines a human readable text alternative of aria-colindex.
+         * @see aria-rowindextext.
+         */
+        'aria-colindextext'?: string | undefined;
+        /**
          * Defines the number of columns spanned by a cell or gridcell within a table, grid, or treegrid.
          * @see aria-colindex @see aria-rowspan.
          */
@@ -1609,6 +1660,11 @@ declare namespace React {
          * @see aria-labelledby
          */
         'aria-describedby'?: string | undefined;
+        /**
+         * Defines a string value that describes or annotates the current element.
+         * @see related aria-describedby.
+         */
+        'aria-description'?: string | undefined;
         /**
          * Identifies the element that provides a detailed, extended description for the object.
          * @see aria-describedby.
@@ -1722,6 +1778,11 @@ declare namespace React {
          * @see aria-rowcount @see aria-rowspan.
          */
         'aria-rowindex'?: number | undefined;
+        /**
+         * Defines a human readable text alternative of aria-rowindex.
+         * @see aria-colindextext.
+         */
+        'aria-rowindextext'?: string | undefined;
         /**
          * Defines the number of rows spanned by a cell or gridcell within a table, grid, or treegrid.
          * @see aria-rowindex @see aria-colspan.
@@ -1898,11 +1959,21 @@ declare namespace React {
         is?: string | undefined;
     }
 
+    /**
+     * For internal usage only.
+     * Different release channels declare additional types of ReactNode this particular release channel accepts.
+     * App or library types should never augment this interface.
+     */
+    interface DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS {}
+
     interface AllHTMLAttributes<T> extends HTMLAttributes<T> {
         // Standard HTML Attributes
         accept?: string | undefined;
         acceptCharset?: string | undefined;
-        action?: string | undefined;
+        action?:
+            | string
+            | undefined
+            | DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS[keyof DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS];
         allowFullScreen?: boolean | undefined;
         allowTransparency?: boolean | undefined;
         alt?: string | undefined;
@@ -1922,7 +1993,7 @@ declare namespace React {
         colSpan?: number | undefined;
         controls?: boolean | undefined;
         coords?: string | undefined;
-        crossOrigin?: "anonymous" | "use-credentials" | "" | undefined;
+        crossOrigin?: CrossOrigin;
         data?: string | undefined;
         dateTime?: string | undefined;
         default?: boolean | undefined;
@@ -1931,7 +2002,10 @@ declare namespace React {
         download?: any;
         encType?: string | undefined;
         form?: string | undefined;
-        formAction?: string | undefined;
+        formAction?:
+            | string
+            | undefined
+            | DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS[keyof DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS];
         formEncType?: string | undefined;
         formMethod?: string | undefined;
         formNoValidate?: boolean | undefined;
@@ -2059,7 +2133,10 @@ declare namespace React {
     interface ButtonHTMLAttributes<T> extends HTMLAttributes<T> {
         disabled?: boolean | undefined;
         form?: string | undefined;
-        formAction?: string | undefined;
+        formAction?:
+            | string
+            | DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS[keyof DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS]
+            | undefined;
         formEncType?: string | undefined;
         formMethod?: string | undefined;
         formNoValidate?: boolean | undefined;
@@ -2118,7 +2195,10 @@ declare namespace React {
 
     interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
         acceptCharset?: string | undefined;
-        action?: string | undefined;
+        action?:
+            | string
+            | undefined
+            | DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS[keyof DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS];
         autoComplete?: string | undefined;
         encType?: string | undefined;
         method?: string | undefined;
@@ -2156,7 +2236,7 @@ declare namespace React {
 
     interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
         alt?: string | undefined;
-        crossOrigin?: "anonymous" | "use-credentials" | "" | undefined;
+        crossOrigin?: CrossOrigin;
         decoding?: "async" | "auto" | "sync" | undefined;
         height?: number | string | undefined;
         loading?: "eager" | "lazy" | undefined;
@@ -2204,11 +2284,13 @@ declare namespace React {
         autoComplete?: string | undefined;
         capture?: boolean | 'user' | 'environment' | undefined; // https://www.w3.org/TR/html-media-capture/#the-capture-attribute
         checked?: boolean | undefined;
-        crossOrigin?: "anonymous" | "use-credentials" | "" | undefined;
         disabled?: boolean | undefined;
         enterKeyHint?: 'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send' | undefined;
         form?: string | undefined;
-        formAction?: string | undefined;
+        formAction?:
+            | string
+            | DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS[keyof DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS]
+            | undefined;
         formEncType?: string | undefined;
         formMethod?: string | undefined;
         formNoValidate?: boolean | undefined;
@@ -2255,7 +2337,8 @@ declare namespace React {
 
     interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
         as?: string | undefined;
-        crossOrigin?: "anonymous" | "use-credentials" | "" | undefined;
+        crossOrigin?: CrossOrigin;
+        fetchPriority?: "high" | "low" | "auto";
         href?: string | undefined;
         hrefLang?: string | undefined;
         integrity?: string | undefined;
@@ -2280,7 +2363,7 @@ declare namespace React {
         autoPlay?: boolean | undefined;
         controls?: boolean | undefined;
         controlsList?: string | undefined;
-        crossOrigin?: "anonymous" | "use-credentials" | "" | undefined;
+        crossOrigin?: CrossOrigin;
         loop?: boolean | undefined;
         mediaGroup?: string | undefined;
         muted?: boolean | undefined;
@@ -2364,7 +2447,7 @@ declare namespace React {
         async?: boolean | undefined;
         /** @deprecated */
         charSet?: string | undefined;
-        crossOrigin?: "anonymous" | "use-credentials" | "" | undefined;
+        crossOrigin?: CrossOrigin;
         defer?: boolean | undefined;
         integrity?: string | undefined;
         noModule?: boolean | undefined;
@@ -2483,6 +2566,9 @@ declare namespace React {
     //   - "string"
     //   - union of string literals
     interface SVGAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+        // React-specific Attributes
+        suppressHydrationWarning?: boolean | undefined;
+
         // Attributes which also defined in HTMLAttributes
         // See comment in SVGDOMPropertyConfig.js
         className?: string | undefined;
@@ -2503,7 +2589,7 @@ declare namespace React {
         // Other HTML properties supported by SVG elements in browsers
         role?: AriaRole | undefined;
         tabIndex?: number | undefined;
-        crossOrigin?: "anonymous" | "use-credentials" | "" | undefined;
+        crossOrigin?: CrossOrigin;
 
         // SVG Specific attributes
         accentHeight?: number | string | undefined;
@@ -2862,6 +2948,7 @@ declare namespace React {
         ruby: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
         s: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
         samp: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
+        search: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
         slot: DetailedHTMLFactory<SlotHTMLAttributes<HTMLSlotElement>, HTMLSlotElement>;
         script: DetailedHTMLFactory<ScriptHTMLAttributes<HTMLScriptElement>, HTMLScriptElement>;
         section: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
@@ -3045,6 +3132,19 @@ declare namespace React {
          */
         componentStack: string;
     }
+
+    namespace JSX {
+        interface Element extends GlobalJSXElement {}
+        interface ElementClass extends GlobalJSXElementClass {}
+        interface ElementAttributesProperty extends GlobalJSXElementAttributesProperty {}
+        interface ElementChildrenAttribute extends GlobalJSXElementChildrenAttribute {}
+
+        type LibraryManagedAttributes<C, P> = GlobalJSXLibraryManagedAttributes<C, P>;
+
+        interface IntrinsicAttributes extends GlobalJSXIntrinsicAttributes {}
+        interface IntrinsicClassAttributes<T> extends GlobalJSXIntrinsicClassAttributes<T> {}
+        interface IntrinsicElements extends GlobalJSXIntrinsicElements {}
+    }
 }
 
 // naked 'any' type in a conditional type will short circuit and union both the then/else branches
@@ -3092,6 +3192,9 @@ type ReactManagedAttributes<C, P> = C extends { propTypes: infer T; defaultProps
             : P;
 
 declare global {
+    /**
+     * @deprecated Use `React.JSX` instead of the global `JSX` namespace.
+     */
     namespace JSX {
         interface Element extends React.ReactElement<any, any> { }
         interface ElementClass extends React.Component<any> {
@@ -3201,6 +3304,7 @@ declare global {
             ruby: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
             s: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
             samp: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+            search: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
             slot: React.DetailedHTMLProps<React.SlotHTMLAttributes<HTMLSlotElement>, HTMLSlotElement>;
             script: React.DetailedHTMLProps<React.ScriptHTMLAttributes<HTMLScriptElement>, HTMLScriptElement>;
             section: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
@@ -3272,7 +3376,7 @@ declare global {
             foreignObject: React.SVGProps<SVGForeignObjectElement>;
             g: React.SVGProps<SVGGElement>;
             image: React.SVGProps<SVGImageElement>;
-            line: React.SVGProps<SVGLineElement>;
+            line: React.SVGLineElementAttributes<SVGLineElement>;
             linearGradient: React.SVGProps<SVGLinearGradientElement>;
             marker: React.SVGProps<SVGMarkerElement>;
             mask: React.SVGProps<SVGMaskElement>;
@@ -3287,7 +3391,7 @@ declare global {
             stop: React.SVGProps<SVGStopElement>;
             switch: React.SVGProps<SVGSwitchElement>;
             symbol: React.SVGProps<SVGSymbolElement>;
-            text: React.SVGProps<SVGTextElement>;
+            text: React.SVGTextElementAttributes<SVGTextElement>;
             textPath: React.SVGProps<SVGTextPathElement>;
             tspan: React.SVGProps<SVGTSpanElement>;
             use: React.SVGProps<SVGUseElement>;
@@ -3295,3 +3399,18 @@ declare global {
         }
     }
 }
+
+// React.JSX needs to point to global.JSX to keep global module augmentations intact.
+// But we can't access global.JSX so we need to create these aliases instead.
+// Once the global JSX namespace will be removed we replace React.JSX with the contents of global.JSX
+interface GlobalJSXElement extends JSX.Element {}
+interface GlobalJSXElementClass extends JSX.ElementClass {}
+interface GlobalJSXElementAttributesProperty extends JSX.ElementAttributesProperty {}
+interface GlobalJSXElementChildrenAttribute extends JSX.ElementChildrenAttribute {}
+
+type GlobalJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<C, P>;
+
+interface GlobalJSXIntrinsicAttributes extends JSX.IntrinsicAttributes {}
+interface GlobalJSXIntrinsicClassAttributes<T> extends JSX.IntrinsicClassAttributes<T> {}
+
+interface GlobalJSXIntrinsicElements extends JSX.IntrinsicElements {}
