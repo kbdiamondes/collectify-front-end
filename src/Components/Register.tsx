@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     },  
     textBoxStyle:{
         height: hp(7), 
-        paddingLeft: wp(5),
+        paddingLeft: hp(3),
         marginBottom: hp(1.5), 
         borderColor: '#F0F2F4', 
         borderWidth: 2,
