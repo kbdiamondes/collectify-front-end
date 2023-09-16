@@ -135,3 +135,32 @@ const styles = StyleSheet.create({
     }, 
 
 });
+
+
+const styless = StyleSheet.create({
+    container:{
+      height: hp(100)
+    }, 
+    header:{
+      height: hp(20),
+      backgroundColor: 'blue'
+    }, 
+    main:{
+      height: hp(50), 
+      display:'flex', 
+      flexDirection: 'row'
+    }, 
+    body1:{
+      width: wp(50), 
+      backgroundColor: 'green'
+    },
+    body2:{ 
+      width: wp(50),
+      backgroundColor: 'yellow'
+    }, 
+    footer:{
+      height: hp(30), 
+      backgroundColor: 'grey'
+    }
+  });
+  
