@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         paddingRight: 25
     }, 
     footer:{
-        flex:0.3, 
+        flex:0.15, 
         height: hp(50)
     }, 
     textHeader:{

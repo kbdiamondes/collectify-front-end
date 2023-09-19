@@ -1,4 +1,6 @@
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 
 type PaymentProps = {
     key:number, 
@@ -11,15 +13,19 @@ export default function DuePaymentList(props: PaymentProps){
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                 <View style={styles.square}/>
-                    <View style={styles.itemText}>
-                        <Text style={{color:'#363636'}}>{props.itemName}</Text>
-                        <Text style={{color: '#92A0A8'}}>Php {props.itemCollectible}</Text>                                  
-                    </View>
-                <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPress={()=>alert("hello")}>
-                        <Text style={styles.buttonLabel}>Pay</Text>
-                    </Pressable>
+
+                <View style={styles.itemText}>
+                    <Text style={{color:'#363636', fontSize:hp(1.4)}}>{props.itemName}</Text>
+                    <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>Php {props.itemCollectible}</Text>                                  
                 </View>
+
+                <View style={styles.buttonMainContainer}>
+                    <View style={styles.buttonContainer}>
+                        <Pressable style={styles.button} onPress={()=>alert("hello")}>
+                            <Text style={styles.buttonLabel}>Pay</Text>
+                        </Pressable>
+                    </View>
+                </View>    
             </View>
             
         </SafeAreaView>
@@ -28,10 +34,13 @@ export default function DuePaymentList(props: PaymentProps){
 
 const styles = StyleSheet.create({
     item:{
+        flex: 1,
         backgroundColor: '#F5F7F9',
-        padding: 21, 
+        padding: 20, 
         borderRadius: 10, 
-        marginBottom: 20,
+        marginBottom: hp(2),
+        marginLeft: hp(1), 
+        marginRight: hp(1), 
         shadowColor: '#000', 
         shadowOffset: {
             width:0,
@@ -41,30 +50,40 @@ const styles = StyleSheet.create({
         elevation: 2
     },
     itemLeft:{
+        flex: 1,
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
     },
     square:{
-        width: 40,
-        height: 40,
+        flex:.5,
+        width: 100,  
+        height: 50,
+        margin: hp(1.5), 
         backgroundColor: '#92A0A8', 
-        borderRadius: 5,
-        marginRight: 15, 
+        borderRadius: 5
     }, 
     itemText: {
+        flex:1, 
         maxWidth: '80%', 
+        marginRight: hp(1.5), 
+        justifyContent: 'center', 
+        alignItems: 'flex-start',
+        textAlign: 'left'
+    }, 
+    buttonMainContainer:{
+        flex:.8, 
+        justifyContent: 'center', 
     }, 
     buttonContainer: {
-        width: 50, 
-        height: 40,
+        flex:.8,
+        width: wp(19), 
+        height: hp(5.5),
+        margin: hp(1.5), 
         backgroundColor:'#2C85E7',
-        marginLeft: 60,
-        justifyContent:'space-evenly',
         borderRadius: 5
     }, 
     button:{
-        borderRadius: 10 ,
         width: '100%', 
         height: '100%', 
         alignItems: 'center', 
@@ -73,6 +92,6 @@ const styles = StyleSheet.create({
     },
     buttonLabel:{
         color: '#fff', 
-        fontSize: 12
+        fontSize: hp(1.5),
     },
 }); 

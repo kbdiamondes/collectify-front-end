@@ -3,6 +3,10 @@ import DuePaymentList from './Lists/DuePaymentList';
 
 import React, { useState } from 'react';
 
+
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+
 const dueItems = [
     {
         itemName: 'iPhone 14 Pro Max SX',
@@ -48,36 +52,29 @@ const dueItems = [
 
 
 export default function DuePayments(){
-    
-
     return(
-
-        <SafeAreaView>
-            <ScrollView>
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <Text style={styles.textHeader} >Upcoming Dues</Text>
                 {
-                    dueItems.map((item, index)=>{
-                        return <DuePaymentList key={index} itemName={item.itemName} itemCollectible={item.itemCollectible}/>
-                    })
-                }
-            </View>    
-            </ScrollView>     
-        </SafeAreaView>
+                dueItems.map((item, index)=>{
+                    return <DuePaymentList key={index} itemName={item.itemName} itemCollectible={item.itemCollectible}/>
+                })
+            }  
+        </ScrollView>     
 
     );
 }
 
 const styles = StyleSheet.create({
     container:{
-        paddingTop: 31, 
-        paddingHorizontal: 21
+        flex:1,
+        paddingTop: hp(2), 
+        paddingHorizontal: hp(1.5)
     }, 
     textHeader:{
-        fontSize: 15,
+        fontSize: hp(2),
         fontWeight: 'bold', 
         color: '#9F9F9F',
-        paddingHorizontal: 23,
-        marginBottom: 10
+        padding: hp(1.2)
     }
 });

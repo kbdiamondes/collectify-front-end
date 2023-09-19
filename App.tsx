@@ -12,6 +12,9 @@ import { ResellerTabNavigator } from './src/Components/Reseller/ResellerTabNavig
 import TestApp from './src/Services/TestAxios';
 import AssignCollectorScreen from './src/Components/Reseller/AssignCollector';
 
+import {SafeAreaView, View,StyleSheet, Platform} from 'react-native'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { SplashScreen } from 'expo-router';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -39,6 +42,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 //used for typechecking upon navigating screens to see if Screen name is not void
 export type CheckScreenNavigationprop = NativeStackNavigationProp<RootStackParamList>; 
 
+SplashScreen.preventAutoHideAsync();
+setTimeout(SplashScreen.hideAsync, 5000);
 
 export default function App(){
   return(
@@ -67,6 +72,7 @@ export default function App(){
 
 //Theme for the STACK
 const MyTheme = {
+  flex:1,
   dark: false,
   colors: {
     primary: 'rgb(255, 45, 85)',

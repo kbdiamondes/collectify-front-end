@@ -1,14 +1,21 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from "react-native";
+import { SafeAreaView, Text, View, StyleSheet, Pressable, TextInput, KeyboardAvoidingView} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
+
 export default function Register(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
 
+    function registerComplete(){
+        alert("Registered")
+        navigation.push('TellUsMoreAboutYourself')
+    }
+
     return(
+        <KeyboardAvoidingView style={styles.container}>
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>    
                 <Text style={styles.textStyleSubheader} onPress={()=>navigation.goBack()}>Back</Text>
@@ -18,12 +25,12 @@ export default function Register(){
             <View style={styles.main}>
                 <View style={styles.body}>
                     <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" ></TextInput>
+                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} secureTextEntry={true} placeholder="Enter password" ></TextInput>
                     <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Full Name" ></TextInput>
                     <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Email Address" ></TextInput>
                     
                     <View style={styles.button}>
-                        <Pressable onPressIn={()=>alert("Registered'")}>
+                        <Pressable onPressIn={registerComplete}>
                             <Text style={styles.buttonLabel}>Register</Text>
                         </Pressable>
                     </View>               
@@ -31,6 +38,7 @@ export default function Register(){
             </View> 
             
         </SafeAreaView>
+        </KeyboardAvoidingView>
     );
 
 }
@@ -45,10 +53,13 @@ const styles = StyleSheet.create({
     header:{
         flex: 0.5, 
         height:hp(50), 
-        margin: hp(5)
+        marginTop: hp(10), 
+        marginLeft: hp(5), 
+        marginRight: hp(5), 
+        marginBottom: hp(5)
     }, 
     main:{
-        flex: 2.5,
+        flex: 1.5,
         display: 'flex', 
         flexDirection: 'row', 
     }, 
@@ -96,7 +107,7 @@ const styles = StyleSheet.create({
     },
 
     button:{
-
+        marginTop: hp(5), 
         backgroundColor: '#2C85E7',
         height: hp(6.5),
         alignItems: 'center', 

@@ -26,7 +26,7 @@ export default function TellMeAboutYourself(){
                     <View style={styles.main}>
                         <View style={styles.body}>
 
-                            <Pressable onPress={()=>navigation.navigate('SoldItems')}>
+                            <Pressable onPress={()=>navigation.navigate('DuePayments')}>
                                 <View style={styles.box}>
                                     <View style={styles.imageContainer}>
                                         <Image style={styles.image} source={ResellImagePlaceHolder}/>
@@ -46,7 +46,7 @@ export default function TellMeAboutYourself(){
                                 </View>
                             </Pressable>
 
-                            <Pressable onPress={()=>navigation.navigate('Collect')}>
+                            <Pressable onPress={()=>navigation.navigate('DuePayments')}>
                                 <View style={styles.box}>
                                     <View style={styles.imageContainer}>
                                         <Image style={styles.image} source={CollectorImagePlaceHolder}/>

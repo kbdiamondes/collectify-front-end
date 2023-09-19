@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from "react-native";
+import { KeyboardAvoidingView, SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -8,10 +8,10 @@ export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
 
     return(
-        <SafeAreaView style={styles.container}>
-
+        <KeyboardAvoidingView style={styles.container}>
+            <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                    <Text style={styles.textStyleSubheader} onPress={()=>navigation.goBack()}>Back</Text>
+            <Text onPress={()=>navigation.goBack()}>Back</Text>
                     <Text style={styles.textStyleHeader}>Login</Text>
 
                     <Pressable style={styles.buttonUnfilled} onPress={()=>navigation.push('Register')}>
@@ -27,9 +27,8 @@ export default function Login(){
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
-
+                        <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
+                        <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
                     <View  style={styles.button}>
                         <Pressable onPressIn={()=>navigation.push('TellUsMoreAboutYourself')}>
                                 <Text style={styles.buttonLabel}>Login</Text>
@@ -41,7 +40,8 @@ export default function Login(){
             <View style={styles.footer}>
 
             </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </KeyboardAvoidingView>
     );
 
 }
@@ -53,17 +53,21 @@ const styles = StyleSheet.create({
         height: hp(100)
     },
     header:{
-        flex: 0.5, 
+        flex: .5, 
         height:hp(50), 
-        margin: hp(5)
+        marginLeft: hp(5), 
+        marginRight: hp(5), 
+        marginTop: hp(12), 
+        marginBottom: hp(8)
     }, 
     main:{
         flex: 0.550,
+        height: hp(5),
         display: 'flex', 
         flexDirection: 'row', 
     }, 
-    body:{
-        flex: 1, 
+    body:{ 
+        flex: 1,
         width: wp(100), 
         paddingLeft: hp(5), 
         paddingRight: hp(5)
@@ -73,10 +77,6 @@ const styles = StyleSheet.create({
         height: hp(50), 
         paddingLeft: hp(5)
     }, 
-    textStyleSubheader:{
-        paddingTop: 35, 
-        paddingBottom: 25
-    },
     textStyleHeader:{
         fontSize: hp(6), 
         fontWeight: 'bold', 
@@ -87,26 +87,22 @@ const styles = StyleSheet.create({
     },
 
     textSmallestContainer:{ 
-        flex:1,
         marginTop: hp(2), 
         marginBottom: hp(1), 
         alignItems: 'center', 
         justifyContent: 'center', 
 
-
     },  
     textBoxStyle:{
-        height: hp(7), 
+        height: 50, 
         paddingLeft: hp(3),
         marginBottom: hp(1.5), 
         borderColor: '#F0F2F4', 
         borderWidth: 2,
-        color:'#363636', 
-
+        color:'#363636',
     },
 
     button:{
-
         backgroundColor: '#2C85E7',
         height: hp(7),
         alignItems: 'center', 
@@ -136,3 +132,4 @@ const styles = StyleSheet.create({
 
 });
 
+////
