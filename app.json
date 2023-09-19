@@ -1,31 +1,32 @@
 {
   "expo": {
-    "name": "capstone-v1",
+    "name": "Collectify",
     "slug": "capstone-v1",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/collectify-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/splash-screen.jpeg",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true, 
+    
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/collectify-icon.png",
         "backgroundColor": "#ffffff",
         "androidUsesCleartextTraffic": true
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/collectify-icon.png"
     }   
     
   }

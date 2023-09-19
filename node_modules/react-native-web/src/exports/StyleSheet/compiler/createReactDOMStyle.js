@@ -32,13 +32,6 @@ const supportsCSS3TextDecoration =
     (window.CSS.supports('text-decoration-line', 'none') ||
       window.CSS.supports('-webkit-text-decoration-line', 'none')));
 
-const ignoredProps = {
-  elevation: true,
-  overlayColor: true,
-  resizeMode: true,
-  tintColor: true
-};
-
 const MONOSPACE_FONT_STACK = 'monospace,monospace';
 
 const SYSTEM_FONT_STACK =
@@ -51,6 +44,8 @@ const STYLE_SHORT_FORM_EXPANSIONS = {
     'borderBottomColor',
     'borderLeftColor'
   ],
+  borderBlockColor: ['borderTopColor', 'borderBottomColor'],
+  borderInlineColor: ['borderRightColor', 'borderLeftColor'],
   borderRadius: [
     'borderTopLeftRadius',
     'borderTopRightRadius',
@@ -63,44 +58,52 @@ const STYLE_SHORT_FORM_EXPANSIONS = {
     'borderBottomStyle',
     'borderLeftStyle'
   ],
+  borderBlockStyle: ['borderTopStyle', 'borderBottomStyle'],
+  borderInlineStyle: ['borderRightStyle', 'borderLeftStyle'],
   borderWidth: [
     'borderTopWidth',
     'borderRightWidth',
     'borderBottomWidth',
     'borderLeftWidth'
   ],
-  marginHorizontal: ['marginRight', 'marginLeft'],
-  marginVertical: ['marginTop', 'marginBottom'],
+  borderBlockWidth: ['borderTopWidth', 'borderBottomWidth'],
+  borderInlineWidth: ['borderRightWidth', 'borderLeftWidth'],
+  insetBlock: ['top', 'bottom'],
+  insetInline: ['left', 'right'],
+  marginBlock: ['marginTop', 'marginBottom'],
+  marginInline: ['marginRight', 'marginLeft'],
+  paddingBlock: ['paddingTop', 'paddingBottom'],
+  paddingInline: ['paddingRight', 'paddingLeft'],
   overflow: ['overflowX', 'overflowY'],
   overscrollBehavior: ['overscrollBehaviorX', 'overscrollBehaviorY'],
-  paddingHorizontal: ['paddingRight', 'paddingLeft'],
-  paddingVertical: ['paddingTop', 'paddingBottom']
-};
-
-/**
- * Transform
- */
-
-// { scale: 2 } => 'scale(2)'
-// { translateX: 20 } => 'translateX(20px)'
-// { matrix: [1,2,3,4,5,6] } => 'matrix(1,2,3,4,5,6)'
-const mapTransform = (transform: Object): string => {
-  const type = Object.keys(transform)[0];
-  const value = transform[type];
-  if (type === 'matrix' || type === 'matrix3d') {
-    return `${type}(${value.join(',')})`;
-  } else {
-    const normalizedValue = normalizeValueWithProperty(value, type);
-    return `${type}(${normalizedValue})`;
-  }
-};
-
-export const createTransformValue = (style: Style): string => {
-  let transform = style.transform;
-  if (Array.isArray(style.transform)) {
-    transform = style.transform.map(mapTransform).join(' ');
-  }
-  return transform;
+  borderBlockStartColor: ['borderTopColor'],
+  borderBlockStartStyle: ['borderTopStyle'],
+  borderBlockStartWidth: ['borderTopWidth'],
+  borderBlockEndColor: ['borderBottomColor'],
+  borderBlockEndStyle: ['borderBottomStyle'],
+  borderBlockEndWidth: ['borderBottomWidth'],
+  //borderInlineStartColor: ['borderLeftColor'],
+  //borderInlineStartStyle: ['borderLeftStyle'],
+  //borderInlineStartWidth: ['borderLeftWidth'],
+  //borderInlineEndColor: ['borderRightColor'],
+  //borderInlineEndStyle: ['borderRightStyle'],
+  //borderInlineEndWidth: ['borderRightWidth'],
+  borderEndStartRadius: ['borderBottomLeftRadius'],
+  borderEndEndRadius: ['borderBottomRightRadius'],
+  borderStartStartRadius: ['borderTopLeftRadius'],
+  borderStartEndRadius: ['borderTopRightRadius'],
+  insetBlockEnd: ['bottom'],
+  insetBlockStart: ['top'],
+  //insetInlineEnd: ['right'],
+  //insetInlineStart: ['left'],
+  marginBlockStart: ['marginTop'],
+  marginBlockEnd: ['marginBottom'],
+  //marginInlineStart: ['marginLeft'],
+  //marginInlineEnd: ['marginRight'],
+  paddingBlockStart: ['paddingTop'],
+  paddingBlockEnd: ['paddingBottom']
+  //paddingInlineStart: ['marginLeft'],
+  //paddingInlineEnd: ['marginRight'],
 };
 
 /**
@@ -119,16 +122,12 @@ const createReactDOMStyle = (style: Style, isInline?: boolean): Style => {
 
     if (
       // Ignore everything with a null value
-      value == null ||
-      // Ignore some React Native styles
-      ignoredProps[prop]
+      value == null
     ) {
       continue;
     }
 
-    if (prop === 'aspectRatio') {
-      resolvedStyle[prop] = value.toString();
-    } else if (prop === 'backgroundClip') {
+    if (prop === 'backgroundClip') {
       // TODO: remove once this issue is fixed
       // https://github.com/rofrischmann/inline-style-prefixer/issues/159
       if (value === 'text') {
@@ -155,12 +154,6 @@ const createReactDOMStyle = (style: Style, isInline?: boolean): Style => {
       } else {
         resolvedStyle[prop] = value;
       }
-    } else if (prop === 'fontVariant') {
-      if (Array.isArray(value) && value.length > 0) {
-        resolvedStyle.fontVariant = value.join(' ');
-      }
-    } else if (prop === 'textAlignVertical') {
-      resolvedStyle.verticalAlign = value === 'center' ? 'middle' : value;
     } else if (prop === 'textDecorationLine') {
       // use 'text-decoration' for browsers that only support CSS2
       // text-decoration (e.g., IE, Edge)
@@ -169,28 +162,35 @@ const createReactDOMStyle = (style: Style, isInline?: boolean): Style => {
       } else {
         resolvedStyle.textDecorationLine = value;
       }
-    } else if (prop === 'transform' || prop === 'transformMatrix') {
-      resolvedStyle.transform = createTransformValue(style);
     } else if (prop === 'writingDirection') {
       resolvedStyle.direction = value;
     } else {
       const value = normalizeValueWithProperty(style[prop], prop);
       const longFormProperties = STYLE_SHORT_FORM_EXPANSIONS[prop];
-      if (isInline && prop === 'margin') {
-        if (style.marginHorizontal == null) {
+      if (isInline && prop === 'inset') {
+        if (style.insetInline == null) {
+          resolvedStyle.left = value;
+          resolvedStyle.right = value;
+        }
+        if (style.insetBlock == null) {
+          resolvedStyle.top = value;
+          resolvedStyle.bottom = value;
+        }
+      } else if (isInline && prop === 'margin') {
+        if (style.marginInline == null) {
           resolvedStyle.marginLeft = value;
           resolvedStyle.marginRight = value;
         }
-        if (style.marginVertical == null) {
+        if (style.marginBlock == null) {
           resolvedStyle.marginTop = value;
           resolvedStyle.marginBottom = value;
         }
       } else if (isInline && prop === 'padding') {
-        if (style.paddingHorizontal == null) {
+        if (style.paddingInline == null) {
           resolvedStyle.paddingLeft = value;
           resolvedStyle.paddingRight = value;
         }
-        if (style.paddingVertical == null) {
+        if (style.paddingBlock == null) {
           resolvedStyle.paddingTop = value;
           resolvedStyle.paddingBottom = value;
         }
@@ -203,7 +203,7 @@ const createReactDOMStyle = (style: Style, isInline?: boolean): Style => {
           }
         });
       } else {
-        resolvedStyle[prop] = Array.isArray(value) ? value.join(',') : value;
+        resolvedStyle[prop] = value;
       }
     }
   }

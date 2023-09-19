@@ -1,3 +1,10 @@
 {
-  "urlRandomness": "KIe73aQ"
+  "urlRandomness": "KIe73aQ",
+  "dev": true,
+  "minify": false,
+  "https": false,
+  "scheme": null,
+  "hostType": "lan",
+  "lanType": "ip",
+  "devClient": false
 }

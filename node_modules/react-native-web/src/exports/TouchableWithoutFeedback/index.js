@@ -18,13 +18,12 @@ import { useMemo, useRef } from 'react';
 import pick from '../../modules/pick';
 import useMergeRefs from '../../modules/useMergeRefs';
 import usePressEvents from '../../modules/usePressEvents';
+import { warnOnce } from '../../modules/warnOnce';
 
 export type Props = $ReadOnly<{|
   accessibilityLabel?: $PropertyType<ViewProps, 'accessibilityLabel'>,
   accessibilityLiveRegion?: $PropertyType<ViewProps, 'accessibilityLiveRegion'>,
   accessibilityRole?: $PropertyType<ViewProps, 'accessibilityRole'>,
-  accessibilityState?: $PropertyType<ViewProps, 'accessibilityState'>,
-  accessibilityValue?: $PropertyType<ViewProps, 'accessibilityValue'>,
   children?: ?React.Node,
   delayLongPress?: ?number,
   delayPressIn?: ?number,
@@ -63,6 +62,11 @@ const forwardPropsList = {
 const pickProps = (props) => pick(props, forwardPropsList);
 
 function TouchableWithoutFeedback(props: Props, forwardedRef): React.Node {
+  warnOnce(
+    'TouchableWithoutFeedback',
+    'TouchableWithoutFeedback is deprecated. Please use Pressable.'
+  );
+
   const {
     delayPressIn,
     delayPressOut,

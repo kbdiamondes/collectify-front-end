@@ -7,5 +7,5 @@
  * @flow
  */
 
-import NativeEventEmitter from '../../vendor/react-native/NativeEventEmitter';
+import NativeEventEmitter from '../../vendor/react-native/EventEmitter/NativeEventEmitter';
 export default NativeEventEmitter;

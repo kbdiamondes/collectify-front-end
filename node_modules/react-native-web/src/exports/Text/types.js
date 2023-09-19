@@ -52,7 +52,6 @@ export type TextStyle = {
     | 'left'
     | 'right'
     | 'start',
-  textAlignVertical?: ?string,
   textDecorationColor?: ?ColorValue,
   textDecorationLine?:
     | 'none'
@@ -67,6 +66,7 @@ export type TextStyle = {
     | 'geometricPrecision'
     | 'optimizeLegibility'
     | 'optimizeSpeed',
+  textShadow?: ?string,
   textShadowColor?: ?ColorValue,
   textShadowOffset?: {| width?: number, height?: number |},
   textShadowRadius?: ?number,
@@ -78,17 +78,35 @@ export type TextStyle = {
     | 'isolate'
     | 'isolate-override'
     | 'plaintext',
+  userSelect?: 'none' | 'text',
+  verticalAlign?: ?string,
   whiteSpace?: ?string,
   wordBreak?: 'normal' | 'break-all' | 'break-word' | 'keep-all',
   wordWrap?: ?string,
   writingDirection?: 'auto' | 'ltr' | 'rtl',
   /* @platform web */
   MozOsxFontSmoothing?: ?string,
-  WebkitFontSmoothing?: ?string
+  WebkitFontSmoothing?: ?string,
+  // deprecated
+  textAlignVertical?: ?string
 };
 
 export type TextProps = {
   ...ViewProps,
+  dir?: 'auto' | 'ltr' | 'rtl',
+  numberOfLines?: ?number,
+  role?:
+    | 'button'
+    | 'header'
+    | 'heading'
+    | 'label'
+    | 'link'
+    | 'listitem'
+    | 'none'
+    | 'text',
+  style?: GenericStyleProp<TextStyle>,
+  testID?: ?string,
+  // @deprecated
   accessibilityRole?:
     | 'button'
     | 'header'
@@ -98,11 +116,6 @@ export type TextProps = {
     | 'listitem'
     | 'none'
     | 'text',
-  dir?: 'auto' | 'ltr' | 'rtl',
-  lang?: string,
-  numberOfLines?: ?number,
   onPress?: (e: any) => void,
-  selectable?: boolean,
-  style?: GenericStyleProp<TextStyle>,
-  testID?: ?string
+  selectable?: boolean
 };

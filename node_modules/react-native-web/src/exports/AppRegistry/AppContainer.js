@@ -21,33 +21,35 @@ type Props = {
 
 const RootTagContext: React.Context<any> = React.createContext(null);
 
-export default function AppContainer(props: Props): React.Node {
-  const { children, WrapperComponent } = props;
+const AppContainer: React.AbstractComponent<Props> = React.forwardRef(
+  (props: Props, forwardedRef?: React.Ref<any>) => {
+    const { children, WrapperComponent } = props;
 
-  let innerView = (
-    <View
-      children={children}
-      key={1}
-      pointerEvents="box-none"
-      style={styles.appContainer}
-    />
-  );
+    let innerView = (
+      <View children={children} key={1} style={styles.appContainer} />
+    );
 
-  if (WrapperComponent) {
-    innerView = <WrapperComponent>{innerView}</WrapperComponent>;
+    if (WrapperComponent) {
+      innerView = <WrapperComponent>{innerView}</WrapperComponent>;
+    }
+
+    return (
+      <RootTagContext.Provider value={props.rootTag}>
+        <View ref={forwardedRef} style={styles.appContainer}>
+          {innerView}
+        </View>
+      </RootTagContext.Provider>
+    );
   }
+);
 
-  return (
-    <RootTagContext.Provider value={props.rootTag}>
-      <View pointerEvents="box-none" style={styles.appContainer}>
-        {innerView}
-      </View>
-    </RootTagContext.Provider>
-  );
-}
+AppContainer.displayName = 'AppContainer';
+
+export default AppContainer;
 
 const styles = StyleSheet.create({
   appContainer: {
-    flex: 1
+    flex: 1,
+    pointerEvents: 'box-none'
   }
 });

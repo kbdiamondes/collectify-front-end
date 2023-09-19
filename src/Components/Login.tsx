@@ -1,117 +1,129 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from "react-native";
+import { KeyboardAvoidingView, SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
 
     return(
-        <SafeAreaView>
-            <View style={styles.container}>
-                
-                <Text style={styles.textStyleSubheader} onPress={()=>navigation.goBack()}>Back</Text>
-                <Text style={styles.textStyleHeader}>Login</Text>
+        <KeyboardAvoidingView style={styles.container}>
+            <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
+            <Text onPress={()=>navigation.goBack()}>Back</Text>
+                    <Text style={styles.textStyleHeader}>Login</Text>
 
-                <View style={styles.buttonUnfilledContainer}>
                     <Pressable style={styles.buttonUnfilled} onPress={()=>navigation.push('Register')}>
                         <Text style={styles.buttonUnfilledLabel}>No account yet? Register Now!</Text>
-                    </Pressable>
-                </View>
+                    </Pressable> 
 
-
-                <Text style={styles.textStyleSmallest} onPress={()=>alert('Coming Soon!')}>Forgot Password?</Text>
-
-                <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
-                <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" ></TextInput>
-                <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPressIn={()=>navigation.push('TellUsMoreAboutYourself')}>
-                        <Text style={styles.buttonLabel}>Login</Text>
-                    </Pressable>
-                </View>               
+                    <View style={styles.textSmallestContainer}>
+                        <Text style={styles.textStyleSmallest} onPress={()=>alert('Coming Soon!')}>Forgot Password?</Text>
+                    </View>
             </View>
-        </SafeAreaView>
+
+
+
+            <View style={styles.main}>
+                <View style={styles.body}>
+                        <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
+                        <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
+                    <View  style={styles.button}>
+                        <Pressable onPressIn={()=>navigation.push('TellUsMoreAboutYourself')}>
+                                <Text style={styles.buttonLabel}>Login</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </View>
+
+            <View style={styles.footer}>
+
+            </View>
+            </SafeAreaView>
+        </KeyboardAvoidingView>
     );
 
 }
 
+
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'flex-start', 
-        alignItem: 'flext-start', 
-        paddingHorizontal: 35,
-        paddingVertical: 80
-    }, 
-    textStyleSubheader:{
-        paddingTop: 35, 
-        paddingBottom: 25
+    container:{
+        flex: 1,
+        height: hp(100)
     },
+    header:{
+        flex: .5, 
+        height:hp(50), 
+        marginLeft: hp(5), 
+        marginRight: hp(5), 
+        marginTop: hp(12), 
+        marginBottom: hp(8)
+    }, 
+    main:{
+        flex: 0.550,
+        height: hp(5),
+        display: 'flex', 
+        flexDirection: 'row', 
+    }, 
+    body:{ 
+        flex: 1,
+        width: wp(100), 
+        paddingLeft: hp(5), 
+        paddingRight: hp(5)
+    }, 
+    footer:{
+        flex:0.3, 
+        height: hp(50), 
+        paddingLeft: hp(5)
+    }, 
     textStyleHeader:{
-        fontSize: 55, 
+        fontSize: hp(6), 
         fontWeight: 'bold', 
     },
 
     textStyleSmallest:{
-        fontSize: 13,
-        alignItems:'center',
-        justifyContent:'center', 
-        marginTop: 16,
-        marginBottom:16, 
-        paddingLeft:115
+        fontSize: hp(1.5),
     },
 
+    textSmallestContainer:{ 
+        marginTop: hp(2), 
+        marginBottom: hp(1), 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+
+    },  
     textBoxStyle:{
-        width: 320, 
         height: 50, 
-        paddingLeft: 20,
+        paddingLeft: hp(3),
+        marginBottom: hp(1.5), 
         borderColor: '#F0F2F4', 
         borderWidth: 2,
-        marginBottom: 13, 
-        color:'#363636', 
+        color:'#363636',
     },
-
-    buttonContainer:{
-        width: 318, 
-        height: 48, 
-        backgroundColor: '#2C85E7',
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        borderRadius: 5, 
-        marginTop: 30
-    }, 
 
     button:{
-        borderRadius: 10 ,
-        width: '100%', 
-        height: '100%', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'row'
-    },
-
-    buttonLabel:{
-        color: '#fff', 
-    },
-
-    buttonUnfilledContainer:{
-        width: 318, 
-        height: 48, 
-        backgroundColor: '#fff',
+        backgroundColor: '#2C85E7',
+        height: hp(7),
         alignItems: 'center', 
         justifyContent: 'center', 
         borderRadius: 5, 
-        borderColor: '#F0F2F4',
-        borderWidth: 2, 
-        marginTop: 30
-    }, 
+    },
+    buttonLabel:{
+        color: '#fff', 
+        fontSize: hp(2)
+    },
 
     buttonUnfilled:{
-        borderRadius: 10 ,
-        width: '100%', 
-        height: '100%', 
+        borderRadius: 5,
+        borderWidth: 2, 
+        borderColor: '#F0F2F4',
+        height: hp(7), 
         alignItems: 'center', 
         justifyContent: 'center', 
-        flexDirection: 'row'
+        flexDirection: 'row', 
+        backgroundColor: '#fff', 
+        marginTop: '5%'
     },
 
     buttonUnfilledLabel:{
@@ -119,3 +131,5 @@ const styles = StyleSheet.create({
     }, 
 
 });
+
+////
