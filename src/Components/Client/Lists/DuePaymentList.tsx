@@ -73,19 +73,18 @@ const styles = StyleSheet.create({
     }, 
     buttonMainContainer:{
         flex:.8, 
+        width: wp(19), 
+        height: hp(5.5),
+        margin: hp(1.5), 
         justifyContent: 'center', 
     }, 
     buttonContainer: {
         flex:.8,
-        width: wp(19), 
-        height: hp(5.5),
-        margin: hp(1.5), 
         backgroundColor:'#2C85E7',
         borderRadius: 5
     }, 
     button:{
-        width: '100%', 
-        height: '100%', 
+        flex:1, 
         alignItems: 'center', 
         justifyContent: 'center', 
         flexDirection: 'row'
