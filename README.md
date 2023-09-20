@@ -1,20 +1,20 @@
-#Collectify
-##A Payment Collection and Reminder Mobile Application
-###Created in compliance for Capstone 2 
+# Collectify
+## A Payment Collection and Reminder Mobile Application
+### Created in compliance for Capstone 2 
 _This mobile application addresses the challenges faced by Micro, Small, and Medium Enterprises (MSMEs) by providing an efficient solution for payment collection and reminders, streamlining their interactions with various clients._
 
 > This documentation serves as a guide for current developers in setting up their environment. 
 
-##Front End Techstack
+## Front End Techstack
 - Typescript
 - Node.js
 - React Native
 
-##Compatible Devices
+## Compatible Devices
 - Android
 - iOS
 
-##Links & Referrences
+## Links & Referrences
 - Learn Expo for Smooth Mobile Development [Expo Documentation] (https://docs.expo.dev/)
 - Learn React Native for Mobile Development [React Native Documentation] (https://reactnative.dev/docs/getting-started)
 - Learn React Navigation to for Mobile Components [React Navigation Documentation] (https://reactnavigation.org/docs/getting-started)
@@ -40,7 +40,7 @@ yarn install
 ```
 
 
-##Usage
+## Usage
 This project uses Expo for development. You can start the development server by running the following commands:
 
 - To start the development server:
@@ -68,7 +68,7 @@ npm run web
 yarn web
 ```
 
-##Dependencies
+## Dependencies
 Here are some of the main dependencies used in this project:
 
 - @expo/webpack-config: ^19.0.0
@@ -91,21 +91,21 @@ Here are some of the main dependencies used in this project:
 - uuid: ^9.0.0
 - expo-splash-screen: ~0.20.5
 
-##Development Dependencies
+## Development Dependencies
 - @babel/core: ^7.20.0
 - @types/react: ~18.2.14
 - @types/react-native: ^0.72.2
 - typescript: ^5.2.2
   
-##Development Team
+## Development Team
 
-###Main Developer
+### Main Developer
 Keith Brylle Diamante
 
-###Assistant Developers
+### Assistant Developers
 Bil Badato
 Harvey Logroño
 
-##License
+## License
 
 This project is developed in compliance for the college senior subject **Capstone 2**
