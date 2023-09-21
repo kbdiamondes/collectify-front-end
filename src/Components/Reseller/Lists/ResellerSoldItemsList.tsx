@@ -1,4 +1,5 @@
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent, ScrollView} from 'react-native'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 type ResellerSoldItemsListProps = {
     key:number, 
@@ -14,8 +15,8 @@ export default function ResellerSoldItemsList(props: ResellerSoldItemsListProps)
                 <View style={styles.itemLeft}>
                     <View style={styles.square}/>
                         <View style={styles.itemText}>
-                            <Text style={{color:'#363636',fontSize: 18, fontWeight: 'bold', paddingTop: 15, paddingLeft: 5}}>{props.itemName}</Text>
-                            <Text style={{color: '#92A0A8', fontSize: 12, paddingLeft: 5}}>{props.piecesLeft} pieces left.</Text>                                  
+                            <Text style={{color:'#363636',fontSize: hp(2), fontWeight: 'bold'}}>{props.itemName}</Text>
+                            <Text style={{color: '#92A0A8', fontSize: hp(1.8)}}>{props.piecesLeft} pieces left.</Text>                                  
                         </View>
                 </View>
                 
@@ -27,12 +28,13 @@ export default function ResellerSoldItemsList(props: ResellerSoldItemsListProps)
 
 const styles = StyleSheet.create({
     item:{
-        height: 200, 
-        width: 360, 
+        flex: 1,
         backgroundColor: '#F5F7F9',
-        padding: 21, 
+        padding: 20, 
         borderRadius: 10, 
-        marginBottom: 20,
+        marginBottom: hp(2),
+        marginLeft: hp(1), 
+        marginRight: hp(1), 
         shadowColor: '#000', 
         shadowOffset: {
             width:0,
@@ -42,28 +44,29 @@ const styles = StyleSheet.create({
         elevation: 2
     },
     itemLeft:{
+        flex:1, 
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
     },
     square:{
-        width: 315,
-        height: 100,
+        flex:.5,
+        width: 50,
+        height: 70,
+        margin: hp(.5),
         backgroundColor: '#92A0A8', 
-        borderRadius: 5,
-        marginRight: 15, 
+        borderRadius: 5
+        
     }, 
     itemText: {
+        flex: 1, 
         maxWidth: '80%', 
-    }, 
-    priceContainer: {
-        width: 80, 
-        height: 40,
-        marginLeft: 100, 
-        justifyContent:'space-evenly',
-        borderRadius: 5,
-        maxWidth: '80%'
-    }, 
+        marginRight: hp(1.5),
+        marginLeft: hp(1),  
+        justifyContent: 'center', 
+        alignItems: 'flex-start', 
+        textAlign: 'left'
+    },
     button:{
         borderRadius: 10 ,
         width: '100%', 
@@ -71,10 +74,5 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         justifyContent: 'center', 
         flexDirection: 'row'
-    },
-    priceLabel:{
-        color: '#363636', 
-        fontSize: 15,
-        fontWeight: 'bold'
-    },
+    }
 }); 

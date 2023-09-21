@@ -5,13 +5,15 @@ import { RootStackParamList } from '../../../../App';
 import { useState } from 'react';
 import { RestAPI } from '../../../Services/RestAPI';
 
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 
 type AssignCollectorProps = {
     collector_id:number, 
     collectorname: String; 
     collectoraddress: String; 
     //OnSend is a function that accepts a number parameter coming from the AssignCollectorList component being mapped
-    onSend: (collectorId: number) => void;
+    //onSend: (collectorId: number) => void;
 }
 
 export default function AssignCollectorList(props: AssignCollectorProps){
@@ -29,7 +31,7 @@ export default function AssignCollectorList(props: AssignCollectorProps){
     //the function for the button that also uses the "Onsend" function to get the on clicked collector_id
     const assignCollectorSubmit = ()=> {
         //alert("Client ID: " + clientid + "\nPayment Dues: Php " + paymentDues);
-        props.onSend(props.collector_id);
+      //props.onSend(props.collector_id); -> disabled for static design
         //alert("Client ID: " + client_id + "\nCollector ID: " + props.collector_id); 
 
         assignCollector({
@@ -69,57 +71,62 @@ export default function AssignCollectorList(props: AssignCollectorProps){
 
     return(
 
-        <View style={styles.item}>
-            <View style={styles.itemLeft}>                    
+        <SafeAreaView style={styles.item}>
+            <View style={styles.itemLeft}>    
+
                 <View style={styles.itemText}>
-                    <Text style={{color:'#363636', fontSize: 18}}>{props.collectorname}</Text>
-                    <Text style={{color: '#92A0A8', fontSize: 12}}>{props.collectoraddress}</Text>                                  
+                    <Text style={{color:'#363636', fontSize: hp(2.5), fontWeight: 'bold'}}>{props.collectorname}</Text>
+                    <Text style={{color: '#92A0A8', fontSize: hp(1)}}>{props.collectoraddress}</Text>                                  
                 </View>
-                <View style={styles.textRightContainer}>
-                    <View style={styles.textRightContainer}>
-                        <Pressable onPress={assignCollectorSubmit}>
-                            <Ionicons name="send" color='#000000' size={20}/>
-                        </Pressable>
-                    </View>
-                </View>
+
+                  <View style={styles.buttonContainer}>
+                      <Pressable style={styles.button} onPress={assignCollectorSubmit}>
+                          <Ionicons name="send" color='#000000' size={20}/>
+                      </Pressable>
+                  </View>
             </View>
-        </View>
+        </SafeAreaView>
 
 
     ); 
 }
 const styles = StyleSheet.create({
     item:{
+        flex:1, 
         backgroundColor: '#fff',
-        padding: 21, 
-        marginTop: 16,
+        padding: 20, 
+        marginBottom: hp(2), 
+        marginLeft: hp(1), 
+        marginRight: hp(1), 
         borderRadius: 3, 
         borderColor: '#CED0D1', 
         borderWidth: 2
     },
     itemLeft:{
+        flex:1, 
         flexDirection:'row',
+        justifyContent: 'center',
         aligntItems: 'center', 
         flexWrap:'wrap'
     }, 
     itemText: {
-        maxWidth: '80%', 
+      flex:5,  
+      marginLeft: hp(1.5), 
+      marginRight: hp(1.5), 
+      justifyContent: 'center', 
+      alignItems: 'flex-start', 
+      textAlign: 'left'
     }, 
-    textRightContainer: {
-        width: 130, 
-        height: 40,
-        paddingLeft: 50, 
-        justifyContent:'space-evenly',
-        borderRadius: 5
+    buttonContainer: {
+      flex:.8, 
+      justifyContent: 'center'
     }, 
-    textRight:{
-        borderRadius: 10 ,
-        width: '100%', 
-        height: '100%', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'row'
-    },
+    button:{
+      flex:1, 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      flexDirection: 'row'
+    }
 }); 
 
 
