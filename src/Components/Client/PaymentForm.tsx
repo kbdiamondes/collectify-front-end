@@ -1,12 +1,13 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable} from 'react-native';
-import DuePaymentList from './Lists/DuePaymentList';
-
 import React, { useState } from 'react';
-import dueItems from '../../../JsonData/items.json'
+import CameraCapture from './Camera';
+import { useNavigation } from "@react-navigation/native";
+import { CheckScreenNavigationprop } from '../../../App';
 
 
 
 export default function PaymentForm(){
+    const navigation = useNavigation<CheckScreenNavigationprop>()
     
     return(
 
@@ -25,10 +26,20 @@ export default function PaymentForm(){
                     <Text style={styles.textLabel}>Reference Number</Text>
                     <TextInput style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
+
+                    <View style={styles.buttonContainer}>
+                        <Pressable style={styles.button} onPress={()=>navigation.push('CameraCapture')}>
+                        <Text style={styles.buttonLabel}>
+                            Take picture
+                        </Text>
+                        </Pressable>
+                    </View>
+
                     <View style={styles.buttonContainer}>
                     <Pressable style={styles.button}>
                         <Text style={styles.buttonLabel}>Continue</Text>
                     </Pressable>
+                    
                 </View>       
                 </View>
             </View>    
@@ -37,6 +48,7 @@ export default function PaymentForm(){
 
     );
 }
+
 
 const styles = StyleSheet.create({
     container:{
@@ -78,7 +90,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         justifyContent:'space-evenly',
         borderRadius: 5,
-        marginTop: 70
     }, 
     button:{
         borderRadius: 10 ,
@@ -95,3 +106,14 @@ const styles = StyleSheet.create({
 
     
 });
+
+
+/*
+                    <View style={styles.buttonContainer}>
+
+                    <Pressable onPress={()=>navigation.push('CameraCapture')}>
+                        <Text style={styles.buttonLabel}>take picture</Text>
+                    </Pressable>
+                    </View>
+
+*/
