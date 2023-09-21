@@ -4,6 +4,7 @@ import { StyleSheet, SafeAreaView, View, Text, Image, Pressable} from "react-nat
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { CheckScreenNavigationprop } from "../../App";
 
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
 const PlaceHolderImage = require('../../assets/vector-1-welcome.png');
@@ -16,23 +17,28 @@ export default function GetStarted(){
     //Const is declared to use the useNavigation hook to have access on "navigation" object
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     return(
-        <SafeAreaView>
-                <View style={styles.container}>
-                    <View style={styles.imageContainer}>
-                        <Image style={styles.image} source={PlaceHolderImage}/>
-                    </View>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.headerimage}>
+                <View style={styles.imageContainer}>
+                <Image style={styles.image} source={PlaceHolderImage}/>
                 </View>
-            <Text style={styles.textHeader}>Welcome</Text>
-            <Text style={styles.textMultiline}>Record, track, and collect payments from clients with ease. </Text>
-
-          
-            <View style={styles.buttonContainer}>
-                <Pressable style={styles.button} onPress={()=>navigation.navigate('Login')}>
-                        <Text style={styles.buttonLabel}>Get Started</Text>
-                </Pressable>
             </View>
             
-        
+            <View style={styles.main}>
+                <View style={styles.body}>
+                <Text style={styles.textHeader}>Welcome</Text>
+                <Text style={styles.textMultiline}>Record, track, and collect payments from clients with ease. </Text>
+                </View>
+            </View>
+
+
+            <View style={styles.footer}>
+                <View style={styles.button}>
+                        <Pressable onPress={()=>navigation.navigate('Login')}>
+                                <Text style={styles.buttonLabel}>Get Started</Text>
+                        </Pressable>
+                </View>
+            </View>
         </SafeAreaView>
     );
 }
@@ -40,88 +46,64 @@ export default function GetStarted(){
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        alignItems:'center', 
-        justifyContent: 'center', 
+        height: hp(100)
     },
-
+    headerimage:{
+        flex: 0.5, 
+        height:hp(50)
+    }, 
+    main:{
+        flex: 0.5, 
+        //height: hp(35), 
+        display: 'flex', 
+        flexDirection: 'row'
+    }, 
+    body:{
+        flex:1,
+        width: wp(100), 
+        paddingLeft: 25, 
+        paddingRight: 25
+    }, 
+    footer:{
+        flex:0.15, 
+        height: hp(50)
+    }, 
     textHeader:{
-        fontSize:55,
+        fontSize:hp(6),
         fontWeight: 'bold', 
-        paddingTop: 360, 
-        paddingHorizontal: 35, 
+        height: hp(10),
         color: '#203949'
     }, 
 
     textMultiline:{
-        fontSize: 23,
-        flexWrap: 'wrap',
-        flexDirection: 'row', 
-        paddingTop: 7, 
-        paddingHorizontal: 35, 
+        flex: 1, 
+        fontSize: hp(2.5),
         color: '#707070'
-
     },
 
     imageContainer:{
-        width: '100%', 
-        height: '100%', 
-        flex: 1
+        flexDirection: 'row', 
     },
     
     image:{
         width: 450, 
-        height: 500
+        height: 500, 
+        flexDirection: "row", 
+        flex: 1,
+        aspectRatio: 1
     }, 
     
     button:{
-        borderRadius: 10 ,
-        width: '100%', 
-        height: '100%', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'row'
-    },
-
-    buttonLabel:{
-        color: '#fff', 
-        fontSize: 20
-    },
-
-    buttonContainer:{
-        width: 330, 
-        height: 65, 
+        height: hp(7),
         backgroundColor: '#707070',
         alignItems: 'center', 
         justifyContent: 'center', 
         borderRadius: 5, 
-        marginHorizontal:35, 
-        marginTop: 138
-    }, 
-
-    widget:{
-        borderRadius: 15 ,
-        width: '100%', 
-        height: '100%', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'row', 
+        margin: '5%'
     },
 
-    widgetLabel:{
-        color: '#707070', 
-        fontSize: 12
+    buttonLabel:{
+        color: '#fff', 
+        fontSize: hp(2)
     },
-
-    widgetContainer:{
-        width: 300, 
-        height: 80, 
-        backgroundColor: '#F5F7F9',
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        borderRadius: 5, 
-        marginLeft: 55, 
-        marginTop: 65,
-        marginBottom: 25, 
-    }, 
-
 });

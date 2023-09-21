@@ -14,6 +14,9 @@ import AssignCollectorScreen from './src/Components/Reseller/AssignCollector';
 import PaymentForm from './src/Components/Client/PaymentForm';
 import CameraCapture from './src/Components/Client/Camera';
 
+import {SafeAreaView, View,StyleSheet, Platform} from 'react-native'
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { SplashScreen } from 'expo-router';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -31,9 +34,10 @@ export type RootStackParamList = {
   TellUsMoreAboutYourself: undefined; 
   SoldItems: undefined; 
   MyCollector: undefined; 
-  SendCollector: undefined; 
   PaymentForm: undefined;
   CameraCapture: undefined;
+  CollectorCollection: undefined; 
+
   //assigned AssignCollector to receive data from SendCollector
   AssignCollector: {otherParam1: any}; 
 };
@@ -43,6 +47,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 //used for typechecking upon navigating screens to see if Screen name is not void
 export type CheckScreenNavigationprop = NativeStackNavigationProp<RootStackParamList>; 
 
+SplashScreen.preventAutoHideAsync();
+setTimeout(SplashScreen.hideAsync, 5000);
 
 export default function App(){
   return(
@@ -61,7 +67,7 @@ export default function App(){
       <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="MyCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="SendCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="CollectorCollection" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
       <Stack.Screen name="CameraCapture" component={CameraCapture} options={{ headerShown: false}}/>
@@ -73,6 +79,7 @@ export default function App(){
 
 //Theme for the STACK
 const MyTheme = {
+  flex:1,
   dark: false,
   colors: {
     primary: 'rgb(255, 45, 85)',

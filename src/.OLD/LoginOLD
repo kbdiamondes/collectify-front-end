@@ -1,0 +1,24 @@
+            <View style={styles.container}>
+
+                <View style={styles.header}>
+                    <Text style={styles.textStyleSubheader} onPress={()=>navigation.goBack()}>Back</Text>
+                    <Text style={styles.textStyleHeader}>Login</Text>
+                </View>
+
+                <View style={styles.main}>
+
+                    <View style={styles.body}>
+                        <View style={styles.buttonUnfilledContainer}>
+                            <Pressable style={styles.buttonUnfilled} onPress={()=>navigation.push('Register')}>
+                                <Text style={styles.buttonUnfilledLabel}>No account yet? Register Now!</Text>
+                            </Pressable>
+                        </View>
+                            <Text style={styles.textStyleSmallest} onPress={()=>alert('Coming Soon!')}>Forgot Password?</Text>
+                            <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
+                            <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" ></TextInput>
+                    </View>
+                <View style={styles.footer}>
+         
+                  </View>
+                </View>
+            </View>

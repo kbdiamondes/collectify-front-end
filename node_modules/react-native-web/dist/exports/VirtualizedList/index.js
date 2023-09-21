@@ -6,5 +6,6 @@
  *
  * 
  */
+
 import VirtualizedList from '../../vendor/react-native/VirtualizedList';
 export default VirtualizedList;

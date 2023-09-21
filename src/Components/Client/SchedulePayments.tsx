@@ -5,6 +5,25 @@ import React, { useState } from 'react';
 import ScheduledPaymentsList from './Lists/ScheduledPaymentsList';
 import scheduledItems from '../../../JsonData/items.json'
 
+
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+
+const scheduledItems = [
+    {
+        itemName: 'iPhone 14 Pro Max SX',
+        itemCollectible: 2555, 
+        itemStatus: 'Unpaid',
+        scheduledDate: 'January 16, 2023'
+    },
+    {
+        itemName: 'iPhone 14 Pro Max SX',
+        itemCollectible: 2555, 
+        itemStatus: 'Unpaid',
+        scheduledDate: 'January 16, 2023'
+    },
+]
+
 export default function SchedulePayments(){
     
 
@@ -28,14 +47,14 @@ export default function SchedulePayments(){
 
 const styles = StyleSheet.create({
     container:{
-        paddingTop: 31, 
-        paddingHorizontal: 21
+        flex:1, 
+        paddingTop: hp(2), 
+        paddingHorizontal: hp(1.5)
     }, 
     textHeader:{
-        fontSize: 15,
+        fontSize: hp(2),
         fontWeight: 'bold', 
         color: '#9F9F9F',
-        paddingHorizontal: 23,
-        marginBottom: 10
+        padding: hp(1.2)
     }
 });

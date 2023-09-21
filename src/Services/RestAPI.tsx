@@ -90,10 +90,11 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
             };
           
             axios
-              .post("http://192.168.1.6:8080/sendCollectors", body, config)
+              .post("http://10.10.7.131:8080/sendCollectors", body, config)
               .then((response) => {
                 setData(response.data);
                 console.log(response.data)
+                console.log("Connection success")
               })
               .catch((error) => {
                 setError(error.response.data.message);
