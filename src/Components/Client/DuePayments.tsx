@@ -2,6 +2,7 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 import DuePaymentList from './Lists/DuePaymentList';
 
 import React, { useState } from 'react';
+import dueItems from '../../../JsonData/items.json'
 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';

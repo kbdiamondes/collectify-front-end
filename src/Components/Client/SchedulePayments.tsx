@@ -3,6 +3,8 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 
 import React, { useState } from 'react';
 import ScheduledPaymentsList from './Lists/ScheduledPaymentsList';
+import scheduledItems from '../../../JsonData/items.json'
+
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -21,6 +23,7 @@ const scheduledItems = [
         scheduledDate: 'January 16, 2023'
     },
 ]
+
 export default function SchedulePayments(){
     
 
