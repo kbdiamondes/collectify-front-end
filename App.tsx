@@ -32,7 +32,7 @@ export type RootStackParamList = {
   TellUsMoreAboutYourself: undefined; 
   SoldItems: undefined; 
   MyCollector: undefined; 
-  SendCollector: undefined; 
+  CollectorCollection: undefined; 
   //assigned AssignCollector to receive data from SendCollector
   AssignCollector: {otherParam1: any}; 
 };
@@ -62,7 +62,7 @@ export default function App(){
       <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="MyCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="SendCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="CollectorCollection" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{ headerShown: false}}/>
 
     </Stack.Navigator>

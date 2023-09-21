@@ -3,14 +3,16 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 import { CheckScreenNavigationprop, RootStackParamList } from '../../../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-type SendCollectorListProps = {
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+type CollectorCollectionListProps = {
     client_id: number,
     fullname: String, 
     //requiredCollectible: number
 }
 
 
-export default function SendCollectorsList(props: SendCollectorListProps){
+export default function CollectorCollectionList(props: CollectorCollectionListProps){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
 
     //function to navigate to AssignCollectorScreen and pass data
@@ -22,27 +24,35 @@ export default function SendCollectorsList(props: SendCollectorListProps){
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                 <View style={styles.square}/>
-                    <View style={styles.itemText}>
-                        <Text style={{color:'#363636'}}>{props.fullname}</Text>
-                        <Text style={{color: '#92A0A8'}}>Php 2500</Text>                                  
-                    </View>
-                <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPress={gotoAssignCollector}>
-                        <Text style={styles.buttonLabel}>Send</Text>
-                    </Pressable>
+
+                <View style={styles.itemText}>
+                    <Text style={{color:'#363636', fontSize:hp(1.4)}}>{props.fullname}</Text>
+                    <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>Php 5000</Text>                                  
                 </View>
+
+                <View style={styles.buttonMainContainer}>
+                    <View style={styles.buttonContainer}>
+                        <Pressable style={styles.button} onPress={gotoAssignCollector}>
+                            <Text style={styles.buttonLabel}>Pay</Text>
+                        </Pressable>
+                    </View>
+                </View>    
             </View>
             
         </SafeAreaView>
     );
 }
 
+
 const styles = StyleSheet.create({
     item:{
+        flex: 1,
         backgroundColor: '#F5F7F9',
-        padding: 21, 
+        padding: 20, 
         borderRadius: 10, 
-        marginBottom: 20,
+        marginBottom: hp(2),
+        marginLeft: hp(1), 
+        marginRight: hp(1), 
         shadowColor: '#000', 
         shadowOffset: {
             width:0,
@@ -52,38 +62,47 @@ const styles = StyleSheet.create({
         elevation: 2
     },
     itemLeft:{
+        flex: 1,
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
     },
     square:{
-        width: 40,
-        height: 40,
+        flex:.5,
+        width: 100,  
+        height: 50,
+        margin: hp(1.5), 
         backgroundColor: '#92A0A8', 
-        borderRadius: 5,
-        marginRight: 15, 
+        borderRadius: 5
     }, 
     itemText: {
+        flex:1, 
         maxWidth: '80%', 
+        marginRight: hp(1.5), 
+        justifyContent: 'center', 
+        alignItems: 'flex-start',
+        textAlign: 'left'
+    }, 
+    buttonMainContainer:{
+        flex:.8, 
+        width: wp(19), 
+        height: hp(5.5),
+        margin: hp(1.5), 
+        justifyContent: 'center', 
     }, 
     buttonContainer: {
-        width: 65, 
-        height: 40,
+        flex:1,
         backgroundColor:'#2C85E7',
-        marginLeft: 50,
-        justifyContent:'space-evenly',
         borderRadius: 5
     }, 
     button:{
-        borderRadius: 10 ,
-        width: '100%', 
-        height: '100%', 
+        flex:1, 
         alignItems: 'center', 
         justifyContent: 'center', 
         flexDirection: 'row'
     },
     buttonLabel:{
         color: '#fff', 
-        fontSize: 12
+        fontSize: hp(1.5),
     },
 }); 
