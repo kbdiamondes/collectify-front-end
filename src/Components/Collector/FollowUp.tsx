@@ -3,6 +3,7 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, { useState } from 'react';
 import CollectionAssignment from './Lists/CollectionAssignmentLists';
 import FollowUpAssignment from './Lists/FollowUpLists';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const recentTransaction= [
     {
@@ -48,14 +49,14 @@ export default function FollowUp(){
 
 const styles = StyleSheet.create({
     container:{
-        paddingTop: 31, 
-        paddingHorizontal: 21
+        flex: 1,
+        paddingTop: hp(1), 
+        paddingHorizontal: hp(1.5)
     }, 
     textHeader:{
-        fontSize: 15,
+        fontSize: hp(2),
         fontWeight: 'bold', 
         color: '#9F9F9F',
-        paddingHorizontal: 23,
-        marginBottom: 10
+        padding: hp(1.2)
     }
 });

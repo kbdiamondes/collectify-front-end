@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/collectify-icon.png",
     "userInterfaceStyle": "light",
+    
     "splash": {
       "image": "./assets/splash-screen.jpeg",
       "resizeMode": "cover",
@@ -16,6 +17,12 @@
     ],
     "ios": {
       "supportsTablet": true, 
+      "splash": {
+        "image": "./assets/splash-screen.jpeg",
+        "resizeMode": "cover",
+        "backgroundColor": "#ffffff"
+      },
+
     
     },
     "android": {
