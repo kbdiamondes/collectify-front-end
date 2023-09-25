@@ -106,7 +106,7 @@ export default function CameraCapture(){
                 textAlign: 'center'
               }}
             >
-              Take picture
+              Picture of Receipt
             </Text>
           </TouchableOpacity>
         </View>

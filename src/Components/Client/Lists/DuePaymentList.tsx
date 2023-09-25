@@ -9,13 +9,13 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 type PaymentProps = {
     key:number, 
     itemName:String; 
-    itemCollectible: number; 
+    requiredCollectible: number; 
 }
 
 
 export default function DuePaymentList(props: PaymentProps){
 
-    const [itemCollectible, setitemCollectible] = useState(props.itemCollectible);
+    const [amountCollectible, setamountCollectible] = useState(props.requiredCollectible);
     const navigation = useNavigation<CheckScreenNavigationprop>();
 
     return(
@@ -25,7 +25,7 @@ export default function DuePaymentList(props: PaymentProps){
 
                 <View style={styles.itemText}>
                     <Text style={{color:'#363636', fontSize:hp(1.4)}}>{props.itemName}</Text>
-                    <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>Php {props.itemCollectible}</Text>                                  
+                    <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>Php {props.requiredCollectible}</Text>                                  
                 </View>
 
                 <View style={styles.buttonMainContainer}>

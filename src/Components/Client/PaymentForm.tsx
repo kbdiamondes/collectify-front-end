@@ -3,12 +3,26 @@ import React, { useState } from 'react';
 import CameraCapture from './Camera';
 import { useNavigation } from "@react-navigation/native";
 import { CheckScreenNavigationprop } from '../../../App';
+import axios from 'axios';
 
 
 
 export default function PaymentForm(){
+    const [itemPrice, setitemPrice] = useState(0)
+    const [referenceNumber, setreferenceNumber] = useState(0)
+    const [paymentType, setpaymentType] = useState('')
+    const [transactionProof, settransactionProof] = useState<any>(null)
     const navigation = useNavigation<CheckScreenNavigationprop>()
-    
+    const handleSubmit = ()=>{axios.post('/user', {
+        firstName: 'Fred',
+        lastName: 'Flintstone'
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });}
     return(
 
         <SafeAreaView>
@@ -20,7 +34,7 @@ export default function PaymentForm(){
                     <Text style={styles.textLabel}>Item Name</Text>
                     <TextInput style={styles.textInput}  placeholder='Enter item name'></TextInput>
                     <Text style={styles.textLabel}>Item Price</Text>
-                    <TextInput style={styles.textInput}  placeholder='Enter amount to be paid'></TextInput>
+                    <TextInput onChangeText={(e)=>setitemPrice(parseInt(e))} keyboardType={'numeric'} style={styles.textInput}  placeholder='Enter amount to be paid'></TextInput>
                     <Text style={styles.textLabel}>Required Collectible</Text>
                     <TextInput style={styles.textInput} editable={false} value='2500'></TextInput>
                     <Text style={styles.textLabel}>Reference Number</Text>
