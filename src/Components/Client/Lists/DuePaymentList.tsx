@@ -1,4 +1,8 @@
-import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
+import { useState } from 'react';
+import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent, TextInput, Modal} from 'react-native'
+import { useNavigation } from "@react-navigation/native";
+import { CheckScreenNavigationprop } from '../../../../App';
+        
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
@@ -8,7 +12,12 @@ type PaymentProps = {
     itemCollectible: number; 
 }
 
+
 export default function DuePaymentList(props: PaymentProps){
+
+    const [itemCollectible, setitemCollectible] = useState(props.itemCollectible);
+    const navigation = useNavigation<CheckScreenNavigationprop>();
+
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
@@ -21,7 +30,7 @@ export default function DuePaymentList(props: PaymentProps){
 
                 <View style={styles.buttonMainContainer}>
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={()=>alert("hello")}>
+                        <Pressable style={styles.button} onPress={()=>navigation.navigate("PaymentForm")}>
                             <Text style={styles.buttonLabel}>Pay</Text>
                         </Pressable>
                     </View>

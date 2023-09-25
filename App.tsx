@@ -11,6 +11,8 @@ import TellMeAboutYourself from './src/Components/TellMe';
 import { ResellerTabNavigator } from './src/Components/Reseller/ResellerTabNavigator';
 import TestApp from './src/Services/TestAxios';
 import AssignCollectorScreen from './src/Components/Reseller/AssignCollector';
+import PaymentForm from './src/Components/Client/PaymentForm';
+import CameraCapture from './src/Components/Client/Camera';
 
 import {SafeAreaView, View,StyleSheet, Platform} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -32,7 +34,10 @@ export type RootStackParamList = {
   TellUsMoreAboutYourself: undefined; 
   SoldItems: undefined; 
   MyCollector: undefined; 
+  PaymentForm: undefined;
+  CameraCapture: undefined;
   CollectorCollection: undefined; 
+
   //assigned AssignCollector to receive data from SendCollector
   AssignCollector: {otherParam1: any}; 
 };
@@ -64,6 +69,8 @@ export default function App(){
       <Stack.Screen name="MyCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="CollectorCollection" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{ headerShown: false}}/>
+      <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
+      <Stack.Screen name="CameraCapture" component={CameraCapture} options={{ headerShown: false}}/>
 
     </Stack.Navigator>
   </NavigationContainer>
