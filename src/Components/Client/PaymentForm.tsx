@@ -13,9 +13,7 @@ export default function PaymentForm(){
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
     const navigation = useNavigation<CheckScreenNavigationprop>()
-    const handleSubmit = ()=>{axios.post('/user', {
-        firstName: 'Fred',
-        lastName: 'Flintstone'
+    const handleSubmit = ()=>{axios.put('/user', {
       })
       .then(function (response) {
         console.log(response);
@@ -23,6 +21,21 @@ export default function PaymentForm(){
       .catch(function (error) {
         console.log(error);
       });}
+
+      const clickSubmit = ()=>{axios.post('/user', {
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });}
+
+      const Submit = ()=> {
+        clickSubmit()
+        handleSubmit()
+    }
+   
     return(
 
         <SafeAreaView>
@@ -40,7 +53,16 @@ export default function PaymentForm(){
                     <Text style={styles.textLabel}>Reference Number</Text>
                     <TextInput style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
-
+                    {/**WALA PAKOY DROPDOWN FOR PAYMENT */}
+                    <select
+                      value={paymentType} onChange={(event) => setpaymentType(event.target.value)} defaultValue={'Select type of Payment'}
+                      style={{ height: '35px', width: '120px', borderRadius: '8px', textAlign: 'center', backgroundColor: '#D9D9D9' }}
+                    >
+                      <option value="Cash">View</option>
+                      <option value="Online Banking">Update</option>
+                      <option value="Over the Counter">Evaluate</option>
+                    </select>
+                    
                     <View style={styles.buttonContainer}>
                         <Pressable style={styles.button} onPress={()=>navigation.push('CameraCapture')}>
                         <Text style={styles.buttonLabel}>
