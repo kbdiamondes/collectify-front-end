@@ -2,10 +2,12 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, Aler
 import React, { useState } from 'react';
 import {Camera} from 'expo-camera'
 import CameraPreview from './CameraPreview';
-
-
+import { CheckScreenNavigationprop } from "../../App";
+import { useNavigation } from 'expo-router';
 
 export default function CameraCapture(){
+
+    const navigation = useNavigation<ImagePreview>(); 
     const [startCamera,setStartCamera] = React.useState(false)
     const [previewVisible, setPreviewVisible] = useState(false)
     const [capturedImage, setCapturedImage] = useState<any>(null)
@@ -18,13 +20,55 @@ export default function CameraCapture(){
           Alert.alert('Access denied')
         }
       }
+      const [imageLink, setImageLink] = React.useState()
+      const setImage = (photo:any)=> {
+        setImageLink(photo)
+      }
 
       const __takePicture = async () => {
-        if (!camera) return
-        const photo = await camera.takePictureAsync()
-        console.log(photo)
-        setPreviewVisible(true)
-        setCapturedImage(photo)
+        if (!camera) return;
+        
+        const photo = await camera.takePictureAsync();
+        
+        // Access the base64 image data
+        const photoBase64 = photo.base64;
+      
+        console.log("test " + photoBase64); // This is the base64-encoded image data
+        
+        // Set the photoBase64 in your component's state or use it as needed
+        setPreviewVisible(true);
+        setCapturedImage(photoBase64)
+      
+    
+
+        //buhaton is convert STRING (PHOTO VARIABLE) -> IMAGE
+        //const [imageLink, setImageLink] 
+        //setImageLink(photo)
+        //const base64 = setImageLink
+        //type binaryImageData = Base64.decode(base64)
+
+        /*
+        import { FileSystem } from 'expo';
+
+        const fileName = 'myImage.png'; // Set a desired file name
+
+        FileSystem.writeAsStringAsync(FileSystem.documentDirectory + fileName, binaryImageData, {
+          encoding: FileSystem.EncodingType.Base64,
+        })
+          .then(() => {
+            console.log(`Image saved as ${fileName}`);
+          })
+          .catch((error) => {
+            console.error('Error saving image:', error);
+          });
+
+        */
+          //import sa ug "const navigation = useNavigate<CheckScreenPropschu>"
+          //navigation.push('')
+          //navigation.goBack()
+          //navigation.goBack()
+        
+
       }
       
     let camera: Camera

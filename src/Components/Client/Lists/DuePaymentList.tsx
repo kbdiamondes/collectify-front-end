@@ -18,6 +18,10 @@ export default function DuePaymentList(props: PaymentProps){
     const [amountCollectible, setamountCollectible] = useState(props.requiredCollectible);
     const navigation = useNavigation<CheckScreenNavigationprop>();
 
+    const handleSubmit = ()=>{
+        console.log(props.itemName)
+        navigation.navigate('PaymentForm')
+    }
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
@@ -30,7 +34,7 @@ export default function DuePaymentList(props: PaymentProps){
 
                 <View style={styles.buttonMainContainer}>
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={()=>alert("hello")}>
+                        <Pressable style={styles.button} onPress={handleSubmit}>
                             <Text style={styles.buttonLabel}>Pay</Text>
                         </Pressable>
                     </View>

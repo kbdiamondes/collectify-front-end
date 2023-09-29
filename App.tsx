@@ -17,6 +17,7 @@ import CameraCapture from './src/Components/Client/Camera';
 import {SafeAreaView, View,StyleSheet, Platform} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SplashScreen } from 'expo-router';
+import ImagePreview from './src/Components/Client/ImagePreview';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -37,7 +38,8 @@ export type RootStackParamList = {
   PaymentForm: undefined;
   CameraCapture: undefined;
   CollectorCollection: undefined; 
-
+  ImagePreview: undefined;
+  
   //assigned AssignCollector to receive data from SendCollector
   AssignCollector: {otherParam1: any}; 
 };
@@ -71,6 +73,7 @@ export default function App(){
       <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
       <Stack.Screen name="CameraCapture" component={CameraCapture} options={{ headerShown: false}}/>
+      <Stack.Screen name="ImagePreview" component={ImagePreview} options={{ headerShown: false}}/>
 
     </Stack.Navigator>
   </NavigationContainer>

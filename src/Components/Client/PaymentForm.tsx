@@ -58,9 +58,9 @@ export default function PaymentForm(){
                       value={paymentType} onChange={(event) => setpaymentType(event.target.value)} defaultValue={'Select type of Payment'}
                       style={{ height: '35px', width: '120px', borderRadius: '8px', textAlign: 'center', backgroundColor: '#D9D9D9' }}
                     >
-                      <option value="Cash">View</option>
-                      <option value="Online Banking">Update</option>
-                      <option value="Over the Counter">Evaluate</option>
+                      <option value="Cash">Cash</option>
+                      <option value="Online Banking">Online Banking</option>
+                      <option value="Over the Counter">Over the Counter</option>
                     </select>
                     
                     <View style={styles.buttonContainer}>
