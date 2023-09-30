@@ -3,12 +3,39 @@ import React, { useState } from 'react';
 import CameraCapture from './Camera';
 import { useNavigation } from "@react-navigation/native";
 import { CheckScreenNavigationprop } from '../../../App';
+import axios from 'axios';
 
 
 
 export default function PaymentForm(){
+    const [itemPrice, setitemPrice] = useState(0)
+    const [referenceNumber, setreferenceNumber] = useState(0)
+    const [paymentType, setpaymentType] = useState('')
+    const [transactionProof, settransactionProof] = useState<any>(null)
     const navigation = useNavigation<CheckScreenNavigationprop>()
-    
+    const handleSubmit = ()=>{axios.put('/user', {
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });}
+
+      const clickSubmit = ()=>{axios.post('/user', {
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });}
+
+      const Submit = ()=> {
+        clickSubmit()
+        handleSubmit()
+    }
+   
     return(
 
         <SafeAreaView>
@@ -20,13 +47,22 @@ export default function PaymentForm(){
                     <Text style={styles.textLabel}>Item Name</Text>
                     <TextInput style={styles.textInput}  placeholder='Enter item name'></TextInput>
                     <Text style={styles.textLabel}>Item Price</Text>
-                    <TextInput style={styles.textInput}  placeholder='Enter amount to be paid'></TextInput>
+                    <TextInput onChangeText={(e)=>setitemPrice(parseInt(e))} keyboardType={'numeric'} style={styles.textInput}  placeholder='Enter amount to be paid'></TextInput>
                     <Text style={styles.textLabel}>Required Collectible</Text>
                     <TextInput style={styles.textInput} editable={false} value='2500'></TextInput>
                     <Text style={styles.textLabel}>Reference Number</Text>
                     <TextInput style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
-
+                    {/**WALA PAKOY DROPDOWN FOR PAYMENT */}
+                    <select
+                      value={paymentType} onChange={(event) => setpaymentType(event.target.value)} defaultValue={'Select type of Payment'}
+                      style={{ height: '35px', width: '120px', borderRadius: '8px', textAlign: 'center', backgroundColor: '#D9D9D9' }}
+                    >
+                      <option value="Cash">Cash</option>
+                      <option value="Online Banking">Online Banking</option>
+                      <option value="Over the Counter">Over the Counter</option>
+                    </select>
+                    
                     <View style={styles.buttonContainer}>
                         <Pressable style={styles.button} onPress={()=>navigation.push('CameraCapture')}>
                         <Text style={styles.buttonLabel}>

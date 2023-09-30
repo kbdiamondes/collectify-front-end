@@ -17,6 +17,9 @@ import CameraCapture from './src/Components/Client/Camera';
 import {SafeAreaView, View,StyleSheet, Platform} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SplashScreen } from 'expo-router';
+
+import ImagePreview from './src/Components/Client/ImagePreview';
+
 import ActiveContracts from './src/Components/Reseller/ActiveContracts';
 import CreateNewContract from './src/Components/Reseller/CreateNewContract';
 import CreateNewContractScreen from './src/Components/Reseller/CreateNewContract';
@@ -24,6 +27,7 @@ import CreateNewContractModal from './src/Components/Reseller/CreateNewContract'
 import FullPaymentScreen from './src/Components/Reseller/FullPaymentScreen';
 import MonthlyPaymentmentScreen from './src/Components/Reseller/MonthlyInstallmentScreen';
 import { AuthContext, AuthContextProvider } from './src/Context/AuthContext';
+
 
 
 export type RootStackParamList = {
@@ -51,6 +55,13 @@ export type RootStackParamList = {
   CreateNewContractModal: undefined; 
   SoldItems: undefined; 
   MyCollector: undefined; 
+
+  PaymentForm: undefined;
+  CameraCapture: undefined;
+  CollectorCollection: undefined; 
+  ImagePreview: undefined;
+  
+  //assigned AssignCollector to receive data from SendCollector
   ActiveContracts: undefined; 
   FullPaymentContract: undefined; 
   MonthlyPaymentContract:undefined; 
@@ -99,7 +110,9 @@ export default function App(){
       <Stack.Screen name="MonthlyPaymentContract" component={MonthlyPaymentmentScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
       <Stack.Screen name="CameraCapture" component={CameraCapture} options={{ headerShown: false}}/>
-    
+
+      <Stack.Screen name="ImagePreview" component={ImagePreview} options={{ headerShown: false}}/>
+
     </Stack.Navigator>
 
   </NavigationContainer>

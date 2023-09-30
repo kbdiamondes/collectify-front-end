@@ -1,64 +1,58 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 import DuePaymentList from './Lists/DuePaymentList';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 //import dueItems from '../../../JsonData/items.json'
 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
-
-const dueItems = [
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-        {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-    {
-        itemName: 'iPhone 14 Pro Max SX',
-        itemCollectible: 2555
-    }, 
-]
-
+import axios from 'axios';
+import { IClient, RestAPI } from '../../Services/RestAPI';
+interface ResponseData{
+    client_id: number;
+    itemName:string;
+    requiredCollectible:number;
+    paymentStatus: boolean;
+}
 
 export default function DuePayments(){
+    //const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
+   const [data, setData] = useState<ResponseData[]>([]);
+    
+    //GET
+    
+    useEffect(() => {
+        axios.get('http://192.168.56.1:8080/client/duePayments')
+        .then(function (response) {
+          // handle success
+          setData(response.data)
+          console.log(response);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        })
+        .finally(function () {
+          // always executed
+        });
+      },[]);
+
+      /*
+      useEffect(() => {
+        sendRequest({ 
+            method: 'GET', 
+            url: "http://192.168.56.1:8080/client/duePayments"
+        })
+         },[] )*/
+
+
     return(
             <ScrollView style={styles.container}>
                 <Text style={styles.textHeader} >Upcoming Dues</Text>
                 {
-                dueItems.map((item, index)=>{
-                    return <DuePaymentList key={index} itemName={item.itemName} itemCollectible={item.itemCollectible}/>
+                data.map((item, index)=>{
+                    return <DuePaymentList key={index} itemName={item.itemName} requiredCollectible={item.requiredCollectible}/>
                 })
             }  
         </ScrollView>     
