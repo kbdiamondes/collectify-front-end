@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React, { useContext } from 'react'; 
 import GetStarted from './src/Components/GetStarted';
 import Login from './src/Components/Login';
 import { DefaultTheme, NavigationContainer, RouteProp } from '@react-navigation/native';
@@ -17,30 +17,58 @@ import CameraCapture from './src/Components/Client/Camera';
 import {SafeAreaView, View,StyleSheet, Platform} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SplashScreen } from 'expo-router';
+
 import ImagePreview from './src/Components/Client/ImagePreview';
+
+import ActiveContracts from './src/Components/Reseller/ActiveContracts';
+import CreateNewContract from './src/Components/Reseller/CreateNewContract';
+import CreateNewContractScreen from './src/Components/Reseller/CreateNewContract';
+import CreateNewContractModal from './src/Components/Reseller/CreateNewContract';
+import FullPaymentScreen from './src/Components/Reseller/FullPaymentScreen';
+import MonthlyPaymentmentScreen from './src/Components/Reseller/MonthlyInstallmentScreen';
+import { AuthContext, AuthContextProvider } from './src/Context/AuthContext';
+
+
 
 export type RootStackParamList = {
   Login: undefined;
   GetStarted: undefined;
   Register: undefined;
+
+  //Client
   DuePayments: undefined; 
+  PaymentForm: undefined;
+  CameraCapture: undefined;
   TabNavigator: undefined; 
   ScheduledPayments: undefined; 
   PaymentReminders: undefined; 
   TransactionHistory: undefined; 
   PaymentRecrods: undefined; 
+
+  //Collector
   Collect: undefined; 
   FollowUp: undefined;
   Assurance: undefined; 
   TellUsMoreAboutYourself: undefined; 
+
+  //Reseller
+  CreateNewContractModal: undefined; 
   SoldItems: undefined; 
   MyCollector: undefined; 
+
   PaymentForm: undefined;
   CameraCapture: undefined;
   CollectorCollection: undefined; 
   ImagePreview: undefined;
   
   //assigned AssignCollector to receive data from SendCollector
+  ActiveContracts: undefined; 
+  FullPaymentContract: undefined; 
+  MonthlyPaymentContract:undefined; 
+
+  CollectorCollection: undefined; 
+  
+  //assigned AssignCollector Screen to receive data from Collector collection Screen
   AssignCollector: {otherParam1: any}; 
 };
 
@@ -53,10 +81,14 @@ SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 5000);
 
 export default function App(){
+
+  const auth = useContext(AuthContext); 
+
   return(
+    <AuthContextProvider>
     <NavigationContainer theme={MyTheme}>
     <Stack.Navigator initialRouteName="GetStarted">
-      <Stack.Screen name="TellUsMoreAboutYourself" component={TellMeAboutYourself} options={{headerShown:false}}/>
+      <Stack.Screen name="TellUsMoreAboutYourself" component={TellMeAboutYourself} options={{headerShown:false, gestureEnabled: false}}/>
       <Stack.Screen name="GetStarted" component={GetStarted} options={{headerShown:false}}/>
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
@@ -67,16 +99,24 @@ export default function App(){
       <Stack.Screen name="Collect" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="FollowUp" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
+      
+      <Stack.Screen name="ActiveContracts" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="CreateNewContractModal" component={CreateNewContractModal} options={{headerShown: false}}/>
       <Stack.Screen name="MyCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="CollectorCollection" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{ headerShown: false}}/>
+      <Stack.Screen name="FullPaymentContract" component={FullPaymentScreen} options={{ headerShown: false}}/>
+      <Stack.Screen name="MonthlyPaymentContract" component={MonthlyPaymentmentScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
       <Stack.Screen name="CameraCapture" component={CameraCapture} options={{ headerShown: false}}/>
+
       <Stack.Screen name="ImagePreview" component={ImagePreview} options={{ headerShown: false}}/>
 
     </Stack.Navigator>
+
   </NavigationContainer>
+  </AuthContextProvider>
   );
 }
 
@@ -94,5 +134,7 @@ const MyTheme = {
   },
 };
 /*
+
+<Stack.Screen name="CreateNewContract" component={CreateNewContract} options={{headerShown: false}}/> -> add to stack if planning to open modal through bottom nav
 <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{headerShown: false}}/>
 */

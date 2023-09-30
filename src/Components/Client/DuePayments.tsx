@@ -1,6 +1,11 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 import DuePaymentList from './Lists/DuePaymentList';
+
 import React, { useEffect, useState } from 'react';
+
+//import dueItems from '../../../JsonData/items.json'
+
+
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import axios from 'axios';
 import { IClient, RestAPI } from '../../Services/RestAPI';

@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import ScheduledPaymentsList from './Lists/ScheduledPaymentsList';
 
 
-
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 

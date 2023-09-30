@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
+    import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, { useState } from 'react';
 import PaymentReminderList from './Lists/PaymentReminderList';
 

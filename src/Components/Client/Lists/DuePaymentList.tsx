@@ -34,7 +34,9 @@ export default function DuePaymentList(props: PaymentProps){
 
                 <View style={styles.buttonMainContainer}>
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={handleSubmit}>
+
+                        <Pressable style={styles.button} onPress={()=>navigation.navigate("PaymentForm")}>
+
                             <Text style={styles.buttonLabel}>Pay</Text>
                         </Pressable>
                     </View>
