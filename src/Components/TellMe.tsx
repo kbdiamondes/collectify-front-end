@@ -8,9 +8,23 @@ const ClientImagePlaceHolder = require('../../assets/vector-3-scaled.png');
 const CollectorImagePlaceHolder = require('../../assets/vector-4-scaled.png');
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
 export default function TellMeAboutYourself(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
+
+    //handles logout
+    const auth = useContext(AuthContext);
+
+    const handlePress = () => {
+        auth?.logout();
+        console.log(auth?.isLoggedIn)
+        alert("You have been logged out!");
+        
+        navigation.goBack(); 
+    }
+
+
     return(
         <SafeAreaProvider>
             
@@ -19,6 +33,7 @@ export default function TellMeAboutYourself(){
                 <View style={styles.header}>
                     <Text style={styles.textStyleHeader}>Tell us about yourself</Text>
                     <Text style={styles.textStyleSubHeader}>Select the business model that apply to you from the cards below</Text>
+                    <Pressable onPress={handlePress}><Text>Sign out</Text></Pressable>
                 </View>
 
                 <ScrollView style={styles.scrollStyle}>

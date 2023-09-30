@@ -1,13 +1,35 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { KeyboardAvoidingView, SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { AuthContext } from "../Context/AuthContext";
+
 export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
 
+    const [userName, setUserName] = useState<string>('');
+    const [passWord, setPassword] = useState<string>('');
+    const auth = useContext(AuthContext);
+
+    
+
+    const handleLogin = () => {
+        
+        auth?.login(userName, passWord )
+        
+        if(auth?.isLoggedIn==true){
+            navigation.navigate('TellUsMoreAboutYourself'); 
+            console.log(userName, passWord, auth?.isLoggedIn);
+        }else{
+            alert("error")
+        }
+    }
+    
     return(
+
+        
         <KeyboardAvoidingView style={styles.container}>
             <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -27,10 +49,10 @@ export default function Login(){
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                        <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
-                        <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
+                        <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
+                        <TextInput onChangeText={(passWordAuth)=>setPassword(passWordAuth)}placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
                     <View  style={styles.button}>
-                        <Pressable onPressIn={()=>navigation.push('TellUsMoreAboutYourself')}>
+                        <Pressable onPressIn={handleLogin}>
                                 <Text style={styles.buttonLabel}>Login</Text>
                         </Pressable>
                     </View>

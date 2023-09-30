@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React, { useContext } from 'react'; 
 import GetStarted from './src/Components/GetStarted';
 import Login from './src/Components/Login';
 import { DefaultTheme, NavigationContainer, RouteProp } from '@react-navigation/native';
@@ -23,6 +23,7 @@ import CreateNewContractScreen from './src/Components/Reseller/CreateNewContract
 import CreateNewContractModal from './src/Components/Reseller/CreateNewContract';
 import FullPaymentScreen from './src/Components/Reseller/FullPaymentScreen';
 import MonthlyPaymentmentScreen from './src/Components/Reseller/MonthlyInstallmentScreen';
+import { AuthContext, AuthContextProvider } from './src/Context/AuthContext';
 
 
 export type RootStackParamList = {
@@ -69,10 +70,14 @@ SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 5000);
 
 export default function App(){
+
+  const auth = useContext(AuthContext); 
+
   return(
+    <AuthContextProvider>
     <NavigationContainer theme={MyTheme}>
     <Stack.Navigator initialRouteName="GetStarted">
-      <Stack.Screen name="TellUsMoreAboutYourself" component={TellMeAboutYourself} options={{headerShown:false}}/>
+      <Stack.Screen name="TellUsMoreAboutYourself" component={TellMeAboutYourself} options={{headerShown:false, gestureEnabled: false}}/>
       <Stack.Screen name="GetStarted" component={GetStarted} options={{headerShown:false}}/>
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
@@ -92,14 +97,13 @@ export default function App(){
       <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="FullPaymentContract" component={FullPaymentScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="MonthlyPaymentContract" component={MonthlyPaymentmentScreen} options={{ headerShown: false}}/>
-
-
       <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
       <Stack.Screen name="CameraCapture" component={CameraCapture} options={{ headerShown: false}}/>
-      
-      
+    
     </Stack.Navigator>
+
   </NavigationContainer>
+  </AuthContextProvider>
   );
 }
 
