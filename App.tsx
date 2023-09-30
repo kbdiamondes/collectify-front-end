@@ -39,6 +39,7 @@ export type RootStackParamList = {
   DuePayments: undefined; 
   PaymentForm: undefined;
   CameraCapture: undefined;
+  ImagePreview: undefined;
   TabNavigator: undefined; 
   ScheduledPayments: undefined; 
   PaymentReminders: undefined; 
@@ -56,10 +57,6 @@ export type RootStackParamList = {
   SoldItems: undefined; 
   MyCollector: undefined; 
 
-  PaymentForm: undefined;
-  CameraCapture: undefined;
-  CollectorCollection: undefined; 
-  ImagePreview: undefined;
   
   //assigned AssignCollector to receive data from SendCollector
   ActiveContracts: undefined; 
