@@ -16,6 +16,16 @@ interface ResponseData{
     paymentStatus: boolean;
 }
 
+const staticData =  
+[
+{
+        "client_id": 1,
+        "itemName": "Bike",
+        "requiredCollectible": 1000,
+        "paymentStatus": false
+  },
+]
+
 export default function DuePayments(){
     //const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
    const [data, setData] = useState<ResponseData[]>([]);
@@ -51,7 +61,7 @@ export default function DuePayments(){
             <ScrollView style={styles.container}>
                 <Text style={styles.textHeader} >Upcoming Dues</Text>
                 {
-                data.map((item, index)=>{
+                staticData.map((item, index)=>{
                     return <DuePaymentList key={index} itemName={item.itemName} requiredCollectible={item.requiredCollectible}/>
                 })
             }  

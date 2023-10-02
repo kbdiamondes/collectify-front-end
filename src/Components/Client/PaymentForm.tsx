@@ -2,8 +2,8 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable} 
 import React, { useState } from 'react';
 import CameraCapture from './Camera';
 import { useNavigation } from "@react-navigation/native";
-import { CheckScreenNavigationprop } from '../../../App';
 import axios from 'axios';
+import { CheckScreenNavigationprop } from '../../../App';
 
 
 
@@ -12,7 +12,9 @@ export default function PaymentForm(){
     const [referenceNumber, setreferenceNumber] = useState(0)
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
-    const navigation = useNavigation<CheckScreenNavigationprop>()
+
+    const navigation  = useNavigation<CheckScreenNavigationprop>();
+
     const handleSubmit = ()=>{axios.put('/user', {
       })
       .then(function (response) {
@@ -53,18 +55,10 @@ export default function PaymentForm(){
                     <Text style={styles.textLabel}>Reference Number</Text>
                     <TextInput style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
-                    {/**WALA PAKOY DROPDOWN FOR PAYMENT */}
-                    <select
-                      value={paymentType} onChange={(event) => setpaymentType(event.target.value)} defaultValue={'Select type of Payment'}
-                      style={{ height: '35px', width: '120px', borderRadius: '8px', textAlign: 'center', backgroundColor: '#D9D9D9' }}
-                    >
-                      <option value="Cash">Cash</option>
-                      <option value="Online Banking">Online Banking</option>
-                      <option value="Over the Counter">Over the Counter</option>
-                    </select>
-                    
+
+
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={()=>navigation.push('CameraCapture')}>
+                        <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot')}>
                         <Text style={styles.buttonLabel}>
                             Take picture
                         </Text>
@@ -72,7 +66,7 @@ export default function PaymentForm(){
                     </View>
 
                     <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button}>
+                    <Pressable style={styles.button} >
                         <Text style={styles.buttonLabel}>Continue</Text>
                     </Pressable>
                     
@@ -151,5 +145,18 @@ const styles = StyleSheet.create({
                         <Text style={styles.buttonLabel}>take picture</Text>
                     </Pressable>
                     </View>
+
+*/
+
+/*
+                    <select
+                      value={paymentType} onChange={(event) => setpaymentType(event.target.value)} defaultValue={'Select type of Payment'}
+                      style={{ height: '35px', width: '120px', borderRadius: '8px', textAlign: 'center', backgroundColor: '#D9D9D9' }}
+                    >
+                      <option value="Cash">Cash</option>
+                      <option value="Online Banking">Online Banking</option>
+                      <option value="Over the Counter">Over the Counter</option>
+                    </select>
+                    
 
 */

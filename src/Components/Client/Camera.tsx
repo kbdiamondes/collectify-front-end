@@ -2,12 +2,11 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, Aler
 import React, { useState } from 'react';
 import {Camera} from 'expo-camera'
 import CameraPreview from './CameraPreview';
-import { CheckScreenNavigationprop } from "../../App";
+import { CheckScreenNavigationprop } from "../../../App";
 import { useNavigation } from 'expo-router';
 
 export default function CameraCapture(){
 
-    const navigation = useNavigation<ImagePreview>(); 
     const [startCamera,setStartCamera] = React.useState(false)
     const [previewVisible, setPreviewVisible] = useState(false)
     const [capturedImage, setCapturedImage] = useState<any>(null)

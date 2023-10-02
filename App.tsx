@@ -38,7 +38,7 @@ export type RootStackParamList = {
   //Client
   DuePayments: undefined; 
   PaymentForm: undefined;
-  CameraCapture: undefined;
+  CameraShot: undefined;
   ImagePreview: undefined;
   TabNavigator: undefined; 
   ScheduledPayments: undefined; 
@@ -106,7 +106,7 @@ export default function App(){
       <Stack.Screen name="FullPaymentContract" component={FullPaymentScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="MonthlyPaymentContract" component={MonthlyPaymentmentScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
-      <Stack.Screen name="CameraCapture" component={CameraCapture} options={{ headerShown: false}}/>
+      <Stack.Screen name="CameraShot" component={CameraCapture} options={{ headerShown: false}}/>
 
       <Stack.Screen name="ImagePreview" component={ImagePreview} options={{ headerShown: false}}/>
 
