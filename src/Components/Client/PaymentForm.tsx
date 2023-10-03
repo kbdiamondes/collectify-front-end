@@ -4,7 +4,7 @@ import CameraCapture from './Camera';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import { CheckScreenNavigationprop } from '../../../App';
-
+import { Picker } from '@react-native-picker/picker';
 
 
 export default function PaymentForm(){
@@ -56,6 +56,11 @@ export default function PaymentForm(){
                     <TextInput style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
 
+                    <Picker mode='dropdown' >
+                            <Picker.Item label='Bank' value={'Bank'}/> 
+                            <Picker.Item label='Cash' value={'Cash'}/> 
+                            <Picker.Item label='Over the Counter' value={'Over the Counter'}/> 
+                    </Picker>
 
                     <View style={styles.buttonContainer}>
                         <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot')}>

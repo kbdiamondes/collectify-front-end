@@ -24,7 +24,7 @@ export default function CameraCapture(){
         setImageLink(photo)
       }
 
-      const __takePicture = async () => {
+      /*const __takePicture = async () => {
         if (!camera) return;
         
         const photo = await camera.takePictureAsync();
@@ -36,7 +36,23 @@ export default function CameraCapture(){
         
         // Set the photoBase64 in your component's state or use it as needed
         setPreviewVisible(true);
-        setCapturedImage(photoBase64)
+        setCapturedImage(photoBase64)*/
+
+
+
+        const __takePicture = async () => {
+          if (!camera) return;
+      
+          const photo = await camera.takePictureAsync();
+          
+          // Convert the photo to a Blob
+          const blob = await fetch(photo.uri).then(response => response.blob());
+      
+          // Now you have the photo as a Blob
+          console.log(blob);
+      
+        
+        
       
     
 
