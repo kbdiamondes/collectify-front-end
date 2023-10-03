@@ -3,13 +3,14 @@ import React, { useState } from 'react';
 import {Camera} from 'expo-camera'
 import CameraPreview from './CameraPreview';
 import { CheckScreenNavigationprop } from "../../../App";
-import { useNavigation } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 
-export default function CameraCapture(){
+export default function CameraShot(){
 
     const [startCamera,setStartCamera] = React.useState(false)
     const [previewVisible, setPreviewVisible] = useState(false)
     const [capturedImage, setCapturedImage] = useState<any>(null)
+    const navigation = useNavigation <CheckScreenNavigationprop>();
     const __startCamera = async () => {
         const {status} = await Camera.requestCameraPermissionsAsync()
         if (status === 'granted') {
@@ -38,7 +39,7 @@ export default function CameraCapture(){
         setPreviewVisible(true);
         setCapturedImage(photoBase64)*/
 
-
+       
 
         const __takePicture = async () => {
           if (!camera) return;
@@ -49,9 +50,10 @@ export default function CameraCapture(){
           const blob = await fetch(photo.uri).then(response => response.blob());
       
           // Now you have the photo as a Blob
-          console.log(blob);
-      
-        
+          console.log(photo);
+          
+         navigation.navigate('ImageScreenPreview', {imageprop:photo});
+          
         
       
     

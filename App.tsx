@@ -27,6 +27,7 @@ import CreateNewContractModal from './src/Components/Reseller/CreateNewContract'
 import FullPaymentScreen from './src/Components/Reseller/FullPaymentScreen';
 import MonthlyPaymentmentScreen from './src/Components/Reseller/MonthlyInstallmentScreen';
 import { AuthContext, AuthContextProvider } from './src/Context/AuthContext';
+import CameraShot from './src/Components/Client/Camera';
 
 
 
@@ -39,12 +40,16 @@ export type RootStackParamList = {
   DuePayments: undefined; 
   PaymentForm: undefined;
   CameraShot: undefined;
-  ImagePreview: undefined;
+  ImageScreenPreview: {imageprop: any};
   TabNavigator: undefined; 
   ScheduledPayments: undefined; 
   PaymentReminders: undefined; 
   TransactionHistory: undefined; 
   PaymentRecrods: undefined; 
+  
+  
+  
+ 
 
   //Collector
   Collect: undefined; 
@@ -106,9 +111,9 @@ export default function App(){
       <Stack.Screen name="FullPaymentContract" component={FullPaymentScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="MonthlyPaymentContract" component={MonthlyPaymentmentScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
-      <Stack.Screen name="CameraShot" component={CameraCapture} options={{ headerShown: false}}/>
+      <Stack.Screen name="CameraShot" component={CameraShot} options={{ headerShown: false}}/>
 
-      <Stack.Screen name="ImagePreview" component={ImagePreview} options={{ headerShown: false}}/>
+      <Stack.Screen name="ImageScreenPreview" component={ImagePreview} options={{ headerShown: false}}/>
 
     </Stack.Navigator>
 

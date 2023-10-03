@@ -56,7 +56,7 @@ export default function PaymentForm(){
                     <TextInput style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
 
-                    <Picker mode='dropdown' >
+                    <Picker mode='dropdown'style={styles.d1} >
                             <Picker.Item label='Bank' value={'Bank'}/> 
                             <Picker.Item label='Cash' value={'Cash'}/> 
                             <Picker.Item label='Over the Counter' value={'Over the Counter'}/> 
@@ -70,12 +70,6 @@ export default function PaymentForm(){
                         </Pressable>
                     </View>
 
-                    <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} >
-                        <Text style={styles.buttonLabel}>Continue</Text>
-                    </Pressable>
-                    
-                </View>       
                 </View>
             </View>    
             </ScrollView>     
@@ -105,7 +99,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     textLabel:{
-        paddingTop: 20,
+        paddingTop: 15,
         fontSize: 15,
         paddingHorizontal: 15,
         marginVertical: 5
@@ -120,11 +114,15 @@ const styles = StyleSheet.create({
 
     },
     buttonContainer: {
+        padding: 5,
         height: 50,
         backgroundColor:'#2C85E7',
         marginLeft: 10,
         justifyContent:'space-evenly',
         borderRadius: 5,
+        width: '50%',
+        alignSelf:'center',
+        margin: 7
     }, 
     button:{
         borderRadius: 10 ,
@@ -138,6 +136,11 @@ const styles = StyleSheet.create({
         color: '#fff', 
         fontSize: 12
     },
+    d1:{
+        height: 40,
+        borderRadius: 5,
+        width: '50%'
+    }
 
     
 });
