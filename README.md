@@ -1,6 +1,7 @@
 # Collectify
 ## A Payment Collection and Reminder Mobile Application
 ### Created in compliance for Capstone 2 
+![Capstone 1 Recap](https://github.com/kbdiamondes/collectify-backend/assets/68324799/64fdcd15-6100-4251-8126-d6a7df201073)
 _This mobile application addresses the challenges faced by Micro, Small, and Medium Enterprises (MSMEs) by providing an efficient solution for payment collection and reminders, streamlining their interactions with various clients._
 
 > This documentation serves as a guide for current developers in setting up their environment. 
