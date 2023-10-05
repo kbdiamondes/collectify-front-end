@@ -1,13 +1,15 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, Pressable} from 'react-native';
 import ActiveContractsList from './Lists/ActiveContractsList';
 
 import React, { useState } from 'react';
 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { CheckScreenNavigationprop } from "../../../App";
+import { useNavigation } from '@react-navigation/native';
 
 
-const activeContracts = [
+const  activeContracts = [
     {
         clientName: 'Marilyn Monroe', 
         itemName: 'iPhone 14 Pro Max', 
@@ -18,6 +20,11 @@ const activeContracts = [
 
 
 export default function ActiveContracts(){
+    const navigation = useNavigation <CheckScreenNavigationprop>();
+    const nav =(clientName:string)=>{
+        navigation.navigate('CollectPayments', {clientProp:clientName});
+    }
+    
     return(
 
         <SafeAreaView>
@@ -26,7 +33,9 @@ export default function ActiveContracts(){
                 <Text style={styles.textHeader} >Scheduled Payments</Text>
                 {
                     activeContracts.map((item, index)=>{
-                        return <ActiveContractsList key={index} clientName={item.clientName} itemName={item.itemName} requiredCollectible={item.requiredCollectible} paymentType={item.paymentType}/>
+                        return <Pressable key={index} onPressIn={()=>nav(item.clientName)}>
+                                    <ActiveContractsList key={index}  clientName={item.clientName} itemName={item.itemName} requiredCollectible={item.requiredCollectible} paymentType={item.paymentType}/>
+                               </Pressable>
                     })
                 }
             </View>    
