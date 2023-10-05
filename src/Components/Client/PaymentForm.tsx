@@ -1,14 +1,16 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable, Modal} from 'react-native';
 import React, { useState } from 'react';
 import CameraCapture from './Camera';
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
-import { CheckScreenNavigationprop } from '../../../App';
+import { CheckScreenNavigationprop, RootStackParamList } from '../../../App';
 import { Picker } from '@react-native-picker/picker';
 import {Ionicons} from '@expo/vector-icons'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export default function PaymentForm(){
+    const nameProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.nameprop;
+    const priceProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.priceprop;
     const [itemName, setitemName] = useState('')
     const [itemPrice, setitemPrice] = useState(0)
     const [requiredCollectible, setrequiredCollectible] = useState(0)
@@ -48,8 +50,11 @@ export default function PaymentForm(){
         console.log(error);
       });}
 
-      const clickSubmit = ()=>{axios.post('/user', {
-    })
+    /* const clickSubmit = ()=>{
+        axios.post('http://collectify-kilvey-services.onrender.com/paydues/client/1/contracts/1/pay', {
+            requiredCollectible: 
+
+      })
     .then(function (response) {
       console.log(response);
     })
@@ -60,7 +65,7 @@ export default function PaymentForm(){
       const Submit = ()=> {
         clickSubmit()
         handleSubmit()
-    }
+    }*/
    
     return(
 //modal
@@ -90,20 +95,20 @@ export default function PaymentForm(){
                 <Text style={styles.textSubHeader} >Easily pay your outstanding dues online with our convenient and secure payment platform.</Text>
                 <View>
                     <Text style={styles.textLabel}>Item Name</Text>
-                    <TextInput style={styles.textInput}  placeholder='Enter item name'></TextInput>
+                    <TextInput defaultValue={nameProp} style={styles.textInput}  placeholder='Enter item name'></TextInput>
                     <Text style={styles.textLabel}>Item Price</Text>
-                    <TextInput onChangeText={(e)=>setitemPrice(parseInt(e))} keyboardType={'numeric'} style={styles.textInput}  placeholder='Enter amount to be paid'></TextInput>
+                    <TextInput defaultValue={priceProp} keyboardType={'numeric'} style={styles.textInput}  placeholder='Enter amount to be paid'></TextInput>
                     <Text style={styles.textLabel}>Required Collectible</Text>
-                    <TextInput style={styles.textInput} editable={false} value='2500'></TextInput>
+                    <TextInput onChangeText={(e)=> setrequiredCollectible(parseInt(e))} style={styles.textInput} editable={false} value='2500'></TextInput>
                     <Text style={styles.textLabel}>Reference Number</Text>
-                    <TextInput style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
+                    <TextInput onChangeText={(e)=> setreferenceNumber(parseInt(e))} style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
 
                     <Picker mode='dropdown'style={styles.d1} >
                             <Picker.Item label='Bank' value={'Bank'}/> 
                             <Picker.Item label='Cash' value={'Cash'}/> 
                             <Picker.Item label='Over the Counter' value={'Over the Counter'}/> 
-                    </Picker>
+                    </Picker>   
 
                     <View style={styles.buttonContainer}>
                         <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot')}>

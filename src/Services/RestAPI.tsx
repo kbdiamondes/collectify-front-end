@@ -25,6 +25,15 @@ export interface IClient{
     fullName: String, 
     address: String, 
     email: String, 
+    contracts: Contract[];
+}
+export interface Contract{
+    contract_id: number,
+    username: String, 
+    itemName: String, 
+    dueAmount: number, 
+    fullPrice: number, 
+    isPaid: Boolean,
 }
 
 export interface ICollector{

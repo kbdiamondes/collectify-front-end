@@ -13,7 +13,9 @@ export default function ImagePreview2(){
     const navigation = useNavigation <CheckScreenNavigationprop>();
     const nav=()=> { 
         alert("Photo Added")
-    navigation.navigate('CollectPayments')
+        navigation.goBack()
+        navigation.goBack()
+        
     
     }
     return(

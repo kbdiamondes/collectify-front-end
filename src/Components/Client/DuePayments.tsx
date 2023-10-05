@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList} from 'react-native';
 import DuePaymentList from './Lists/DuePaymentList';
 
 import React, { useEffect, useState } from 'react';
@@ -9,11 +9,23 @@ import React, { useEffect, useState } from 'react';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import axios from 'axios';
 import { IClient, RestAPI } from '../../Services/RestAPI';
+import CollectorCollectionList from '../Reseller/Lists/CollectorCollectionList';
+
 interface ResponseData{
     client_id: number;
     itemName:string;
     requiredCollectible:number;
     paymentStatus: boolean;
+    Contracts: Contracts[];
+}
+interface Contracts{
+    contract_id: number;
+    username: string;
+    itemName: string;
+    dueAmount: number;
+    fullPrice: number;
+    transactionProof: any;
+    isPaid: Boolean;
 }
 
 const staticData =  
@@ -27,13 +39,19 @@ const staticData =
 ]
 
 export default function DuePayments(){
-    //const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
-   const [data, setData] = useState<ResponseData[]>([]);
-    
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
+    const [data, setData] = useState<ResponseData[]>([]);
+
     //GET
-    
-    useEffect(() => {
-        axios.get('http://192.168.56.1:8080/client/duePayments')
+    /*useEffect(() => {
+        axios.get("http://collectify-kilvey-services.onrender.com/clients")
+        .then(res => {
+            setData(res.data)
+            console.log(res.data)
+        }).catch(err => console.log(err))
+      },[]);
+   /* useEffect(() => {
+        axios.get("http://collectify-kilvey-services.onrender.com/clients")
         .then(function (response) {
           // handle success
           setData(response.data)
@@ -47,7 +65,13 @@ export default function DuePayments(){
           // always executed
         });
       },[]);
-
+*/
+      useEffect(() => {
+        sendRequest({ 
+            method: 'GET', 
+            url: "http://collectify-kilvey-services.onrender.com/clients"
+        })
+    },[] )
       /*
       useEffect(() => {
         sendRequest({ 
@@ -60,12 +84,20 @@ export default function DuePayments(){
     return(
             <ScrollView style={styles.container}>
                 <Text style={styles.textHeader} >Upcoming Dues</Text>
-                {
-                staticData.map((item, index)=>{
-                    return <DuePaymentList key={index} itemName={item.itemName} requiredCollectible={item.requiredCollectible}/>
-                })
-            }  
-        </ScrollView>     
+                <FlatList
+                    data={client_user}
+                    keyExtractor={(client: IClient) => client.client_id.toString()}
+                    renderItem={({ item: client }) => (
+                        <React.Fragment>
+                            {client.contracts.map((contract, index) => (
+                                <DuePaymentList
+                                key={index} itemName={contract.itemName} requiredCollectible={contract.dueAmount} fullPrice={contract.fullPrice}
+                                                                                                             />
+                            ))}
+                        </React.Fragment>
+                    )}
+                />
+             </ScrollView>     
 
     );
 }
