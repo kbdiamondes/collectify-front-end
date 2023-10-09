@@ -63,8 +63,6 @@ export default function CameraShot(){
     let camera: Camera
     return(
       <SafeAreaView style={{flex:1, justifyContent:"center", alignItems:"center"}}>
-      {startCamera ? (
-       
             <Camera
               style={{flex: 1, width: "100%"}}
               ref={(r) => {
@@ -111,40 +109,7 @@ export default function CameraShot(){
                 </View>
               </View>
             </Camera>
-      ) : (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#fff',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <TouchableOpacity
-            onPress={__startCamera}
-            style={{
-              width: 130,
-              borderRadius: 4,
-              backgroundColor: '#14274e',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 40
-            }}
-          >
-            <Text
-              style={{
-                color: '#fff',
-                fontWeight: 'bold',
-                textAlign: 'center'
-              }}
-            >
-              Picture of Receipt
-            </Text>
-          </TouchableOpacity>
-        </View>
-       
-      )}
+      
       </SafeAreaView>
     );
 }

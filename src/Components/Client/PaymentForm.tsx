@@ -39,8 +39,10 @@ export default function PaymentForm(){
         //pass value here
     }
 
+    //static function for api testing
     let clientIdProp = 1;
-    let contractId = 2;
+    let contractId = 4;
+    let pricing:number = 55; 
 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
 
@@ -103,15 +105,14 @@ export default function PaymentForm(){
       
     const handleSubmit = () => {
         const formData = new FormData();
-        formData.append('amount', priceProp);
+        formData.append('amount', pricing.toString());
         formData.append('base64Image', photoProp);
         formData.append('fileName', '3.png');
         formData.append('contentType', 'image/png');
         
-        axios.post(`http://localhost:8080/paydues/client/${clientIdProp}/contracts/${contractId}/pay`, formData, {
+        axios.post(`https://adelaide-platypus-djxk.1.us-1.fl0.io/paydues/client/${clientIdProp}/contracts/${contractId}/pay`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
-            'Expect': ''
           }
         })
         .then(function (response) {
