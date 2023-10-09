@@ -22,74 +22,44 @@ export default function CameraShot(){
           Alert.alert('Access denied')
         }
       }
+
+
       const [imageLink, setImageLink] = React.useState()
       const setImage = (photo:any)=> {
         setImageLink(photo)
       }
-
-      /*const __takePicture = async () => {
-        if (!camera) return;
-        
-        const photo = await camera.takePictureAsync();
-        
-        // Access the base64 image data
-        const photoBase64 = photo.base64;
-      
-        console.log("test " + photoBase64); // This is the base64-encoded image data
-        
-        // Set the photoBase64 in your component's state or use it as needed
-        setPreviewVisible(true);
-        setCapturedImage(photoBase64)*/
-
        
 
         const __takePicture = async () => {
           if (!camera) return;
-      
+
           const photo = await camera.takePictureAsync();
-          
-          // Convert the photo to a Blob
-          const blob = await fetch(photo.uri).then(response => response.blob());
-      
-          // Now you have the photo as a Blob
-          console.log(photo);
-          
-         navigation.navigate('ImageScreenPreview', {imageprop:photo,nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp});
-          
+
+          // Fetch the image and convert it to a Blob
+          const response = await fetch(photo.uri);
+          const data = await response.blob();
+
+          // Convert the Blob to a base64 string
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            if (reader.result !== null && typeof reader.result === 'string') {
+              const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
+              // Now you have the base64Image without the data URL prefix
+
+              console.log(photo);
+              navigation.navigate('ImageScreenPreview', {
+                imageprop: base64Image,
+                nameprop: nameProp,
+                priceprop: priceProp,
+                contractId: contractIdProp
+              });
+            }
+          };
+
+          console.log(priceProp); 
+          reader.readAsDataURL(data);
+        };
         
-      
-    
-
-        //buhaton is convert STRING (PHOTO VARIABLE) -> IMAGE
-        //const [imageLink, setImageLink] 
-        //setImageLink(photo)
-        //const base64 = setImageLink
-        //type binaryImageData = Base64.decode(base64)
-
-        /*
-        import { FileSystem } from 'expo';
-
-        const fileName = 'myImage.png'; // Set a desired file name
-
-        FileSystem.writeAsStringAsync(FileSystem.documentDirectory + fileName, binaryImageData, {
-          encoding: FileSystem.EncodingType.Base64,
-        })
-          .then(() => {
-            console.log(`Image saved as ${fileName}`);
-          })
-          .catch((error) => {
-            console.error('Error saving image:', error);
-          });
-
-        */
-          //import sa ug "const navigation = useNavigate<CheckScreenPropschu>"
-          //navigation.push('')
-          //navigation.goBack()
-          //navigation.goBack()
-        
-
-      }
-      
     let camera: Camera
     return(
       <SafeAreaView style={{flex:1, justifyContent:"center", alignItems:"center"}}>

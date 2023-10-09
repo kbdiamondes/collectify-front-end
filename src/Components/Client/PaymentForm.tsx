@@ -14,8 +14,8 @@ export default function PaymentForm(){
     const contractIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
     const photoProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.photo;
     const [itemName, setitemName] = useState('')
-    const [itemPrice, setitemPrice] = useState(0)
-    const [requiredCollectible, setrequiredCollectible] = useState(0)
+    const [itemPrice, setitemPrice] = useState('')
+    const [requiredCollectible, setrequiredCollectible] = useState(priceProp)
     const [referenceNumber, setreferenceNumber] = useState(0)
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
@@ -39,25 +39,96 @@ export default function PaymentForm(){
         //pass value here
     }
 
+    let clientIdProp = 1;
+    let contractId = 2;
+
     const navigation  = useNavigation<CheckScreenNavigationprop>();
 
-    const handleSubmit = ()=>{axios.post("http://collectify-kilvey-services.onrender.com/paydues/client/"+contractIdProp+"/contracts/"+contractIdProp+"/pay", {
+    const handleUpload = async () => {
+        try {
+          const formData = new FormData();
+          formData.append('base64Image', 'YourBase64ImageDataHere');
+          formData.append('fileName', 'YourFileNameHere.png');
+          formData.append('contentType', 'image/png');
+      
+          const response = await axios.post('http://localhost:8080/upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Expect': '',
+            },
 
-        amount: priceProp,
-        base64Image: photoProp,
-        fileName: "Iphone.png",
-        contentType: "png"
-      })
-      .then(function (response) {
-        console.log(priceProp);
+          });
+      
+          console.log('Upload successful:', response.data);
+          // Handle the response data as needed
+        } catch (error) {
+          console.error('Upload failed:', error);
+          // Handle errors
+        }
+      };
+
+    const handlePOST = () => {
+        // Define the data to send in the request
+        const data = new FormData();
+        data.append('amount', '100.00'); // Replace with the actual amount
+        data.append('base64Image', photoProp); // Replace with your base64 image data
+        data.append('fileName', 'CameraPicture.png'); // Replace with the desired file name
+        data.append('contentType', 'image/png'); // Replace with the content type
+      
+        // Define the URL with client and contract IDs
+        const clientId = 2; // Replace with the actual client ID
+        const contractId = 1; // Replace with the actual contract ID
+        const apiUrl = `http://localhost:8080/paydues/client/${clientId}/contracts/${contractId}/pay`;
+      
+        // Make the Axios POST request with the "multipart/form-data" content type
+        axios
+          .post(apiUrl, data, {
+            headers: {
+              'Content-Type': 'multipart/form-data', // Set the content type
+              'Expect': ''
+            },
+          })
+          .then(function (response) {
+            // Handle the successful response here
+            console.log('Payment successful');
+            console.log(response.data); // You can access the response data here
+          })
+          .catch(function (error) {
+            // Handle errors here
+            console.error('Payment failed:', error);
+          });
+      };
+      
+      
+      
+    const handleSubmit = () => {
+        const formData = new FormData();
+        formData.append('amount', priceProp);
+        formData.append('base64Image', photoProp);
+        formData.append('fileName', '3.png');
+        formData.append('contentType', 'image/png');
+        
+        axios.post(`http://localhost:8080/paydues/client/${clientIdProp}/contracts/${contractId}/pay`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Corrected header value
+            'Expect': ''
+          }
+        })
+        .then(function (response) {
+          console.log(priceProp);
+          console.log(photoProp);
+          console.log(response);
+          handleModal();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      
+        console.log("Due Amount: " + priceProp);
         console.log(photoProp);
-        console.log(response);
-        handleModal()
-      })
-      .catch(function (error) {
-        console.log(error);
-      });}
-
+      }
+      
+      
     /* const clickSubmit = ()=>{
         axios.post('http://collectify-kilvey-services.onrender.com/paydues/client/1/contracts/1/pay', {
             requiredCollectible: 
@@ -101,13 +172,14 @@ export default function PaymentForm(){
             <View style={styles.container}>
                 <Text style={styles.textHeader} >Pay Dues</Text>
                 <Text style={styles.textSubHeader} >Easily pay your outstanding dues online with our convenient and secure payment platform.</Text>
+                <Text>{itemPrice}</Text>
                 <View>
                     <Text style={styles.textLabel}>Item Name</Text>
                     <TextInput defaultValue={nameProp} style={styles.textInput}  placeholder='Enter item name'></TextInput>
                     <Text style={styles.textLabel}>Item Price</Text>
                     <TextInput defaultValue={priceProp} keyboardType={'numeric'} style={styles.textInput}  placeholder='Enter amount to be paid'></TextInput>
                     <Text style={styles.textLabel}>Required Collectible</Text>
-                    <TextInput onChangeText={(e)=> setrequiredCollectible(parseInt(e))} style={styles.textInput} editable={false} value='2500'></TextInput>
+                    <TextInput onChangeText={(e)=> setrequiredCollectible(parseInt(e))} style={styles.textInput} editable={false} value='6000'></TextInput>
                     <Text style={styles.textLabel}>Reference Number</Text>
                     <TextInput onChangeText={(e)=> setreferenceNumber(parseInt(e))} style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
@@ -139,8 +211,8 @@ export default function PaymentForm(){
         </SafeAreaView>
 
     );
-}
 
+}
 
 const styles = StyleSheet.create({
     container:{

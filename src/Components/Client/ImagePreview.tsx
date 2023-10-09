@@ -17,7 +17,9 @@ export default function ImagePreview(){
     const nav=()=> { 
         alert("Photo Added")
         navigation.navigate("PaymentForm",{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp,photo:imagePrev})
-       
+       console.log(imagePrev)
+       console.log(contractIdProp)
+       console.log(priceProp)
        
     
     }

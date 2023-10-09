@@ -17,6 +17,8 @@ export default function Login(){
 
     const handleLogin = () => {
         
+        navigation.navigate('TellUsMoreAboutYourself'); 
+        /*
         auth?.login(userName, passWord )
         
         if(auth?.isLoggedIn==true){
@@ -24,7 +26,7 @@ export default function Login(){
             console.log(userName, passWord, auth?.isLoggedIn);
         }else{
             alert("error")
-        }
+        }*/
     }
     
     return(

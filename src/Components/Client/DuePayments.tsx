@@ -69,7 +69,7 @@ export default function DuePayments(){
       useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "https://adelaide-platypus-djxk.1.us-1.fl0.io/clients"
+            url: "http://localhost:8080/clients"
         })
     },[] )
       /*
