@@ -11,7 +11,7 @@ type PaymentProps = {
     itemName:String; 
     requiredCollectible: number; 
     fullPrice: number;
-
+    contractId: number;
 }
 
 
@@ -33,7 +33,7 @@ export default function DuePaymentList(props: PaymentProps){
                 <View style={styles.buttonMainContainer}>
                     <View style={styles.buttonContainer}>
 
-                        <Pressable style={styles.button} onPress={()=>navigation.navigate("PaymentForm",{nameprop:props.itemName, priceprop:props.fullPrice} )}>
+                        <Pressable style={styles.button} onPress={()=>navigation.navigate("PaymentForm",{nameprop:props.itemName, priceprop:props.fullPrice, contractId:props.contractId} )}>
 
                             <Text style={styles.buttonLabel}>Pay</Text>
                         </Pressable>

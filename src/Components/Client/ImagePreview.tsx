@@ -8,13 +8,16 @@ import { CheckScreenNavigationprop } from "../../../App";
 
 
 export default function ImagePreview(){
-    const imagePrev = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.imageprop;
+  const nameProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.nameprop;
+  const priceProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.priceprop;
+  const contractIdProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.contractId;
+  const imagePrev = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.imageprop;
     console.log(imagePrev);
     const navigation = useNavigation <CheckScreenNavigationprop>();
     const nav=()=> { 
         alert("Photo Added")
-        navigation.goBack()
-        navigation.goBack()
+        navigation.navigate("PaymentForm",{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp,photo:imagePrev})
+       
        
     
     }

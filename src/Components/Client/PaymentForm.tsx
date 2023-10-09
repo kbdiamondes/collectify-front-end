@@ -11,13 +11,14 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 export default function PaymentForm(){
     const nameProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.nameprop;
     const priceProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.priceprop;
+    const contractIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
+    const photoProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.photo;
     const [itemName, setitemName] = useState('')
     const [itemPrice, setitemPrice] = useState(0)
     const [requiredCollectible, setrequiredCollectible] = useState(0)
     const [referenceNumber, setreferenceNumber] = useState(0)
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
-
     const [isModalVisible, setIsModalVisible] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
 
@@ -40,9 +41,16 @@ export default function PaymentForm(){
 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
 
-    const handleSubmit = ()=>{axios.put('/user', {
+    const handleSubmit = ()=>{axios.post("http://collectify-kilvey-services.onrender.com/paydues/client/"+contractIdProp+"/contracts/"+contractIdProp+"/pay", {
+
+        amount: priceProp,
+        base64Image: photoProp,
+        fileName: "Iphone.png",
+        contentType: "png"
       })
       .then(function (response) {
+        console.log(priceProp);
+        console.log(photoProp);
         console.log(response);
         handleModal()
       })
@@ -103,7 +111,7 @@ export default function PaymentForm(){
                     <Text style={styles.textLabel}>Reference Number</Text>
                     <TextInput onChangeText={(e)=> setreferenceNumber(parseInt(e))} style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
-
+                    
                     <Picker mode='dropdown'style={styles.d1} >
                             <Picker.Item label='Bank' value={'Bank'}/> 
                             <Picker.Item label='Cash' value={'Cash'}/> 
@@ -111,7 +119,7 @@ export default function PaymentForm(){
                     </Picker>   
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot')}>
+                        <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot',{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp})}>
                         <Text style={styles.buttonLabel}>
                             Take picture
                         </Text>

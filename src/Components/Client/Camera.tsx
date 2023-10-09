@@ -2,11 +2,13 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, Aler
 import React, { useState } from 'react';
 import {Camera} from 'expo-camera'
 import CameraPreview from './CameraPreview';
-import { CheckScreenNavigationprop } from "../../../App";
-import { useNavigation } from '@react-navigation/native';
+import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 export default function CameraShot(){
-
+  const nameProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.nameprop;
+  const priceProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.priceprop;
+  const contractIdProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.contractId;
     const [startCamera,setStartCamera] = React.useState(false)
     const [previewVisible, setPreviewVisible] = useState(false)
     const [capturedImage, setCapturedImage] = useState<any>(null)
@@ -52,7 +54,7 @@ export default function CameraShot(){
           // Now you have the photo as a Blob
           console.log(photo);
           
-         navigation.navigate('ImageScreenPreview', {imageprop:photo});
+         navigation.navigate('ImageScreenPreview', {imageprop:photo,nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp});
           
         
       

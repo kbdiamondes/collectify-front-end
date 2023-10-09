@@ -69,7 +69,7 @@ export default function DuePayments(){
       useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "http://collectify-kilvey-services.onrender.com/clients"
+            url: "https://adelaide-platypus-djxk.1.us-1.fl0.io/clients"
         })
     },[] )
       /*
@@ -91,7 +91,7 @@ export default function DuePayments(){
                         <React.Fragment>
                             {client.contracts.map((contract, index) => (
                                 <DuePaymentList
-                                key={index} itemName={contract.itemName} requiredCollectible={contract.dueAmount} fullPrice={contract.fullPrice}
+                                key={index} itemName={contract.itemName} requiredCollectible={contract.dueAmount} fullPrice={contract.fullPrice} contractId={contract.contract_id}
                                                                                                              />
                             ))}
                         </React.Fragment>
