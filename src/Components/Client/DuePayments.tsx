@@ -91,9 +91,11 @@ export default function DuePayments(){
                         <React.Fragment>
                             {client.contracts.map((contract, index) => (
                                 <DuePaymentList
-                                key={index} itemName={contract.itemName} requiredCollectible={contract.dueAmount} fullPrice={contract.fullPrice} contractId={contract.contract_id}
+                                key={index} itemName={contract.itemName} requiredCollectible={contract.dueAmount} fullPrice={contract.fullPrice} contractId={contract.contract_id} 
+                               
                                                                                                              />
                             ))}
+                            
                         </React.Fragment>
                     )}
                 />

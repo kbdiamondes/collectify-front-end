@@ -13,9 +13,10 @@ export default function PaymentForm(){
     const priceProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.priceprop;
     const contractIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
     const photoProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.photo;
+   // const clientidProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.clientId;
     const [itemName, setitemName] = useState('')
     const [itemPrice, setitemPrice] = useState('')
-    const [requiredCollectible, setrequiredCollectible] = useState(priceProp)
+    const [requiredCollectible, setrequiredCollectible] = useState('') //priceProp
     const [referenceNumber, setreferenceNumber] = useState(0)
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
@@ -34,15 +35,17 @@ export default function PaymentForm(){
     }
 
     const confirmContract = () =>{
-        alert("Success")
+      navigation.navigate('DuePayments')
+      alert("Success")
+        
         handleModal() //hides the modal
         //pass value here
     }
 
     //static function for api testing
     let clientIdProp = 1;
-    let contractId = 4;
-    let pricing:number = 55; 
+    let contractId = 8;
+    //let pricing:number = 500; 
 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
 
@@ -105,7 +108,7 @@ export default function PaymentForm(){
       
     const handleSubmit = () => {
         const formData = new FormData();
-        formData.append('amount', pricing.toString());
+        formData.append('amount', requiredCollectible);
         formData.append('base64Image', photoProp);
         formData.append('fileName', '3.png');
         formData.append('contentType', 'image/png');
@@ -123,8 +126,9 @@ export default function PaymentForm(){
         })
         .catch(function (error) {
           console.log(error);
+         
         });
-      
+        
         console.log("Due Amount: " + priceProp);
         console.log(photoProp);
       }
@@ -180,7 +184,7 @@ export default function PaymentForm(){
                     <Text style={styles.textLabel}>Item Price</Text>
                     <TextInput defaultValue={priceProp} keyboardType={'numeric'} style={styles.textInput}  placeholder='Enter amount to be paid'></TextInput>
                     <Text style={styles.textLabel}>Required Collectible</Text>
-                    <TextInput onChangeText={(e)=> setrequiredCollectible(parseInt(e))} style={styles.textInput} editable={false} value='6000'></TextInput>
+                    <TextInput onChangeText={(e)=> setrequiredCollectible(e)} value = {requiredCollectible} style={styles.textInput} ></TextInput>
                     <Text style={styles.textLabel}>Reference Number</Text>
                     <TextInput onChangeText={(e)=> setreferenceNumber(parseInt(e))} style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
