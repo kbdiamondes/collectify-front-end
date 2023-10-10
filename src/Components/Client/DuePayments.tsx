@@ -69,8 +69,9 @@ export default function DuePayments(){
       useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "https://adelaide-platypus-djxk.1.us-1.fl0.io/clients"
+            url: "https://adelaide-platypus-djxk.1.us-1.fl0.io/clients" 
         })
+        console.log(client_user)
     },[] )
       /*
       useEffect(() => {
@@ -91,7 +92,7 @@ export default function DuePayments(){
                         <React.Fragment>
                             {client.contracts.map((contract, index) => (
                                 <DuePaymentList
-                                key={index} itemName={contract.itemName} requiredCollectible={contract.dueAmount} fullPrice={contract.fullPrice} contractId={contract.contract_id} 
+                                key={index} itemName={contract.itemName} requiredCollectible={contract.dueAmount} fullPrice={contract.fullPrice} contractId={contract.contract_id} clientId={client.client_id} 
                                
                                                                                                              />
                             ))}

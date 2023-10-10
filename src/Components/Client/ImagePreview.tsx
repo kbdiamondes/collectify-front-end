@@ -11,12 +11,13 @@ export default function ImagePreview(){
   const nameProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.nameprop;
   const priceProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.priceprop;
   const contractIdProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.contractId;
+  const clientIdProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.clientId;
   const imagePrev = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.imageprop;
     console.log(imagePrev);
     const navigation = useNavigation <CheckScreenNavigationprop>();
     const nav=()=> { 
         alert("Photo Added")
-        navigation.navigate("PaymentForm",{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp,photo:imagePrev})
+        navigation.navigate("PaymentForm",{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp,photo:imagePrev,clientId:clientIdProp})
        console.log(imagePrev)
        console.log(contractIdProp)
        console.log(priceProp)

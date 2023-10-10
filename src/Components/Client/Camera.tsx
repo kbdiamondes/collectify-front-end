@@ -9,6 +9,8 @@ export default function CameraShot(){
   const nameProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.nameprop;
   const priceProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.priceprop;
   const contractIdProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.contractId;
+  const clientIdProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.clientId;
+
     const [startCamera,setStartCamera] = React.useState(false)
     const [previewVisible, setPreviewVisible] = useState(false)
     const [capturedImage, setCapturedImage] = useState<any>(null)
@@ -51,7 +53,8 @@ export default function CameraShot(){
                 imageprop: base64Image,
                 nameprop: nameProp,
                 priceprop: priceProp,
-                contractId: contractIdProp
+                contractId: contractIdProp,
+                clientId: clientIdProp
               });
             }
           };

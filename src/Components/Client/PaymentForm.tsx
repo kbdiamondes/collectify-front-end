@@ -1,5 +1,5 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable, Modal} from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CameraCapture from './Camera';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
@@ -13,7 +13,7 @@ export default function PaymentForm(){
     const priceProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.priceprop;
     const contractIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
     const photoProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.photo;
-   // const clientidProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.clientId;
+    const clientidProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.clientId;
     const [itemName, setitemName] = useState('')
     const [itemPrice, setitemPrice] = useState('')
     const [requiredCollectible, setrequiredCollectible] = useState('') //priceProp
@@ -22,6 +22,9 @@ export default function PaymentForm(){
     const [transactionProof, settransactionProof] = useState<any>(null)
     const [isModalVisible, setIsModalVisible] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
+    
+    useEffect((
+     )=>{console.log(clientidProp)  },[])
 
      //checks passed data from console
      const continueButton = () => {
@@ -43,8 +46,8 @@ export default function PaymentForm(){
     }
 
     //static function for api testing
-    let clientIdProp = 1;
-    let contractId = 8;
+   // let clientIdProp = 1;
+   // let contractId = 8;
     //let pricing:number = 500; 
 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
@@ -112,8 +115,8 @@ export default function PaymentForm(){
         formData.append('base64Image', photoProp);
         formData.append('fileName', '3.png');
         formData.append('contentType', 'image/png');
-        
-        axios.post(`https://adelaide-platypus-djxk.1.us-1.fl0.io/paydues/client/${clientIdProp}/contracts/${contractId}/pay`, formData, {
+        console.log(`https://adelaide-platypus-djxk.1.us-1.fl0.io/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
+        axios.post(`https://adelaide-platypus-djxk.1.us-1.fl0.io/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
@@ -126,6 +129,8 @@ export default function PaymentForm(){
         })
         .catch(function (error) {
           console.log(error);
+          console.log(contractIdProp);
+          console.log(clientidProp);
          
         });
         
@@ -196,7 +201,7 @@ export default function PaymentForm(){
                     </Picker>   
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot',{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp})}>
+                        <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot',{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp, clientId:clientidProp})}>
                         <Text style={styles.buttonLabel}>
                             Take picture
                         </Text>
