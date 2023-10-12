@@ -1,21 +1,45 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TransactionHistoryList from './Lists/TransactionHistoryList';
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import axios from 'axios';
 
-const recentTransaction= [
-    {
-        personName:'John Doe', 
-        transactionDate:  'August 15, 2015',
-        itemCollectible: 2500
-    },
-]
+interface ClientEntity{
+    id: string
+    username: string
+    password: string
+    fullName: string
+    address: string
+    email: string
+  }
 
+interface Transaction{
+    client: ClientEntity
+    transactionDate: string
+    amountSent: number
+  }  
 
 export default function TransactionHistory(){
-    
+
+    const clientId=""
+
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+    useEffect(()=>{
+        axios.get('/TransactionHistory/client/', {
+            params: {
+              clientId: clientId
+            }
+          })
+          .then(function (response) {
+            setTransactions(response.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+        },[])
 
     return(
 
@@ -24,8 +48,8 @@ export default function TransactionHistory(){
             <View style={styles.container}>
                 <Text style={styles.textHeader}>Transaction History</Text>
                 {
-                    recentTransaction.map((item, index)=>{
-                        return <TransactionHistoryList key={index} personName={item.personName} itemCollectible={item.itemCollectible} transactionDate={item.transactionDate} />
+                    transactions.map((item, index)=>{
+                        return <TransactionHistoryList key={index} personName={item.client.fullName} itemCollectible={item.amountSent} transactionDate={item.transactionDate} />
                     })
                 }
             </View>    
