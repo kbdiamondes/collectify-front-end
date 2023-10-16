@@ -14,109 +14,42 @@ export default function PaymentForm(){
     const contractIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
     const photoProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.photo;
     const clientidProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.clientId;
+    const orderIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.orderId;
+    const dueAmountProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.dueAmount;
+
     const [itemName, setitemName] = useState('')
-    const [itemPrice, setitemPrice] = useState('')
-    const [requiredCollectible, setrequiredCollectible] = useState('') //priceProp
-    const [referenceNumber, setreferenceNumber] = useState(0)
+    const [itemPrice, setitemPrice] = useState(priceProp)
+    const [requiredCollectible, setrequiredCollectible] = useState(dueAmountProp) 
+    const [referenceNumber, setreferenceNumber] = useState(orderIdProp)
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
     const [isModalVisible, setIsModalVisible] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
     
     useEffect((
-     )=>{console.log(clientidProp)  },[])
+     )=>{console.log("Client ID:" + clientidProp + "\nOrder ID: " + orderIdProp + "\nFull Price: "+ priceProp)  },[])
 
-     //checks passed data from console
-     const continueButton = () => {
-        console.log(itemName);
-        console.log(itemPrice);
-        console.log(requiredCollectible);
-        console.log(referenceNumber);
-        console.log(paymentType);
-        console.log(transactionProof);
-        handleModal() //shows the modal
-    }
+
 
     const confirmContract = () =>{
       navigation.navigate('DuePayments')
       alert("Success")
         
-        handleModal() //hides the modal
-        //pass value here
-    }
+      handleSubmit()
+      handleModal() 
 
-    //static function for api testing
-   // let clientIdProp = 1;
-   // let contractId = 8;
-    //let pricing:number = 500; 
+    }
 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
 
-    const handleUpload = async () => {
-        try {
-          const formData = new FormData();
-          formData.append('base64Image', 'YourBase64ImageDataHere');
-          formData.append('fileName', 'YourFileNameHere.png');
-          formData.append('contentType', 'image/png');
-      
-          const response = await axios.post('http://localhost:8080/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'Expect': '',
-            },
-
-          });
-      
-          console.log('Upload successful:', response.data);
-          // Handle the response data as needed
-        } catch (error) {
-          console.error('Upload failed:', error);
-          // Handle errors
-        }
-      };
-
-    const handlePOST = () => {
-        // Define the data to send in the request
-        const data = new FormData();
-        data.append('amount', '100.00'); // Replace with the actual amount
-        data.append('base64Image', photoProp); // Replace with your base64 image data
-        data.append('fileName', 'CameraPicture.png'); // Replace with the desired file name
-        data.append('contentType', 'image/png'); // Replace with the content type
-      
-        // Define the URL with client and contract IDs
-        const clientId = 2; // Replace with the actual client ID
-        const contractId = 1; // Replace with the actual contract ID
-        const apiUrl = `http://localhost:8080/paydues/client/${clientId}/contracts/${contractId}/pay`;
-      
-        // Make the Axios POST request with the "multipart/form-data" content type
-        axios
-          .post(apiUrl, data, {
-            headers: {
-              'Content-Type': 'multipart/form-data', // Set the content type
-              'Expect': ''
-            },
-          })
-          .then(function (response) {
-            // Handle the successful response here
-            console.log('Payment successful');
-            console.log(response.data); // You can access the response data here
-          })
-          .catch(function (error) {
-            // Handle errors here
-            console.error('Payment failed:', error);
-          });
-      };
-      
-      
-      
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const formData = new FormData();
         formData.append('amount', requiredCollectible);
         formData.append('base64Image', photoProp);
         formData.append('fileName', '3.png');
         formData.append('contentType', 'image/png');
-        console.log(`https://adelaide-platypus-djxk.1.us-1.fl0.io/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
-        axios.post(`https://adelaide-platypus-djxk.1.us-1.fl0.io/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`, formData, {
+        console.log(`http://192.168.1.2:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
+        axios.post(`http://192.168.1.2:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
@@ -124,6 +57,8 @@ export default function PaymentForm(){
         .then(function (response) {
           console.log(priceProp);
           console.log(photoProp);
+          console.log(contractIdProp);
+          console.log(requiredCollectible); 
           console.log(response);
           handleModal();
         })
@@ -134,33 +69,14 @@ export default function PaymentForm(){
          
         });
         
-        console.log("Due Amount: " + priceProp);
+        console.log("Full Amount: " + priceProp);
+        console.log("Due Amount: " + dueAmountProp);
         console.log(photoProp);
       }
       
       
-    /* const clickSubmit = ()=>{
-        axios.post('http://collectify-kilvey-services.onrender.com/paydues/client/1/contracts/1/pay', {
-            requiredCollectible: 
 
-      })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });}
-
-      const Submit = ()=> {
-        clickSubmit()
-        handleSubmit()
-    }*/
-   
     return(
-//modal
-        
-
-
         <SafeAreaView>
             <Modal animationType="slide" transparent={true} visible={isModalVisible}>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex:1, backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
@@ -182,28 +98,31 @@ export default function PaymentForm(){
             <View style={styles.container}>
                 <Text style={styles.textHeader} >Pay Dues</Text>
                 <Text style={styles.textSubHeader} >Easily pay your outstanding dues online with our convenient and secure payment platform.</Text>
-                <Text>{itemPrice}</Text>
                 <View>
+                    
                     <Text style={styles.textLabel}>Item Name</Text>
                     <TextInput defaultValue={nameProp} style={styles.textInput}  placeholder='Enter item name'></TextInput>
-                    <Text style={styles.textLabel}>Item Price</Text>
-                    <TextInput defaultValue={priceProp} keyboardType={'numeric'} style={styles.textInput}  placeholder='Enter amount to be paid'></TextInput>
-                    <Text style={styles.textLabel}>Required Collectible</Text>
-                    <TextInput onChangeText={(e)=> setrequiredCollectible(e)} value = {requiredCollectible} style={styles.textInput} ></TextInput>
-                    <Text style={styles.textLabel}>Reference Number</Text>
-                    <TextInput onChangeText={(e)=> setreferenceNumber(parseInt(e))} style={styles.textInput} placeholder='Enter reference Number here'></TextInput>
-                    <Text style={styles.textLabel}>Type of Payment</Text>
                     
-                    <Picker mode='dropdown'style={styles.d1} >
+                    <Text style={styles.textLabel}>Item Price</Text>
+                    <TextInput defaultValue={priceProp} editable={false} keyboardType={'numeric'} style={styles.textInput}  placeholder={priceProp}></TextInput>
+                    
+                    <Text style={styles.textLabel}>Required Collectible</Text>
+                    <TextInput defaultValue={dueAmountProp} editable={false} style={styles.textInput} placeholder={dueAmountProp}></TextInput>
+                    
+                    <Text style={styles.textLabel}>Reference Number</Text>
+                    <TextInput defaultValue = {referenceNumber} editable={false} style={styles.textInput}></TextInput>
+                    
+                    <Text style={styles.textLabel}>Type of Payment</Text>
+                    <Picker mode='dropdown'style={styles.textInput} >
                             <Picker.Item label='Bank' value={'Bank'}/> 
                             <Picker.Item label='Cash' value={'Cash'}/> 
                             <Picker.Item label='Over the Counter' value={'Over the Counter'}/> 
                     </Picker>   
 
-                    <View style={styles.buttonContainer}>
+                    <View style={styles.buttonUnfilled}>
                         <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot',{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp, clientId:clientidProp})}>
-                        <Text style={styles.buttonLabel}>
-                            Take picture
+                        <Text style={styles.buttonUnfilledLabel}>
+                            <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
                         </Text>
                         </Pressable>
                      
@@ -226,7 +145,9 @@ export default function PaymentForm(){
 
 const styles = StyleSheet.create({
     container:{
-        paddingTop: 120, 
+        marginTop: hp(1), 
+        marginBottom: hp(1),
+        paddingTop: 50, 
         paddingHorizontal: 21
     }, 
     textHeader:{
@@ -250,24 +171,21 @@ const styles = StyleSheet.create({
         marginVertical: 5
     },
     textInput:{
-        fontSize: 17,
-        paddingHorizontal: 15,
-        marginHorizontal: 15,
-        marginVertical: 5,
-        borderColor: "#523009",
-        borderWidth: .5,
+        height: 50, 
+        paddingLeft: hp(3),
+        marginBottom: hp(1.5), 
+        borderColor: '#F0F2F4', 
+        borderWidth: 2,
+        color:'#363636',
 
     },
     buttonContainer: {
-        padding: 5,
-        height: 50,
-        backgroundColor:'#2C85E7',
-        marginLeft: 10,
-        justifyContent:'space-evenly',
-        borderRadius: 5,
-        width: '50%',
-        alignSelf:'center',
-        margin: 7
+      marginTop: hp(2), 
+      backgroundColor: '#2C85E7',
+      height: hp(7),
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      borderRadius: 5, 
     }, 
     button:{
         borderRadius: 10 ,
@@ -282,7 +200,7 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     d1:{
-        height: 40,
+        height: 50,
         borderRadius: 5,
         width: '50%'
     },
@@ -311,6 +229,20 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
       },
+    buttonUnfilled:{
+        borderRadius: 5,
+        borderWidth: 2, 
+        borderColor: '#F0F2F4',
+        height: hp(7), 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        flexDirection: 'row', 
+        backgroundColor: '#fff', 
+        marginTop: '5%'
+    },
+    buttonUnfilledLabel:{
+      color: '#4A5B6B', 
+  }, 
 
 });
     

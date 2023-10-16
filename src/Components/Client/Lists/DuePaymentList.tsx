@@ -10,9 +10,11 @@ type PaymentProps = {
     key:number, 
     itemName:String; 
     requiredCollectible: number; 
+    dueAmount: number; 
     fullPrice: number;
     contractId: number;
     clientId: number;
+    orderId: String;
 }
 
 
@@ -33,11 +35,11 @@ export default function DuePaymentList(props: PaymentProps){
                 <View style={styles.buttonMainContainer}>
                     <View style={styles.buttonContainer}>
 
-                    <Pressable style={styles.button}  onPress={() => {navigation.navigate("PaymentForm", { nameprop: props.itemName, priceprop: props.fullPrice, contractId: props.contractId,clientId: props.clientId});
+                    <Pressable style={styles.button}  onPress={() => {
+                        navigation.navigate("PaymentForm", { nameprop: props.itemName, priceprop: props.fullPrice, contractId: props.contractId,clientId: props.clientId, orderId: props.orderId, dueAmount: props.dueAmount});
     
-  }}
->
-
+                        }}
+                        >
                             <Text style={styles.buttonLabel}>Pay</Text>
                         </Pressable>
                     </View>
