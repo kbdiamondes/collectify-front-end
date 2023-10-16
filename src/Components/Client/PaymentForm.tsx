@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable, Modal} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable, Modal, ToastAndroid} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import CameraCapture from './Camera';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -24,20 +24,34 @@ export default function PaymentForm(){
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
     const [isModalVisible, setIsModalVisible] = useState(false)
+
+    const [error, setError] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
     
     useEffect((
      )=>{console.log("Client ID:" + clientidProp + "\nOrder ID: " + orderIdProp + "\nFull Price: "+ priceProp)  },[])
 
 
+     const toastTransactionFailed = () => {
+      ToastAndroid.showWithGravity(
+        'Transaction Failed',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    };
 
     const confirmContract = () =>{
-      navigation.navigate('DuePayments')
-      alert("Success")
-        
       handleSubmit()
-      handleModal() 
 
+      if(error===false){
+        toastTransactionFailed()
+        handleModal()
+      }else{
+        navigation.navigate('DuePayments')
+        alert("Success")
+        handleModal() 
+
+      }
     }
 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
@@ -60,12 +74,13 @@ export default function PaymentForm(){
           console.log(contractIdProp);
           console.log(requiredCollectible); 
           console.log(response);
-          handleModal();
+          setError(false); 
         })
         .catch(function (error) {
           console.log(error);
           console.log(contractIdProp);
           console.log(clientidProp);
+          setError(true); 
          
         });
         
@@ -104,10 +119,10 @@ export default function PaymentForm(){
                     <TextInput defaultValue={nameProp} style={styles.textInput}  placeholder='Enter item name'></TextInput>
                     
                     <Text style={styles.textLabel}>Item Price</Text>
-                    <TextInput defaultValue={priceProp} editable={false} keyboardType={'numeric'} style={styles.textInput}  placeholder={priceProp}></TextInput>
+                    <TextInput defaultValue={priceProp} editable={false} keyboardType={'numeric'} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Required Collectible</Text>
-                    <TextInput defaultValue={dueAmountProp} editable={false} style={styles.textInput} placeholder={dueAmountProp}></TextInput>
+                    <TextInput defaultValue={dueAmountProp} editable={false} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Reference Number</Text>
                     <TextInput defaultValue = {referenceNumber} editable={false} style={styles.textInput}></TextInput>
@@ -128,7 +143,7 @@ export default function PaymentForm(){
                      
                     </View>
                     <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPressIn={handleSubmit}>
+                    <Pressable style={styles.button} onPressIn={handleModal}>
                         <Text style={styles.buttonLabel}>
                             Continue
                         </Text>

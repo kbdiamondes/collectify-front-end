@@ -29,6 +29,7 @@ export interface IClient{
 }
 export interface Contract{
     contract_id: number,
+    orderid: String,
     username: String, 
     itemName: String, 
     dueAmount: number, 
