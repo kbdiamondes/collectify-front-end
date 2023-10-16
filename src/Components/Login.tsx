@@ -8,7 +8,6 @@ import { AuthContext } from "../Context/AuthContext";
 
 export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
-
     const [userName, setUserName] = useState<string>('');
     const [passWord, setPassword] = useState<string>('');
     const auth = useContext(AuthContext);
@@ -17,12 +16,25 @@ export default function Login(){
 
     const handleLogin = () => {
         
-        navigation.navigate('TellUsMoreAboutYourself'); 
-        /*
-        auth?.login(userName, passWord )
         
-        if(auth?.isLoggedIn==true){
-            navigation.navigate('TellUsMoreAboutYourself'); 
+        //navigation.navigate('TellUsMoreAboutYourself'); 
+        
+       // auth?.login(userName, passWord )
+        
+        if(userName == "client"){
+            navigation.navigate('DuePayments')
+        }else if (userName == "reseller"){
+            navigation.navigate('Collect')
+        }else if (userName == "collector")
+            navigation.navigate('SoldItems')
+        
+       /* if(auth?.isLoggedIn==true){
+            if(userType == "client"){
+                navigation.navigate('DuePayments')
+            }else if (userType == "reseller"){
+                navigation.navigate('Collect')
+            }else if (userType == "collector")
+                navigation.navigate('SoldItems')
             console.log(userName, passWord, auth?.isLoggedIn);
         }else{
             alert("error")

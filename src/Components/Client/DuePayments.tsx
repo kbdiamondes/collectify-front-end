@@ -69,7 +69,7 @@ export default function DuePayments(){
       useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "https://adelaide-platypus-djxk.1.us-1.fl0.io/clients" 
+            url: "https://collectify-backend-lzknxa3dha-uw.a.run.app/clients" 
         })
         console.log(client_user)
     },[] )
@@ -83,7 +83,7 @@ export default function DuePayments(){
 
 
     return(
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
                 <Text style={styles.textHeader} >Upcoming Dues</Text>
                 <FlatList
                     data={client_user}
@@ -100,7 +100,7 @@ export default function DuePayments(){
                         </React.Fragment>
                     )}
                 />
-             </ScrollView>     
+             </View>     
 
     );
 }
