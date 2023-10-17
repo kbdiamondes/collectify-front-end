@@ -44,26 +44,36 @@ export default function PaymentForm(){
       handleSubmit()
 
       if(error===false){
-        toastTransactionFailed()
-        handleModal()
-      }else{
         navigation.navigate('DuePayments')
         alert("Success")
         handleModal() 
-
+      }else if(error===true){
+        toastTransactionFailed()
+        handleModal()
       }
     }
 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
 
+    const generateUniqueFilename = (fileExtension: string) => {
+      const uniqueId = new Date().getTime(); // Use a timestamp as a unique identifier
+      return `${uniqueId}.${fileExtension}`;
+    };
+
     const handleSubmit = async () => {
         const formData = new FormData();
+
+            // Generate a unique filename
+      const fileExtension = 'png'; // Change this to the actual file extension
+      const uniqueFilename = generateUniqueFilename(fileExtension);
+
+
         formData.append('amount', requiredCollectible);
         formData.append('base64Image', photoProp);
-        formData.append('fileName', '3.png');
+        formData.append('fileName', uniqueFilename);
         formData.append('contentType', 'image/png');
-        console.log(`http://192.168.1.2:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
-        axios.post(`http://192.168.1.2:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`, formData, {
+        console.log(`http://192.168.1.11:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
+        axios.post(`http://192.168.1.11:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
@@ -80,7 +90,7 @@ export default function PaymentForm(){
           console.log(error);
           console.log(contractIdProp);
           console.log(clientidProp);
-          setError(true); 
+          setError(!error)
          
         });
         
@@ -119,13 +129,13 @@ export default function PaymentForm(){
                     <TextInput defaultValue={nameProp} style={styles.textInput}  placeholder='Enter item name'></TextInput>
                     
                     <Text style={styles.textLabel}>Item Price</Text>
-                    <TextInput defaultValue={priceProp} editable={false} keyboardType={'numeric'} style={styles.textInput}></TextInput>
+                    <TextInput defaultValue={itemPrice.toString()} editable={false} keyboardType={'numeric'} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Required Collectible</Text>
-                    <TextInput defaultValue={dueAmountProp} editable={false} style={styles.textInput}></TextInput>
+                    <TextInput defaultValue={requiredCollectible.toString()} editable={false} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Reference Number</Text>
-                    <TextInput defaultValue = {referenceNumber} editable={false} style={styles.textInput}></TextInput>
+                    <TextInput defaultValue = {referenceNumber.toString()} editable={false} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Type of Payment</Text>
                     <Picker mode='dropdown'style={styles.textInput} >

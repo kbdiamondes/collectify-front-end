@@ -1,9 +1,11 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert} from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Camera} from 'expo-camera'
 import CameraPreview from './CameraPreview';
 import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import ImageResizer from 'react-native-image-resizer';
+
 
 export default function CameraShot(){
   const nameProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.nameprop;
@@ -15,53 +17,59 @@ export default function CameraShot(){
     const [previewVisible, setPreviewVisible] = useState(false)
     const [capturedImage, setCapturedImage] = useState<any>(null)
     const navigation = useNavigation <CheckScreenNavigationprop>();
-    const __startCamera = async () => {
-        const {status} = await Camera.requestCameraPermissionsAsync()
+    useEffect(() => {
+      // Request camera permissions when the component mounts
+      const requestCameraPermissions = async () => {
+        const { status } = await Camera.requestCameraPermissionsAsync();
         if (status === 'granted') {
           // start the camera
-          setStartCamera(true)
+          setStartCamera(true);
         } else {
-          Alert.alert('Access denied')
+          Alert.alert('Access denied');
         }
-      }
+      };
+  
+      requestCameraPermissions();
+    }, []); // Empty dependency array to run the effect only once
+  
 
 
       const [imageLink, setImageLink] = React.useState()
       const setImage = (photo:any)=> {
         setImageLink(photo)
       }
-       
 
-        const __takePicture = async () => {
-          if (!camera) return;
+      const __takePicture = async () => {
+        if (!camera) return;
 
-          const photo = await camera.takePictureAsync();
+        const photo = await camera.takePictureAsync();
 
-          // Fetch the image and convert it to a Blob
-          const response = await fetch(photo.uri);
-          const data = await response.blob();
+        // Fetch the image and convert it to a Blob
+        const response = await fetch(photo.uri);
+        const data = await response.blob();
 
-          // Convert the Blob to a base64 string
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            if (reader.result !== null && typeof reader.result === 'string') {
-              const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
-              // Now you have the base64Image without the data URL prefix
+        // Convert the Blob to a base64 string
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (reader.result !== null && typeof reader.result === 'string') {
+            const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
+            // Now you have the base64Image without the data URL prefix
 
-              console.log(photo);
-              navigation.navigate('ImageScreenPreview', {
-                imageprop: base64Image,
-                nameprop: nameProp,
-                priceprop: priceProp,
-                contractId: contractIdProp,
-                clientId: clientIdProp
-              });
-            }
-          };
-
-          console.log(priceProp); 
-          reader.readAsDataURL(data);
+            console.log(photo);
+            navigation.navigate('ImageScreenPreview', {
+              imageprop: base64Image,
+              nameprop: nameProp,
+              priceprop: priceProp,
+              contractId: contractIdProp,
+              clientId: clientIdProp
+            });
+          }
         };
+
+        console.log(priceProp); 
+        reader.readAsDataURL(data);
+      };
+      
         
     let camera: Camera
     return(
