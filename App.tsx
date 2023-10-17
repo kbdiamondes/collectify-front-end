@@ -30,7 +30,6 @@ import { AuthContext, AuthContextProvider } from './src/Context/AuthContext';
 import CameraShot from './src/Components/Client/Camera';
 import CollectPayments from './src/Components/Reseller/CollectPayments';
 import ImagePreview2 from './src/Components/Client/ImagePreview2';
-import CameraShot2 from './src/Components/Client/Camera2';
 
 
 
@@ -60,16 +59,16 @@ export type RootStackParamList = {
   Assurance: undefined; 
   TellUsMoreAboutYourself: undefined; 
 
+
   //Reseller
   CreateNewContractModal: undefined; 
-  CameraShot2: undefined
   SoldItems: undefined; 
   MyCollector: undefined; 
   CollectPayments: {clientProp: any};
   ImageScreenPreview2: {imageprop: any};
 
   //assigned AssignCollector to receive data from SendCollector
-  ActiveContracts: undefined; 
+  ActiveContractScreen: undefined; 
   FullPaymentContract: undefined; 
   MonthlyPaymentContract:undefined; 
   CollectorCollection: undefined; 
@@ -106,7 +105,7 @@ export default function App(){
       <Stack.Screen name="FollowUp" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
       
-      <Stack.Screen name="ActiveContracts" component={ResellerTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="ActiveContractScreen" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="CreateNewContractModal" component={CreateNewContractModal} options={{headerShown: false}}/>
       <Stack.Screen name="MyCollector" component={ResellerTabNavigator} options={{headerShown: false}}/>
@@ -116,7 +115,7 @@ export default function App(){
       <Stack.Screen name="MonthlyPaymentContract" component={MonthlyPaymentmentScreen} options={{ headerShown: false}}/>
       <Stack.Screen name="PaymentForm" component={PaymentForm} options={{ headerShown: false}}/>
       <Stack.Screen name="CameraShot" component={CameraShot} options={{ headerShown: false}}/>
-      <Stack.Screen name="CameraShot2" component={CameraShot2} options={{ headerShown: false}}/>
+      
       <Stack.Screen name="ImageScreenPreview" component={ImagePreview} options={{ headerShown: false}}/>
       <Stack.Screen name="ImageScreenPreview2" component={ImagePreview2} options={{ headerShown: false}}/>
       <Stack.Screen name="CollectPayments" component={CollectPayments} options={{ headerShown: false}}/>

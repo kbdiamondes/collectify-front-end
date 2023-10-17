@@ -24,7 +24,7 @@ export default function Login(){
         if(userName == "client"){
             navigation.navigate('DuePayments')
         }else if (userName == "reseller"){
-            navigation.navigate('ActiveContracts')
+            navigation.navigate('ActiveContractScreen')
         }else if (userName == "collector")
             navigation.navigate('Collect')
         

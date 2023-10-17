@@ -9,7 +9,7 @@ import { CheckScreenNavigationprop } from "../../../App";
 import { useNavigation } from '@react-navigation/native';
 
 
-const  activeContracts = [
+const  activeContractData = [
     {
         clientName: 'Marilyn Monroe', 
         itemName: 'iPhone 14 Pro Max', 
@@ -19,7 +19,7 @@ const  activeContracts = [
 ]
 
 
-export default function ActiveContracts(){
+export default function ActiveContractListScreen(){
     const navigation = useNavigation <CheckScreenNavigationprop>();
     const nav =(clientName:string)=>{
         navigation.navigate('CollectPayments', {clientProp:clientName});
@@ -30,9 +30,9 @@ export default function ActiveContracts(){
         <SafeAreaView>
             <ScrollView>
             <View style={styles.container}>
-                <Text style={styles.textHeader} >Scheduled Payments</Text>
+                <Text style={styles.textHeader} >Active Contracts</Text>
                 {
-                    activeContracts.map((item, index)=>{
+                    activeContractData.map((item, index)=>{
                         return <Pressable key={index} onPressIn={()=>nav(item.clientName)}>
                                     <ActiveContractsList key={index}  clientName={item.clientName} itemName={item.itemName} requiredCollectible={item.requiredCollectible} paymentType={item.paymentType}/>
                                </Pressable>

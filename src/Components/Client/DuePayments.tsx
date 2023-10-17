@@ -19,7 +19,7 @@ export default function DuePayments(){
       useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.1.11:8080/clients" 
+            url: "http://192.168.134.53:8080/clients" 
         })
         console.log(client_user)
     },[] )
