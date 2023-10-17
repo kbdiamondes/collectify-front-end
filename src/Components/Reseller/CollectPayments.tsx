@@ -115,6 +115,12 @@ export default function CollectPayments() {
                     style={image_preview.image}
                     resizeMode="contain" // You can choose the resizeMode that fits your needs
                 />
+                <View style={image_preview.undoButtonContainer}>
+                    <TouchableOpacity style={image_preview.button} onPress={()=>setImagePreview(false)}>
+                        <Ionicons name="arrow-undo-circle" color="#000000" size={25} />
+                    </TouchableOpacity>
+                </View>
+
                 <View style={image_preview.buttonContainer}>
                     <TouchableOpacity style={image_preview.button} onPress={goBack}>
                         <Ionicons name="arrow-forward" color="#000000" size={25} />
@@ -487,6 +493,13 @@ const image_preview = StyleSheet.create({
       width: '100%',
       height: '100%',
     },
+    undoButtonContainer: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        padding: 20,
+        alignItems: 'flex-start'
+      },
     buttonContainer: {
       position: 'absolute',
       bottom: 0,
