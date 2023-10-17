@@ -25,20 +25,27 @@ export default function CollectorCollection(){
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.1.6:8080/client"
+            url: "http://192.168.134.53:8080/clients"
         })
     },[] )
 
     return(
 
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
                 <Text style={styles.textHeader} >Client with Debt</Text>
-                {
-                    indebtPerson.map((item, index)=>{
-                        return <CollectorCollectionList key={index} fullname={item.fullname} client_id={item.client_id}/>
-                    })
-                }    
-        </ScrollView>
+                <FlatList
+                    data={client_user}
+                    keyExtractor={(client: IClient) => client.client_id.toString()}
+                    renderItem={({ item: client }) => (
+                        <React.Fragment>
+                            {client.contracts.map((contract, index) => (
+                                <CollectorCollectionList key={index} client_id={client.client_id} fullname={client.fullName} requiredCollectible={contract.dueAmount} />
+                            ))}
+                            
+                        </React.Fragment>
+                    )}
+                /> 
+        </View>
 
     );
 }

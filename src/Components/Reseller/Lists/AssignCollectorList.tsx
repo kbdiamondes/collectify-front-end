@@ -13,7 +13,7 @@ type AssignCollectorProps = {
     collectorname: String; 
     collectoraddress: String; 
     //OnSend is a function that accepts a number parameter coming from the AssignCollectorList component being mapped
-    //onSend: (collectorId: number) => void;
+    onSend: (collectorId: number) => void;
 }
 
 export default function AssignCollectorList(props: AssignCollectorProps){
@@ -31,7 +31,7 @@ export default function AssignCollectorList(props: AssignCollectorProps){
     //the function for the button that also uses the "Onsend" function to get the on clicked collector_id
     const assignCollectorSubmit = ()=> {
         //alert("Client ID: " + clientid + "\nPayment Dues: Php " + paymentDues);
-      //props.onSend(props.collector_id); -> disabled for static design
+      props.onSend(props.collector_id);// -> disabled for static design
         //alert("Client ID: " + client_id + "\nCollector ID: " + props.collector_id); 
 
         assignCollector({

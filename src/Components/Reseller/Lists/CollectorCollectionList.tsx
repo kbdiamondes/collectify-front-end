@@ -8,7 +8,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 type CollectorCollectionListProps = {
     client_id: number,
     fullname: String, 
-    //requiredCollectible: number
+    requiredCollectible: number
 }
 
 
@@ -27,7 +27,7 @@ export default function CollectorCollectionList(props: CollectorCollectionListPr
 
                 <View style={styles.itemText}>
                     <Text style={{color:'#363636', fontSize:hp(1.4)}}>{props.fullname}</Text>
-                    <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>Php 5000</Text>                                  
+                    <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>{props.requiredCollectible}</Text>                                  
                 </View>
 
                 <View style={styles.buttonMainContainer}>

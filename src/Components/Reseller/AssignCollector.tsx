@@ -8,8 +8,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import AssignCollectorList from "./Lists/AssignCollectorList";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React from "react";
 
 
+/*
 const availableCollectors = [
     {
         collector_id: 2,
@@ -32,7 +34,7 @@ const availableCollectors = [
         collectoraddress: "Cebu City"
     }
 
-]
+]*/
 
 /*
 interface RouteProps{
@@ -60,7 +62,7 @@ export default function AssignCollectorScreen(){
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.1.6:8080/collector"
+            url: "http://192.168.134.53:8080/collectors"
         })
     },[] )
 
@@ -83,12 +85,16 @@ export default function AssignCollectorScreen(){
             <View style={styles.main}>
                 <View style={styles.body}>
                     
-                    {
-                        availableCollectors.map((item, index)=>{
-                            return <AssignCollectorList key={index} collector_id={item.collector_id} collectorname={item.collectorname} collectoraddress={item.collectoraddress}/>; 
-                        })
-                    }
-
+                <FlatList
+                    style={{height: '56%', paddingVertical: 5, marginTop: 12, marginBottom: 17}}
+                    data={client_user}
+                    keyExtractor={(collector: ICollector) => collector.collector_id.toString()}
+                    renderItem={({ item: collector}) => (
+                    <React.Fragment>
+                        <AssignCollectorList collector_id={collector.collector_id} collectorname={collector.fullName} collectoraddress={collector.address} onSend={handleSendButton}/>
+                    </React.Fragment>
+                    )}
+                />
                     <View style={styles.body2}>
                         <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Select only available collectors.</Text>
                         <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Make sure to assign collectors with relevant expertise to the task.</Text>

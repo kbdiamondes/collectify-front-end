@@ -9,6 +9,8 @@ import { Camera } from 'expo-camera';
 
 
 export default function CollectPayments() {
+  //const c = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.clientId;
+
     const [requiredCollectible, setrequiredCollectible] = useState(0)
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
