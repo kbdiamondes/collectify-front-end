@@ -1,11 +1,12 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, Image,  TextInput, Pressable, Modal, Button, Alert, TouchableOpacity} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
 import { CheckScreenNavigationprop, RootStackParamList } from '../../../App';
 import {Ionicons} from '@expo/vector-icons'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Camera } from 'expo-camera';
+import { AuthContext } from '../../Context/AuthContext';
 
 
 export default function CollectPayments() {
@@ -14,7 +15,7 @@ export default function CollectPayments() {
     
     const [requiredCollectible, setrequiredCollectible] = useState(dueAmountprop)
     const [contractId, setContractId] = useState(contractIdprop)
-    const [paymentType, setpaymentType] = useState('')
+    const [paymentType, setpaymentType] = useState("GCash")
     const [transactionProof, settransactionProof] = useState<any>(null)
     const [selected, setselected] = useState (0)
     const [isModalVisible, setIsModalVisible] = useState(false)
@@ -24,14 +25,16 @@ export default function CollectPayments() {
     const [CapturedImage, setCapturedImage] = useState<any>(); 
     const [showImagePreview, setImagePreview] = useState(false); 
 
-    
+    const [error, setError] = useState(false)
+
+    const auth = useContext(AuthContext); 
 
      //checks passed data from console
      const continueButton = () => {
         console.log(contractId)
         console.log(requiredCollectible);
         console.log(paymentType);
-        console.log(transactionProof);
+        console.log(CapturedImage);
         handleModal() //shows the modal
     }
 
@@ -44,17 +47,49 @@ export default function CollectPayments() {
       };
       
 
+      const generateUniqueFilename = (fileExtension: string) => {
+        const uniqueId = new Date().getTime(); // Use a timestamp as a unique identifier
+        return `${uniqueId}.${fileExtension}`;
+      };
+  
 
-    const handleSubmit = ()=> { axios.put('/user', {
-      })
-      .then(function (response) {
-        console.log(response);
-        handleModal()
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-    };
+
+      const handleSubmit = async () => {
+        const formData = new FormData();
+
+            // Generate a unique filename
+        const fileExtension = 'png'; // Change this to the actual file extension
+        const uniqueFilename = generateUniqueFilename(fileExtension);
+
+
+        formData.append('amount', requiredCollectible);
+        formData.append('base64Image', CapturedImage);
+        formData.append('fileName', uniqueFilename);
+        formData.append('contentType', 'image/png');
+        //https://collectify-backend-lzknxa3dha-uw.a.run.app/collect-payments/1/contracts/3/collect-payment?paymentType=CreditCard
+        console.log(`http://192.168.134.53:8080/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType )
+        axios.post(`http://192.168.134.53:8080/collect-payments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Corrected header value
+          }
+        })
+        .then(function (response) {
+          console.log(CapturedImage);
+          console.log("Filename: " + uniqueFilename);
+          console.log("Collectible:" + requiredCollectible); 
+          console.log(response);
+          setError(false); 
+        })
+        .catch(function (error) {
+          console.log(error);
+          setError(!error)
+         
+        });
+        
+        console.log("Due Amount: " + requiredCollectible);
+        console.log(CapturedImage);
+      }
+      
 
     let camera: Camera
 
@@ -521,3 +556,7 @@ const image_preview = StyleSheet.create({
       justifyContent: 'center',
     },
   });
+
+function generateUniqueFilename(fileExtension: string) {
+  throw new Error('Function not implemented.');
+}

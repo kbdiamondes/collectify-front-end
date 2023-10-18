@@ -29,7 +29,7 @@ export default function ActiveContractListScreen(){
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.134.53:8080/clients/unpaid-contracts" 
+            url: "http://192.168.134.53:8080/clients"  //use /clients/unpaid-contracts when collect as collector works
         })
 
     },[] )

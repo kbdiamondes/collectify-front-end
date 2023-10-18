@@ -34,7 +34,7 @@ export default function PaymentForm(){
 /*
      const toastTransactionFailed = () => {
       ToastAndroid.showWithGravity(
-        'Transaction Failed',
+        'Success',
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
@@ -44,11 +44,11 @@ export default function PaymentForm(){
       handleSubmit()
 
       if(error===false){
+       // toastTransactionFailed()
         navigation.navigate('DuePayments')
-        alert("Success")
         handleModal() 
       }else if(error===true){
-        //toastTransactionFailed()
+       // toastTransactionFailed()
         handleModal()
       }
     }
@@ -72,8 +72,8 @@ export default function PaymentForm(){
         formData.append('base64Image', photoProp);
         formData.append('fileName', uniqueFilename);
         formData.append('contentType', 'image/png');
-        console.log(`http://192.168.1.11:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
-        axios.post(`http://192.168.1.11:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`, formData, {
+        console.log(`http://192.168.134.53:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
+        axios.post(`http://192.168.134.53:8080/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }

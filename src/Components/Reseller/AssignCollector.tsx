@@ -15,6 +15,7 @@ import { AuthContext } from "../../Context/AuthContext";
 //naa ni siyay parameter dapat (client_id)
 export default function AssignCollectorScreen(){
     
+    const auth = useContext(AuthContext);
     
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
     useEffect(() => {
@@ -28,9 +29,9 @@ export default function AssignCollectorScreen(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     
     //Function to receive the collector ID that is mapped on the Flatlist
-    const handleSendButton = (contractId: number) => {
+    const handleSendButton = (collectorId: number) => {
         // Do something with the collector ID
-        console.log('Clicked contract ID:', contractId);
+        console.log('Clicked collector ID:', collectorId);
       };
 
       
