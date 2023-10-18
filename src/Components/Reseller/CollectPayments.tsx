@@ -1,17 +1,19 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, Image,  TextInput, Pressable, Modal, Button, Alert, TouchableOpacity} from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
-import { CheckScreenNavigationprop } from '../../../App';
+import { CheckScreenNavigationprop, RootStackParamList } from '../../../App';
 import {Ionicons} from '@expo/vector-icons'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Camera } from 'expo-camera';
 
 
 export default function CollectPayments() {
-  //const c = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.clientId;
-
-    const [requiredCollectible, setrequiredCollectible] = useState(0)
+    const contractIdprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
+    const dueAmountprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.dueAmount;
+    
+    const [requiredCollectible, setrequiredCollectible] = useState(dueAmountprop)
+    const [contractId, setContractId] = useState(contractIdprop)
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
     const [selected, setselected] = useState (0)
@@ -26,6 +28,7 @@ export default function CollectPayments() {
 
      //checks passed data from console
      const continueButton = () => {
+        console.log(contractId)
         console.log(requiredCollectible);
         console.log(paymentType);
         console.log(transactionProof);
@@ -228,7 +231,7 @@ export default function CollectPayments() {
                
                 <View>
                     <Text style={styles.textLabel}>Collectibles</Text>
-                    <TextInput style={styles.textInput}  placeholder='Enter amount to be collected'></TextInput>
+                    <TextInput style={styles.textInput} editable={false} defaultValue={requiredCollectible.toString()} placeholder='Enter amount to be collected'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
                 <View style={styles.buttonGrid}>
 

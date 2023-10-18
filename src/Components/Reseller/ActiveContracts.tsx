@@ -25,10 +25,6 @@ export default function ActiveContractListScreen(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
 
 
-    const navigation = useNavigation <CheckScreenNavigationprop>();
-    const nav =(collectorProp: number, contractProp: number, dueAmountProp: number)=>{
-        navigation.navigate('CollectPayments', { contractProp: contractProp, dueAmountProp: dueAmountProp});
-    }
 
     useEffect(() => {
         sendRequest({ 
@@ -49,9 +45,9 @@ export default function ActiveContractListScreen(){
                         <React.Fragment>
                             
                             {client.contracts.map((contract, index) => (
-                                <Pressable key={index}>
-                                    <ActiveContractsList key={index} clientName={client.fullName} itemName={contract.itemName} requiredCollectible={contract.dueAmount} paymentType="Installment"                                                                                  />
-                                </Pressable>
+                                
+                                    <ActiveContractsList key={index} contractId={contract.contract_id} clientName={client.fullName} itemName={contract.itemName} requiredCollectible={contract.dueAmount} paymentType="Installment"                                                                                  />
+                                
                             ))}
                             
                         </React.Fragment>

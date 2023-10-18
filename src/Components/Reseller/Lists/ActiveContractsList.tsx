@@ -1,6 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { CheckScreenNavigationprop } from '../../../../App';
 
 
 type ActiveContractProps = {
@@ -9,11 +11,21 @@ type ActiveContractProps = {
     itemName: String; 
     requiredCollectible: number; 
     paymentType: String; 
+    contractId: number
 
 }
 export default function ActiveContractsList(props: ActiveContractProps){
+
+
+    const navigation = useNavigation <CheckScreenNavigationprop>();
+
+    const gotoCollectPayments =()=>{
+        navigation.navigate('CollectPayments', { contractId: props.contractId, dueAmount: props.requiredCollectible});
+    }
+    
     return(
         <SafeAreaView style={styles.item}>
+            <Pressable onPress={gotoCollectPayments}>
             <View style={styles.itemLeft}>
                 <View style={styles.square}/>
                     <View style={styles.itemText}>
@@ -27,6 +39,7 @@ export default function ActiveContractsList(props: ActiveContractProps){
                     </View>
                 </View>
             </View>
+            </Pressable>
             
         </SafeAreaView>
     );

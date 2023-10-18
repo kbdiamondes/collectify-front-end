@@ -2,62 +2,20 @@ import { SafeAreaView,View,  StyleSheet, Text, ScrollView, Pressable, Button, Fl
 import {Ionicons} from '@expo/vector-icons'; 
 import { RouteProp, useRoute, useNavigation } from "@react-navigation/native";
 import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
-import { Key, useEffect, useState } from "react";
+import { Key, useContext, useEffect, useState } from "react";
 import { ICollector, RestAPI } from "../../Services/RestAPI";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import AssignCollectorList from "./Lists/AssignCollectorList";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import React from "react";
-
-
-/*
-const availableCollectors = [
-    {
-        collector_id: 2,
-        collectorname: "John Doe", 
-        collectoraddress: "Cebu City"
-    }, 
-    {
-        collector_id: 3,
-        collectorname: "John Doe", 
-        collectoraddress: "Cebu City"
-    },
-    {
-        collector_id: 3,
-        collectorname: "John Doe", 
-        collectoraddress: "Cebu City"
-    },
-    {
-        collector_id: 3,
-        collectorname: "John Doe", 
-        collectoraddress: "Cebu City"
-    }
-
-]*/
-
-/*
-interface RouteProps{
-    route: {params: {otherParam:string}}; 
-}
-
-type AssignCollectorProps = NativeStackScreenProps<RootStackParamList, 'AssignCollector'>;
-//type AssignCollectorProps = RouteProp<RootStackParamList, 'AssignCollector'>;
-
-/*
-type AssignCollectorProps = {
-    route: RouteProp<RootStackParamList, 'AssignCollector'>
-}*/
-
-
-
-
-
+import { AuthContext } from "../../Context/AuthContext";
 
 
 //naa ni siyay parameter dapat (client_id)
 export default function AssignCollectorScreen(){
-
+    
+    
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
     useEffect(() => {
         sendRequest({ 
@@ -66,12 +24,13 @@ export default function AssignCollectorScreen(){
         })
     },[] )
 
+
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     
     //Function to receive the collector ID that is mapped on the Flatlist
-    const handleSendButton = (collectorId: number) => {
+    const handleSendButton = (contractId: number) => {
         // Do something with the collector ID
-        console.log('Clicked collector ID:', collectorId);
+        console.log('Clicked contract ID:', contractId);
       };
 
       

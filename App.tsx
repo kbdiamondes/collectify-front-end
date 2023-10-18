@@ -64,7 +64,7 @@ export type RootStackParamList = {
   CreateNewContractModal: undefined; 
   SoldItems: undefined; 
   MyCollector: undefined; 
-  CollectPayments: {contractProp: any,  dueAmountProp: any};
+  CollectPayments: {contractId: any,  dueAmount: any};
   ImageScreenPreview2: {imageprop: any};
 
   //assigned AssignCollector to receive data from SendCollector

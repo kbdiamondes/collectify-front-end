@@ -56,10 +56,9 @@ export interface IReseller{
 }
 
 export interface IData{
-    paymentDues: number, 
     reseller: {reseller_id: number} ,
-    collector: {collector_id: number} ,
-    client: {client_id: number}; 
+    collector: {collector_id: number} , 
+    contract: {contract_id: number}
 
 }
 
@@ -91,7 +90,10 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
         //POST - USER
         function assignCollector(idata: IData) {
             setLoading(true);
-            const body = JSON.stringify(idata);
+            
+            // Construct the URL with the collectorId as a query parameter
+            const url = `http://192.168.134.53:8080/${idata.reseller.reseller_id}/contracts/${idata.contract.contract_id}/assign-collector?collectorId=${idata.collector.collector_id}`;
+            
             const config = {
               headers: {
                 'Content-Type': 'application/json',
@@ -100,11 +102,12 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
             };
           
             axios
-              .post("http://10.10.7.131:8080/sendCollectors", body, config)
+              .post(url, null, config) // You don't need a request body in this case
               .then((response) => {
                 setData(response.data);
-                console.log(response.data)
-                console.log("Connection success")
+                console.log(response.data);
+                console.log(idata);
+                console.log("Connection success");
               })
               .catch((error) => {
                 setError(error.response.data.message);
@@ -114,6 +117,10 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
                 setLoading(false);
               });
           }
+          
+        
+        
+          
           
 
     

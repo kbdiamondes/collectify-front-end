@@ -39,7 +39,7 @@ export default function CollectorCollection(){
                     renderItem={({ item: client }) => (
                         <React.Fragment>
                             {client.contracts.map((contract, index) => (
-                                <CollectorCollectionList key={index} client_id={client.client_id} fullname={client.fullName} requiredCollectible={contract.dueAmount} />
+                                <CollectorCollectionList key={index} contract_id={contract.contract_id} fullname={client.fullName} requiredCollectible={contract.dueAmount} />
                             ))}
                             
                         </React.Fragment>

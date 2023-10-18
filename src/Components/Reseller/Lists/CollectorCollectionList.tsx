@@ -6,9 +6,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 type CollectorCollectionListProps = {
-    client_id: number,
     fullname: String, 
     requiredCollectible: number
+    contract_id: number
 }
 
 
@@ -17,7 +17,7 @@ export default function CollectorCollectionList(props: CollectorCollectionListPr
 
     //function to navigate to AssignCollectorScreen and pass data
     const gotoAssignCollector = () => {
-        navigation.navigate('AssignCollector', {otherParam1:props.client_id});
+        navigation.navigate('AssignCollector', {otherParam1:props.contract_id});
     }
 
     return(

@@ -1,11 +1,13 @@
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent, Modal, Alert} from 'react-native'
 import {Ionicons} from '@expo/vector-icons'; 
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { RootStackParamList } from '../../../../App';
-import { useState } from 'react';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { CheckScreenNavigationprop, RootStackParamList } from '../../../../App';
+import { useContext, useState } from 'react';
 import { RestAPI } from '../../../Services/RestAPI';
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { AuthContext } from '../../../Context/AuthContext';
+import axios from 'axios';
 
 
 type AssignCollectorProps = {
@@ -19,31 +21,53 @@ type AssignCollectorProps = {
 export default function AssignCollectorList(props: AssignCollectorProps){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
 
+    const auth = useContext(AuthContext)
+    const navigation = useNavigation<CheckScreenNavigationprop>(); 
 
     const [modalVisible, setModalVisible] = useState(false);
     //required for type checking of parameters and used for navigation & passing data
     //receiving end
-    const selected_clientid = useRoute<RouteProp<RootStackParamList, 'AssignCollector'>>().params.otherParam1;
-    const [client_id, setClientID] = useState(selected_clientid);
-    let paymentDues = 2500;
-    let reseller_id=1;
+    const selected_contractid = useRoute<RouteProp<RootStackParamList, 'AssignCollector'>>().params.otherParam1;
+    const [contract_id, setClientID] = useState(selected_contractid);
+
+    let reseller_id=auth?.user.entityId;
 
     //the function for the button that also uses the "Onsend" function to get the on clicked collector_id
     const assignCollectorSubmit = ()=> {
         //alert("Client ID: " + clientid + "\nPayment Dues: Php " + paymentDues);
-      props.onSend(props.collector_id);// -> disabled for static design
+        //props.onSend(props.collector_id);// -> disabled for static design
         //alert("Client ID: " + client_id + "\nCollector ID: " + props.collector_id); 
 
-        assignCollector({
-            paymentDues: paymentDues,
-            reseller: { reseller_id: reseller_id },
-            collector: { collector_id: props.collector_id },
-            client: { client_id: client_id },
+        
+            
+        // Construct the URL with the collectorId as a query parameter
+        const url = `http://192.168.134.53:8080/assigncollectors/${reseller_id}/contracts/${contract_id}/assign-collector?collectorId=${props.collector_id}`;
+        
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            "Access-Control-Allow-Origin": "*",
+          },
+        };
+      
+        axios
+          .post(url, null, config) // You don't need a request body in this case
+          .then((response) => {
+
+            console.log(response.data);
+            console.log("Connection success");
+          })
+          .catch((error) => {
+            
+            console.log(error.response.data.message);
+          })
+          .finally(() => {
+
           });
-          console.log("Payment Dues: " + paymentDues);
+      
           console.log("Reseller ID: " + reseller_id);
           console.log( "Collector ID: " + props.collector_id);
-          console.log("Client ID: " + client_id);
+          console.log("Contract ID: " + contract_id);
 
           if(!error){
             Alert.alert('Collector Assignment', 'Successful!', [
