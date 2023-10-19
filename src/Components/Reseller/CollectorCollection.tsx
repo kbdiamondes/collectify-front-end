@@ -6,6 +6,7 @@ import { IClient, RestAPI } from '../../Services/RestAPI';
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import CollectorCollectionList from './Lists/CollectorCollectionList';
+import { BASE_URL } from '../../../config';
 
 //remove when connecting to back-end
 const indebtPerson = [
@@ -25,7 +26,7 @@ export default function CollectorCollection(){
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.134.53:8080/clients"
+            url: BASE_URL+"/clients"
         })
     },[] )
 

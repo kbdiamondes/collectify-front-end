@@ -10,6 +10,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import axios from 'axios';
 import { IClient, RestAPI } from '../../Services/RestAPI';
 import CollectorCollectionList from '../Reseller/Lists/CollectorCollectionList';
+import { BASE_URL } from '../../../config';
 
 
 export default function DuePayments(){
@@ -20,7 +21,7 @@ export default function DuePayments(){
         
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.1.2:8080/clients" 
+            url: BASE_URL+"/clients" 
         })
         console.log(client_user)
     },[] )

@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import { credentials } from "./AuthCredentials";
 import axios from "axios";
+import { BASE_URL } from "../../config";
 
 type UserCredentials = {
   username: string;
@@ -34,7 +35,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
   const login = (username: string) => {
     axios
-      .post('http://192.168.1.2:8080/login', { username }, {
+      .post(BASE_URL+'/login', { username }, {
         headers: {
           'Content-Type': 'application/json',
         }

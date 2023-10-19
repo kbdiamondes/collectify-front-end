@@ -8,6 +8,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { CheckScreenNavigationprop } from "../../../App";
 import { useNavigation } from '@react-navigation/native';
 import { IClient, RestAPI } from '../../Services/RestAPI';
+import { BASE_URL } from '../../../config';
 
 
 /*
@@ -29,7 +30,7 @@ export default function ActiveContractListScreen(){
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.134.53:8080/clients"  //use /clients/unpaid-contracts when collect as collector works
+            url: BASE_URL+"/clients"  //use /clients/unpaid-contracts when collect as collector works
         })
 
     },[] )

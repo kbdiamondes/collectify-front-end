@@ -7,6 +7,7 @@ import {Ionicons} from '@expo/vector-icons'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Camera } from 'expo-camera';
 import { AuthContext } from '../../Context/AuthContext';
+import { BASE_URL } from '../../../config';
 
 
 export default function CollectPayments() {
@@ -67,8 +68,8 @@ export default function CollectPayments() {
         formData.append('fileName', uniqueFilename);
         formData.append('contentType', 'image/png');
         //https://collectify-backend-lzknxa3dha-uw.a.run.app/collect-payments/1/contracts/3/collect-payment?paymentType=CreditCard
-        console.log(`http://192.168.134.53:8080/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType )
-        axios.post(`http://192.168.134.53:8080/collect-payments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
+        console.log(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType )
+        axios.post(BASE_URL+`/collect-payments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }

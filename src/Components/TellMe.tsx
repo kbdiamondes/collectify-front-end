@@ -18,7 +18,7 @@ export default function TellMeAboutYourself(){
 
     const handlePress = () => {
         auth?.logout();
-        console.log(auth?.isLoggedIn)
+        
         alert("You have been logged out!");
         
         navigation.goBack(); 

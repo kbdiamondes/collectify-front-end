@@ -10,6 +10,7 @@ import { heightPercentageToDP } from "react-native-responsive-screen";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import React from "react";
 import { AuthContext } from "../../Context/AuthContext";
+import { BASE_URL } from "../../../config";
 
 
 //naa ni siyay parameter dapat (client_id)
@@ -21,7 +22,7 @@ export default function AssignCollectorScreen(){
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.134.53:8080/collectors"
+            url: BASE_URL+"/collectors"
         })
     },[] )
 
