@@ -1,25 +1,39 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert} from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Camera} from 'expo-camera'
 import CameraPreview from './CameraPreview';
-import { CheckScreenNavigationprop } from "../../App";
-import { useNavigation } from 'expo-router';
+import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import ImageResizer from 'react-native-image-resizer';
 
-export default function CameraCapture(){
 
-    const navigation = useNavigation<ImagePreview>(); 
+export default function CameraShot(){
+  const nameProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.nameprop;
+  const priceProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.priceprop;
+  const contractIdProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.contractId;
+  const clientIdProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.clientId;
+
     const [startCamera,setStartCamera] = React.useState(false)
     const [previewVisible, setPreviewVisible] = useState(false)
     const [capturedImage, setCapturedImage] = useState<any>(null)
-    const __startCamera = async () => {
-        const {status} = await Camera.requestCameraPermissionsAsync()
+    const navigation = useNavigation <CheckScreenNavigationprop>();
+    useEffect(() => {
+      // Request camera permissions when the component mounts
+      const requestCameraPermissions = async () => {
+        const { status } = await Camera.requestCameraPermissionsAsync();
         if (status === 'granted') {
           // start the camera
-          setStartCamera(true)
+          setStartCamera(true);
         } else {
-          Alert.alert('Access denied')
+          Alert.alert('Access denied');
         }
-      }
+      };
+  
+      requestCameraPermissions();
+    }, []); // Empty dependency array to run the effect only once
+  
+
+
       const [imageLink, setImageLink] = React.useState()
       const setImage = (photo:any)=> {
         setImageLink(photo)
@@ -27,55 +41,39 @@ export default function CameraCapture(){
 
       const __takePicture = async () => {
         if (!camera) return;
-        
+
         const photo = await camera.takePictureAsync();
-        
-        // Access the base64 image data
-        const photoBase64 = photo.base64;
+
+        // Fetch the image and convert it to a Blob
+        const response = await fetch(photo.uri);
+        const data = await response.blob();
+
+        // Convert the Blob to a base64 string
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (reader.result !== null && typeof reader.result === 'string') {
+            const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
+            // Now you have the base64Image without the data URL prefix
+
+            console.log(photo);
+            navigation.navigate('ImageScreenPreview', {
+              imageprop: base64Image,
+              nameprop: nameProp,
+              priceprop: priceProp,
+              contractId: contractIdProp,
+              clientId: clientIdProp
+            });
+          }
+        };
+
+        console.log(priceProp); 
+        reader.readAsDataURL(data);
+      };
       
-        console.log("test " + photoBase64); // This is the base64-encoded image data
         
-        // Set the photoBase64 in your component's state or use it as needed
-        setPreviewVisible(true);
-        setCapturedImage(photoBase64)
-      
-    
-
-        //buhaton is convert STRING (PHOTO VARIABLE) -> IMAGE
-        //const [imageLink, setImageLink] 
-        //setImageLink(photo)
-        //const base64 = setImageLink
-        //type binaryImageData = Base64.decode(base64)
-
-        /*
-        import { FileSystem } from 'expo';
-
-        const fileName = 'myImage.png'; // Set a desired file name
-
-        FileSystem.writeAsStringAsync(FileSystem.documentDirectory + fileName, binaryImageData, {
-          encoding: FileSystem.EncodingType.Base64,
-        })
-          .then(() => {
-            console.log(`Image saved as ${fileName}`);
-          })
-          .catch((error) => {
-            console.error('Error saving image:', error);
-          });
-
-        */
-          //import sa ug "const navigation = useNavigate<CheckScreenPropschu>"
-          //navigation.push('')
-          //navigation.goBack()
-          //navigation.goBack()
-        
-
-      }
-      
     let camera: Camera
     return(
       <SafeAreaView style={{flex:1, justifyContent:"center", alignItems:"center"}}>
-      {startCamera ? (
-       
             <Camera
               style={{flex: 1, width: "100%"}}
               ref={(r) => {
@@ -122,40 +120,7 @@ export default function CameraCapture(){
                 </View>
               </View>
             </Camera>
-      ) : (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#fff',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <TouchableOpacity
-            onPress={__startCamera}
-            style={{
-              width: 130,
-              borderRadius: 4,
-              backgroundColor: '#14274e',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 40
-            }}
-          >
-            <Text
-              style={{
-                color: '#fff',
-                fontWeight: 'bold',
-                textAlign: 'center'
-              }}
-            >
-              Picture of Receipt
-            </Text>
-          </TouchableOpacity>
-        </View>
-       
-      )}
+      
       </SafeAreaView>
     );
 }

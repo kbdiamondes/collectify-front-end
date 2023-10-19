@@ -2,67 +2,29 @@ import { SafeAreaView,View,  StyleSheet, Text, ScrollView, Pressable, Button, Fl
 import {Ionicons} from '@expo/vector-icons'; 
 import { RouteProp, useRoute, useNavigation } from "@react-navigation/native";
 import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
-import { Key, useEffect, useState } from "react";
+import { Key, useContext, useEffect, useState } from "react";
 import { ICollector, RestAPI } from "../../Services/RestAPI";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import AssignCollectorList from "./Lists/AssignCollectorList";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
-
-const availableCollectors = [
-    {
-        collector_id: 2,
-        collectorname: "John Doe", 
-        collectoraddress: "Cebu City"
-    }, 
-    {
-        collector_id: 3,
-        collectorname: "John Doe", 
-        collectoraddress: "Cebu City"
-    },
-    {
-        collector_id: 3,
-        collectorname: "John Doe", 
-        collectoraddress: "Cebu City"
-    },
-    {
-        collector_id: 3,
-        collectorname: "John Doe", 
-        collectoraddress: "Cebu City"
-    }
-
-]
-
-/*
-interface RouteProps{
-    route: {params: {otherParam:string}}; 
-}
-
-type AssignCollectorProps = NativeStackScreenProps<RootStackParamList, 'AssignCollector'>;
-//type AssignCollectorProps = RouteProp<RootStackParamList, 'AssignCollector'>;
-
-/*
-type AssignCollectorProps = {
-    route: RouteProp<RootStackParamList, 'AssignCollector'>
-}*/
-
-
-
-
-
+import React from "react";
+import { AuthContext } from "../../Context/AuthContext";
 
 
 //naa ni siyay parameter dapat (client_id)
 export default function AssignCollectorScreen(){
-
+    
+    const auth = useContext(AuthContext);
+    
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.1.6:8080/collector"
+            url: "http://192.168.134.53:8080/collectors"
         })
     },[] )
+
 
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     
@@ -83,12 +45,16 @@ export default function AssignCollectorScreen(){
             <View style={styles.main}>
                 <View style={styles.body}>
                     
-                    {
-                        availableCollectors.map((item, index)=>{
-                            return <AssignCollectorList key={index} collector_id={item.collector_id} collectorname={item.collectorname} collectoraddress={item.collectoraddress}/>; 
-                        })
-                    }
-
+                <FlatList
+                    style={{height: '56%', paddingVertical: 5, marginTop: 12, marginBottom: 17}}
+                    data={client_user}
+                    keyExtractor={(collector: ICollector) => collector.collector_id.toString()}
+                    renderItem={({ item: collector}) => (
+                    <React.Fragment>
+                        <AssignCollectorList collector_id={collector.collector_id} collectorname={collector.fullName} collectoraddress={collector.address} onSend={handleSendButton}/>
+                    </React.Fragment>
+                    )}
+                />
                     <View style={styles.body2}>
                         <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Select only available collectors.</Text>
                         <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Make sure to assign collectors with relevant expertise to the task.</Text>

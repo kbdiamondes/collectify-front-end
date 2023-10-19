@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent, TextInput, Modal} from 'react-native'
 import { useNavigation } from "@react-navigation/native";
 import { CheckScreenNavigationprop } from '../../../../App';
@@ -10,6 +10,11 @@ type PaymentProps = {
     key:number, 
     itemName:String; 
     requiredCollectible: number; 
+    dueAmount: number; 
+    fullPrice: number;
+    contractId: number;
+    clientId: number;
+    orderId: String;
 }
 
 
@@ -17,11 +22,6 @@ export default function DuePaymentList(props: PaymentProps){
 
     const [amountCollectible, setamountCollectible] = useState(props.requiredCollectible);
     const navigation = useNavigation<CheckScreenNavigationprop>();
-
-    const handleSubmit = ()=>{
-        console.log(props.itemName)
-        navigation.navigate('PaymentForm')
-    }
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
@@ -35,8 +35,11 @@ export default function DuePaymentList(props: PaymentProps){
                 <View style={styles.buttonMainContainer}>
                     <View style={styles.buttonContainer}>
 
-                        <Pressable style={styles.button} onPress={()=>navigation.navigate("PaymentForm")}>
-
+                    <Pressable style={styles.button}  onPress={() => {
+                        navigation.navigate("PaymentForm", { nameprop: props.itemName, priceprop: props.fullPrice, contractId: props.contractId,clientId: props.clientId, orderId: props.orderId, dueAmount: props.dueAmount});
+    
+                        }}
+                        >
                             <Text style={styles.buttonLabel}>Pay</Text>
                         </Pressable>
                     </View>
