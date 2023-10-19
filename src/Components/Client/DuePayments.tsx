@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator} from 'react-native';
 import DuePaymentList from './Lists/DuePaymentList';
 
 import React, { useEffect, useState } from 'react';
@@ -17,9 +17,10 @@ export default function DuePayments(){
 
 
       useEffect(() => {
+        
         sendRequest({ 
             method: 'GET', 
-            url: "http://192.168.134.53:8080/clients" 
+            url: "http://192.168.1.2:8080/clients" 
         })
         console.log(client_user)
     },[] )
@@ -27,22 +28,33 @@ export default function DuePayments(){
 
     return(
             <View style={styles.container}>
-                <Text style={styles.textHeader} >Upcoming Dues</Text>
-                <FlatList
-                    data={client_user}
-                    keyExtractor={(client: IClient) => client.client_id.toString()}
-                    renderItem={({ item: client }) => (
-                        <React.Fragment>
-                            {client.contracts.map((contract, index) => (
-                                <DuePaymentList
-                                key={index} itemName={contract.itemName} requiredCollectible={contract.dueAmount} fullPrice={contract.fullPrice} contractId={contract.contract_id} clientId={client.client_id} orderId={contract.orderid} dueAmount={contract.dueAmount}
-                               
-                                                                                                             />
-                            ))}
-                            
-                        </React.Fragment>
-                    )}
-                />
+                {loading?(
+                    <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+                        <ActivityIndicator style={{margin: hp(25)}}size="large" />
+                    </View>
+                ):
+                ( 
+                <View style={styles.container}>
+                    <Text style={styles.textHeader} >Upcoming Dues</Text>
+                    <FlatList
+                        data={client_user}
+                        keyExtractor={(client: IClient) => client.client_id.toString()}
+                        renderItem={({ item: client }) => (
+                            <React.Fragment>
+                                {client.contracts.map((contract, index) => (
+                                    <DuePaymentList
+                                    key={index} itemName={contract.itemName} requiredCollectible={contract.dueAmount} fullPrice={contract.fullPrice} contractId={contract.contract_id} clientId={client.client_id} orderId={contract.orderid} dueAmount={contract.dueAmount}
+                                   
+                                                                                                                 />
+                                ))}
+                                
+                            </React.Fragment>
+                        )}
+                    />
+                </View>
+                )
+
+            }
              </View>     
 
     );

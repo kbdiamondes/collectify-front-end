@@ -1,5 +1,8 @@
+import { useNavigation } from "@react-navigation/native";
 import axios, { AxiosRequestConfig } from "axios";
 import { useState } from "react";
+import { Alert } from "react-native";
+import { CheckScreenNavigationprop } from "../../App";
 
 
 /*
@@ -70,6 +73,7 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
     const [collector_user, setCollectorUser] = useState<ICollector[]>(); 
     const [data, setData] = useState<IData[]>();
 
+    const navigation = useNavigation<CheckScreenNavigationprop>();
     function sendRequest(config: AxiosRequestConfig<any>) {
         setLoading(true);
 
@@ -83,6 +87,8 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
             })
             .catch((error) => {
                 setError(error.message);
+                Alert.alert("Cannot connect to the server. Please try again later.")
+                
             })
             .finally(() => setLoading(false))
     }

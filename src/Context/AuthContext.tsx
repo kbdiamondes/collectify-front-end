@@ -34,7 +34,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
   const login = (username: string) => {
     axios
-      .post('http://192.168.134.53:8080/login', { username }, {
+      .post('http://192.168.1.2:8080/login', { username }, {
         headers: {
           'Content-Type': 'application/json',
         }
