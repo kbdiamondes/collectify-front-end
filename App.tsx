@@ -30,6 +30,7 @@ import { AuthContext, AuthContextProvider } from './src/Context/AuthContext';
 import CameraShot from './src/Components/Client/Camera';
 import CollectPayments from './src/Components/Reseller/CollectPayments';
 import ImagePreview2 from './src/Components/Client/ImagePreview2';
+import DefaultDashboard from './src/Components/Dashboard';
 
 
 
@@ -84,6 +85,13 @@ export type CheckScreenNavigationprop = NativeStackNavigationProp<RootStackParam
 
 SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 5000);
+
+/*
+export default function App(){
+  return(
+    <DefaultDashboard/>
+  );
+}*/
 
 export default function App(){
 
