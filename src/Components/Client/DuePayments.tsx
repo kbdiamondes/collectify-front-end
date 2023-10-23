@@ -24,7 +24,7 @@ export default function DuePayments(){
         if(auth?.user.entityId){
             sendRequest({ 
                 method: 'GET', 
-                url: BASE_URL + "/clients/client/"+ auth?.user.entityId+"/unpaid-contracts"
+                url: BASE_URL + "/due-payments/client/"+ auth?.user.entityId+"/unpaid-contracts"
                 //url: BASE_URL + "/clients/"
                 //url: BASE_URL + "/clients/unpaid-contracts"
                 //url: "http://192.168.1.16:8080/clients/client/"+ auth?.user.entityId+"/unpaid-contracts"
