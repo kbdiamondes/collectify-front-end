@@ -117,13 +117,13 @@ export default function PaymentForm(){
                 <View>
                     
                     <Text style={styles.textLabel}>Item Name</Text>
-                    <TextInput defaultValue={nameProp} style={styles.textInput}  placeholder='Enter item name'></TextInput>
+                    <TextInput defaultValue={nameProp} style={styles.textInput}  editable={false} placeholder='Enter item name'></TextInput>
                     
                     <Text style={styles.textLabel}>Item Price</Text>
-                    <TextInput defaultValue={priceProp} editable={false} keyboardType={'numeric'} style={styles.textInput}></TextInput>
+                    <TextInput defaultValue={itemPrice.toString()} editable={false} keyboardType={'numeric'} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Required Collectible</Text>
-                    <TextInput defaultValue={dueAmountProp} editable={false} style={styles.textInput}></TextInput>
+                    <TextInput defaultValue={requiredCollectible.toString()} editable={false} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Reference Number</Text>
                     <TextInput defaultValue = {referenceNumber} editable={false} style={styles.textInput}></TextInput>
