@@ -4,8 +4,7 @@ import {Camera} from 'expo-camera'
 import CameraPreview from './CameraPreview';
 import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import ImageResizer from 'react-native-image-resizer';
-
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
 export default function CameraShot(){
   const nameProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.nameprop;
@@ -39,56 +38,78 @@ export default function CameraShot(){
         setImageLink(photo)
       }
 
+      /*
+      const __takePicture = async () => {
+        if (!camera) return;
+
+    
+        const photo = await camera.takePictureAsync();
+
+        // Fetch the image and convert it to a Blob
+        const response = await fetch(photo.uri);
+        const data = await response.blob();
+
+        // Convert the Blob to a base64 string
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (reader.result !== null && typeof reader.result === 'string') {
+            const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
+            // Now you have the base64Image without the data URL prefix
+
+            console.log(photo);
+            navigation.navigate('ImageScreenPreview', {
+              imageprop: base64Image,
+              nameprop: nameProp,
+              priceprop: priceProp,
+              contractId: contractIdProp,
+              clientId: clientIdProp
+            });
+          }
+        };
+
+        console.log(priceProp); 
+        reader.readAsDataURL(data);
+      };*/
       const __takePicture = async () => {
         if (!camera) return;
     
         const photo = await camera.takePictureAsync();
     
-        // Create a canvas element to resize and compress the image
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        const image = new Image();
+        const manipResult = await manipulateAsync(
+          photo.uri,
+          [],
+          { compress: 0.5, format: SaveFormat.JPEG }
+        );
     
-        if (context) { // Check if context is not null
-            // Set the canvas dimensions to your desired size
-            canvas.width = 800; // Set the width you want
-            canvas.height = 600; // Set the height you want
+        if (manipResult.uri) {
+          // Fetch the manipulated image and convert it to a Blob
+          const response = await fetch(manipResult.uri);
+          const data = await response.blob();
     
-            image.onload = () => {
-                context.drawImage(image, 0, 0, canvas.width, canvas.height);
-                canvas.toBlob((blob) => {
-                  if (blob) { // Check if blob is not null
-                      // Convert the Blob to a base64 string
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                          if (reader.result !== null && typeof reader.result === 'string') {
-                              const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
-                              // Now you have the compressed base64Image without the data URL prefix
-              
-                              console.log(photo);
-                              navigation.navigate('ImageScreenPreview', {
-                                  imageprop: base64Image,
-                                  nameprop: nameProp,
-                                  priceprop: priceProp,
-                                  contractId: contractIdProp,
-                                  clientId: clientIdProp
-                              });
-                          }
-                      };
-              
-                      reader.readAsDataURL(blob);
-                  }
-              }, 'image/jpeg', 0.8);
-            };
+          // Convert the Blob to a base64 string
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            if (reader.result !== null && typeof reader.result === 'string') {
+              const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/jpeg;base64,' part
     
-            // Load the image into the canvas
-            image.src = photo.uri;
+              // Now you have the base64Image without the data URL prefix
+              console.log(manipResult);
+              navigation.navigate('ImageScreenPreview', {
+                imageprop: base64Image,
+                nameprop: nameProp,
+                priceprop: priceProp,
+                contractId: contractIdProp,
+                clientId: clientIdProp,
+              });
+            }
+          };
+    
+          reader.readAsDataURL(data);
         }
-    };
-    
+      };
       
         
-    let camera: Camera
+    let camera: Camera | null;
     return(
       <SafeAreaView style={{flex:1, justifyContent:"center", alignItems:"center"}}>
             <Camera
@@ -101,6 +122,7 @@ export default function CameraShot(){
                 style={{
                   flex: 1,
                   width: '100%',
+                  height: '100%',
                   backgroundColor: 'transparent',
                   flexDirection: 'row'
                 }}
