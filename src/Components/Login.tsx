@@ -19,14 +19,14 @@ export default function Login(){
         
         //navigation.navigate('TellUsMoreAboutYourself'); 
         
-       auth?.login(userName, passWord )
+       //auth?.login(userName, passWord )
         
        
-        if(auth?.user.tableName== "Client"){
+       /* if(auth?.user.tableName== "Client"){
             navigation.navigate('DuePayments')
         }else if (auth?.user.tableName == "Reseller"){
             navigation.navigate('ActiveContractScreen')
-        }else if (auth?.user.tableName == "Collector")
+        }else if (auth?.user.tableName == "Collector")*/
             navigation.navigate('Collect')
         
        /* if(auth?.isLoggedIn==true){

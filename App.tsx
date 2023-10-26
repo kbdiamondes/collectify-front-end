@@ -31,6 +31,8 @@ import CameraShot from './src/Components/Client/Camera';
 import CollectPayments from './src/Components/Reseller/CollectPayments';
 import ImagePreview2 from './src/Components/Client/ImagePreview2';
 import DefaultDashboard from './src/Components/Dashboard';
+import CollectPaymentForm from './src/Components/Collector/CollectPaymentForm';
+import CollectAllPaymentForm from './src/Components/Collector/CollectAllPaymentForm';
 
 
 
@@ -52,6 +54,7 @@ export type RootStackParamList = {
   
   
   
+  
  
 
   //Collector
@@ -59,7 +62,8 @@ export type RootStackParamList = {
   FollowUp: undefined;
   Assurance: undefined; 
   TellUsMoreAboutYourself: undefined; 
-
+  CollectPaymentForm: undefined;
+  CollectAllPaymentForm: undefined;
 
   //Reseller
   CreateNewContractModal: undefined; 
@@ -127,6 +131,8 @@ export default function App(){
       <Stack.Screen name="ImageScreenPreview" component={ImagePreview} options={{ headerShown: false}}/>
       <Stack.Screen name="ImageScreenPreview2" component={ImagePreview2} options={{ headerShown: false}}/>
       <Stack.Screen name="CollectPayments" component={CollectPayments} options={{ headerShown: false}}/>
+      <Stack.Screen name="CollectPaymentForm" component={CollectPaymentForm} options={{ headerShown: false}}/>
+      <Stack.Screen name="CollectAllPaymentForm" component={CollectAllPaymentForm} options={{ headerShown: false}}/>
 
     </Stack.Navigator>
 

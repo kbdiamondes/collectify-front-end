@@ -3,43 +3,10 @@ import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, { useState } from 'react';
 import CollectionAssignment from './Lists/CollectionAssignmentLists';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { useNavigation } from '@react-navigation/native';
+import { CheckScreenNavigationprop } from '../../../App';
 
 const recentTransaction= [
-    {
-        personName:'John Doe', 
-        transactionDate:  'August 15, 2015',
-        itemCollectible: 2500
-    },
-    {
-        personName:'John Doe', 
-        transactionDate:  'August 15, 2015',
-        itemCollectible: 2500
-    },
-    {
-        personName:'John Doe', 
-        transactionDate:  'August 15, 2015',
-        itemCollectible: 2500
-    },
-    {
-        personName:'John Doe', 
-        transactionDate:  'August 15, 2015',
-        itemCollectible: 2500
-    },
-    {
-        personName:'John Doe', 
-        transactionDate:  'August 15, 2015',
-        itemCollectible: 2500
-    },
-    {
-        personName:'John Doe', 
-        transactionDate:  'August 15, 2015',
-        itemCollectible: 2500
-    },
-    {
-        personName:'John Doe', 
-        transactionDate:  'August 15, 2015',
-        itemCollectible: 2500
-    },
     {
         personName:'John Doe', 
         transactionDate:  'August 15, 2015',
@@ -49,8 +16,11 @@ const recentTransaction= [
 
 
 export default function Collection(){
+    const navigation = useNavigation <CheckScreenNavigationprop>();
+    const gotoCollectPayments =()=>{
     
-
+       // navigation.navigate('CollectPayments', { contractId: props.contractId, dueAmount: props.requiredCollectible});
+    }
     return(
 
         <SafeAreaView>
