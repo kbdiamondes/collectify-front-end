@@ -41,34 +41,51 @@ export default function CameraShot(){
 
       const __takePicture = async () => {
         if (!camera) return;
-
+    
         const photo = await camera.takePictureAsync();
-
-        // Fetch the image and convert it to a Blob
-        const response = await fetch(photo.uri);
-        const data = await response.blob();
-
-        // Convert the Blob to a base64 string
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (reader.result !== null && typeof reader.result === 'string') {
-            const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
-            // Now you have the base64Image without the data URL prefix
-
-            console.log(photo);
-            navigation.navigate('ImageScreenPreview', {
-              imageprop: base64Image,
-              nameprop: nameProp,
-              priceprop: priceProp,
-              contractId: contractIdProp,
-              clientId: clientIdProp
-            });
-          }
-        };
-
-        console.log(priceProp); 
-        reader.readAsDataURL(data);
-      };
+    
+        // Create a canvas element to resize and compress the image
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const image = new Image();
+    
+        if (context) { // Check if context is not null
+            // Set the canvas dimensions to your desired size
+            canvas.width = 800; // Set the width you want
+            canvas.height = 600; // Set the height you want
+    
+            image.onload = () => {
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                canvas.toBlob((blob) => {
+                  if (blob) { // Check if blob is not null
+                      // Convert the Blob to a base64 string
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                          if (reader.result !== null && typeof reader.result === 'string') {
+                              const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
+                              // Now you have the compressed base64Image without the data URL prefix
+              
+                              console.log(photo);
+                              navigation.navigate('ImageScreenPreview', {
+                                  imageprop: base64Image,
+                                  nameprop: nameProp,
+                                  priceprop: priceProp,
+                                  contractId: contractIdProp,
+                                  clientId: clientIdProp
+                              });
+                          }
+                      };
+              
+                      reader.readAsDataURL(blob);
+                  }
+              }, 'image/jpeg', 0.8);
+            };
+    
+            // Load the image into the canvas
+            image.src = photo.uri;
+        }
+    };
+    
       
         
     let camera: Camera
