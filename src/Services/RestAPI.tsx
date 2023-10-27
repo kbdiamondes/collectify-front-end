@@ -31,6 +31,7 @@ export interface ICollector{
     fullName: String, 
     address: String, 
     email: String, 
+    contracts: Contract[]
 }
 
 export interface IReseller{
