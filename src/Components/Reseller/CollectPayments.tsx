@@ -28,6 +28,7 @@ export default function CollectPayments() {
 
     const [error, setError] = useState(false)
 
+    const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext); 
 
      //checks passed data from console
@@ -44,6 +45,7 @@ export default function CollectPayments() {
       
         alert("Success");
         handleModal();
+        navigation.goBack(); 
 
       };
       
@@ -67,9 +69,10 @@ export default function CollectPayments() {
         formData.append('base64Image', CapturedImage);
         formData.append('fileName', uniqueFilename);
         formData.append('contentType', 'image/png');
+        formData.append('paymentType', paymentType);
         //https://collectify-backend-lzknxa3dha-uw.a.run.app/collect-payments/1/contracts/3/collect-payment?paymentType=CreditCard
-        console.log(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType )
-        axios.post(BASE_URL+`/collect-payments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
+        //console.log(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType )
+        axios.post(BASE_URL+`/collectPayments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
@@ -159,6 +162,7 @@ export default function CollectPayments() {
   
             // Now you have the base64Image without the data URL prefix
             console.log(manipResult);
+            setCapturedImage(base64Image);
 
             setImagePreview(true)
           }

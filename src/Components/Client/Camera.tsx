@@ -38,38 +38,6 @@ export default function CameraShot(){
         setImageLink(photo)
       }
 
-      /*
-      const __takePicture = async () => {
-        if (!camera) return;
-
-    
-        const photo = await camera.takePictureAsync();
-
-        // Fetch the image and convert it to a Blob
-        const response = await fetch(photo.uri);
-        const data = await response.blob();
-
-        // Convert the Blob to a base64 string
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (reader.result !== null && typeof reader.result === 'string') {
-            const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
-            // Now you have the base64Image without the data URL prefix
-
-            console.log(photo);
-            navigation.navigate('ImageScreenPreview', {
-              imageprop: base64Image,
-              nameprop: nameProp,
-              priceprop: priceProp,
-              contractId: contractIdProp,
-              clientId: clientIdProp
-            });
-          }
-        };
-
-        console.log(priceProp); 
-        reader.readAsDataURL(data);
-      };*/
       const __takePicture = async () => {
         if (!camera) return;
     
@@ -117,6 +85,7 @@ export default function CameraShot(){
               ref={(r) => {
                 camera = r
               }}
+              ratio='16:9'
             >
               <View
                 style={{

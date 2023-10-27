@@ -5,20 +5,23 @@ import { useNavigation } from "@react-navigation/native";
 
 import {Ionicons} from '@expo/vector-icons'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import { useState } from "react";
+import { useContext, useState } from "react";
+import axios from "axios";
+import { AuthContext } from "../../Context/AuthContext";
+import { BASE_URL } from "../../../config";
 
 export default function FullPaymentScreen(){
     const navigation = useNavigation<CheckScreenNavigationprop>()
 
     const [buyerName, setBuyername] = useState<String>(""); 
     const [itemName, setItemName] = useState<String>(""); 
-    const [itemPrice, setItemPrice] = useState<String>(""); 
+    const [itemPrice, setItemPrice] = useState<Number>(); 
     const [itemSpecs, setItemSpecs] = useState<String>(""); 
-    const [fullAmount, setFullAmount] = useState<String>(""); 
-
+    
     const [isModalVisible, setIsModalVisible] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
 
+    const auth = useContext(AuthContext);
 
     //checks passed data from console
     const continueButton = () => {
@@ -26,21 +29,43 @@ export default function FullPaymentScreen(){
         console.log(itemName);
         console.log(itemPrice);
         console.log(itemSpecs);
-        console.log(fullAmount);
         handleModal() //shows the modal
     }
 
-    const confirmContract = () =>{
-        alert("Purchase confirmed")
-        handleModal() //hides the modal
-        //pass value here
+    const confirmContract = () => {
+        // Construct the request payload
+        const contractData = {
+            resellerId: auth?.user.entityId, // Replace with the actual resellerId
+            clientUsername: buyerName, // Replace with the actual clientUsername
+            contract: {
+                username: buyerName,
+                itemName: itemName,
+                fullPrice: itemPrice, // Assuming itemPrice is a number
+                isPaid: false, // You may need to change this based on your logic
+                installmentDuration: 0, // You may need to change this based on your logic
+                isMonthly: false, // You may need to change this based on your logic
+            }
+        };
+    
+        // Make the POST request using Axios
+        axios.post(BASE_URL+`/resellers/${contractData.resellerId}/clients/${contractData.clientUsername}/contracts`, contractData.contract)
+            .then(response => {
+                // Handle the response here (e.g., show a success message)
+                alert("Purchase confirmed");
+                handleModal();
+                const message = "Name: " + buyerName + "\nItem Name: " + itemName + "\nItem Price: " + itemPrice + "\nItem Specs: " + itemSpecs;
+                console.log(message);
+                navigation.goBack();
+                navigation.goBack();
+            })
+            .catch(error => {
+                // Handle any errors (e.g., show an error message)
+                alert("Error confirming purchase");
+                console.error(error);
+            });
 
-        var message = "Name:" + buyerName +  "\nItem Name:" + itemName + "\nItem Price: "+ itemPrice + "\nItem Specs:" +itemSpecs + "\nFull Amount: "+fullAmount;
-
-        console.log(message)
-        navigation.goBack();
-        navigation.goBack();
-    }   
+    };
+    
 
     return(
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -69,11 +94,11 @@ export default function FullPaymentScreen(){
                 </Pressable>
                 <Text style={styles.textStyleHeader}>Full Payment</Text>
                 <Text style={styles.textStyleSubheader}>Complete your payment with ease through our seure andc convenient full payment page. </Text>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Buyer Username" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Name" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Price" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Specifications" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Total amount for full payment" ></TextInput>
+                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Buyer Username" onChangeText={(username) => setBuyername(username)}></TextInput>
+                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Name" onChangeText={(item)=> setItemName(item)}></TextInput>
+                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Price" keyboardType="numeric" onChangeText={(amount)=>setItemPrice(parseInt(amount))} ></TextInput>
+                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Specifications"></TextInput>
+                
                     
                     <View style={styles.button}>
                         <Pressable onPressIn={continueButton}>
