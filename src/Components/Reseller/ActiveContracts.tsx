@@ -36,6 +36,12 @@ export default function ActiveContractListScreen(){
         console.log(auth?.user.entityId)
 
     },[] )
+
+    const navigation = useNavigation<CheckScreenNavigationprop>();
+    const toLogout = () => {
+        auth?.logout;
+        navigation.navigate('Login');
+    }
     
     return(
 
@@ -48,6 +54,7 @@ export default function ActiveContractListScreen(){
                 :(
                     <View style={styles.container}>
                     <Text style={styles.textHeader} >Active Contracts</Text>
+                    <Pressable onPress={toLogout}><Text>Logout</Text></Pressable>
                     <FlatList
                         data={contract} // Use contracts instead of client_user
                         keyExtractor={(contract) => contract.contract_id.toString()} // Adjust keyExtractor

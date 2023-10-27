@@ -1,6 +1,6 @@
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
-import { KeyboardAvoidingView, SafeAreaView, Text, View, StyleSheet, Pressable, TextInput} from "react-native";
+import { KeyboardAvoidingView, SafeAreaView, Text, View, StyleSheet, Pressable, TextInput, ActivityIndicator} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -10,37 +10,39 @@ export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     const [userName, setUserName] = useState<string>('');
     const [passWord, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState(false); 
     const auth = useContext(AuthContext);
 
-    
+    useFocusEffect(
+        React.useCallback(() => {
+          setLoading(false);
+        }, [])
+      );
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
+        setLoading(true);
+        await auth?.login(userName, passWord);
         
-        
-        //navigation.navigate('TellUsMoreAboutYourself'); 
-        
-       auth?.login(userName, passWord )
-        
-       
-        if(auth?.user.tableName== "Client"){
-            navigation.navigate('DuePayments')
-        }else if (auth?.user.tableName == "Reseller"){
-            navigation.navigate('ActiveContractScreen')
-        }else if (auth?.user.tableName == "Collector")
-            navigation.navigate('Collect')
-        
-       /* if(auth?.isLoggedIn==true){
-            if(userType == "client"){
-                navigation.navigate('DuePayments')
-            }else if (userType == "reseller"){
-                navigation.navigate('Collect')
-            }else if (userType == "collector")
-                navigation.navigate('SoldItems')
-            console.log(userName, passWord, auth?.isLoggedIn);
-        }else{
-            alert("error")
-        }*/
+        try {
+
+            
+            if (auth?.user.tableName === "Client") {
+              navigation.navigate('DuePayments');
+            } else if (auth?.user.tableName === "Reseller") {
+              navigation.navigate('ActiveContractScreen');
+            } else if (auth?.user.tableName === "Collector") {
+              navigation.navigate('Collect');
+            } else if (auth?.user.tableName === "Not Found") {
+              alert('User not found');
+            }
+          } catch (error) {
+            // Handle any login errors here
+            console.error('Login error:', error);
+          } finally {
+            setLoading(false);
+          }
     }
+        
     
     return(
 
@@ -66,11 +68,21 @@ export default function Login(){
                 <View style={styles.body}>
                         <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
                         <TextInput onChangeText={(passWordAuth)=>setPassword(passWordAuth)}placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
-                    <View  style={styles.button}>
+                    {loading?(
+                        <View style={styles.buttonLoading}>                        
+                                    <ActivityIndicator size="large" color="#0000ff" />                     
+                        </View>
+                    ):(
+                        <View style={styles.button}>                        
                         <Pressable onPressIn={handleLogin}>
                                 <Text style={styles.buttonLabel}>Login</Text>
                         </Pressable>
+                    
                     </View>
+                    )}
+
+
+
                 </View>
             </View>
 
@@ -146,6 +158,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         borderRadius: 5, 
     },
+    buttonLoading:{
+        backgroundColor: '#707070',
+        height: hp(7),
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        borderRadius: 5, 
+    },
     buttonLabel:{
         color: '#fff', 
         fontSize: hp(2)
@@ -169,4 +188,3 @@ const styles = StyleSheet.create({
 
 });
 
-////
