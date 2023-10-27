@@ -1,54 +1,51 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator} from 'react-native';
 import DuePaymentList from './Lists/CollectorCollectionList';
 
-import React, { Key, useEffect, useState } from 'react';
+import React, { Key, useContext, useEffect, useState } from 'react';
 import { IClient, RestAPI } from '../../Services/RestAPI';
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import CollectorCollectionList from './Lists/CollectorCollectionList';
 import { BASE_URL } from '../../../config';
-
-//remove when connecting to back-end
-const indebtPerson = [
-    {
-        fullname: 'John Doe', 
-        client_id: 1
-    },
-    {
-        fullname: 'John Doe', 
-        client_id: 1
-    }
-]
+import { AuthContext } from '../../Context/AuthContext';
 
 export default function CollectorCollection(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
+
+    const auth = useContext(AuthContext)
 
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: BASE_URL+"/clients"
+            url: BASE_URL+"/contracts/unpaid/" + auth?.user.entityId
         })
     },[] )
 
-    return(
-
+    return (
         <View style={styles.container}>
-                <Text style={styles.textHeader} >Client with Debt</Text>
-                <FlatList
-                    data={client_user}
-                    keyExtractor={(client: IClient) => client.client_id.toString()}
-                    renderItem={({ item: client }) => (
-                        <React.Fragment>
-                            {client.contracts.map((contract, index) => (
-                                <CollectorCollectionList key={index} contract_id={contract.contract_id} fullname={client.fullName} requiredCollectible={contract.dueAmount} />
-                            ))}
-                            
-                        </React.Fragment>
-                    )}
-                /> 
+          {loading ? (
+            <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+              <ActivityIndicator style={{ margin: hp(25) }} size="large" />
+            </View>
+          ) : (
+            <View style={styles.container}>
+            <Text style={styles.textHeader}>Clients with Debt</Text>
+            <FlatList
+              data={contract} // Use contracts instead of client_user
+              keyExtractor={(contract) => contract.contract_id.toString()} // Adjust keyExtractor
+              renderItem={({ item: contract }) => (
+                <CollectorCollectionList
+                  key={contract.contract_id.toString()}
+                  contract_id={contract.contract_id}
+                  fullname={contract.username} // Use contract.username
+                  requiredCollectible={contract.dueAmount}
+                />
+              )}
+            />
+          </View>
+          )}
         </View>
-
-    );
+      );
 }
 
 const styles = StyleSheet.create({

@@ -31,7 +31,7 @@ export function ResellerTabNavigator() {
             borderRightWidth: hp(.5), 
             position: 'relative', 
             overflow: 'hidden'}}}>
-           <Tab.Screen name='ActiveContracts' component={ActiveContractListScreen} options={{headerTitle: 'Create Contracts',title: 'Create Contracts', tabBarIcon: ()=>(<Ionicons name="clipboard" color='#fff' size={20}></Ionicons>)}}/>
+           <Tab.Screen name='ActiveContracts' component={ActiveContractListScreen} options={{headerTitle: 'Your Contracts',title: 'Contracts', tabBarIcon: ()=>(<Ionicons name="clipboard" color='#fff' size={20}></Ionicons>)}}/>
            <Tab.Screen name='ItemsSold' component={ResellerSoldItems} options={{headerTitle: 'Sold Items',title: 'Items Sold', tabBarIcon: ()=>(<Ionicons name="cart" color='#fff' size={20}></Ionicons>)}}/>
            <Tab.Screen name='CreateNewContract' component={PlaceHolder}
                       listeners={({navigation}) => 

@@ -15,7 +15,7 @@ import { AuthContext } from '../../Context/AuthContext';
 
 
 export default function DuePayments(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
 
     const [unpaidContracts, setUnpaidContracts] = useState();
 

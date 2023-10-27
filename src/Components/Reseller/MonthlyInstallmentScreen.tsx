@@ -14,7 +14,7 @@ export default function MonthlyPaymentmentScreen(){
     const [itemName, setItemName] = useState<String>(""); 
     const [itemPrice, setItemPrice] = useState<String>(""); 
     const [itemSpecs, setItemSpecs] = useState<String>(""); 
-    const [installmentAmount, setInstallmentAmount] = useState<String>(""); 
+    const [installmentDuration, setInstallmentDuration] = useState<String>(""); 
 
     const [isModalVisible, setIsModalVisible] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
@@ -26,7 +26,7 @@ export default function MonthlyPaymentmentScreen(){
         console.log(itemName);
         console.log(itemPrice);
         console.log(itemSpecs);
-        console.log(installmentAmount);
+        console.log(installmentDuration);
         handleModal() //shows the modal
     }
 
@@ -35,7 +35,7 @@ export default function MonthlyPaymentmentScreen(){
         handleModal() //hides the modal
         //pass value here
 
-        var message = "Name:" + buyerName +  "\nItem Name:" + itemName + "\nItem Price: "+ itemPrice + "\nItem Specs:" +itemSpecs + "\nInstallment Amount: "+installmentAmount;
+        var message = "Name:" + buyerName +  "\nItem Name:" + itemName + "\nItem Price: "+ itemPrice + "\nItem Specs:" +itemSpecs + "\nInstallment Amount: "+installmentDuration;
 
         console.log(message)
         navigation.goBack();
@@ -73,9 +73,9 @@ export default function MonthlyPaymentmentScreen(){
                 <Text style={styles.textStyleSubheader}>Easily track and manage monthly installments with our user-friendly interface. </Text>
                     <TextInput onChangeText={(name)=>setBuyername(name)}   placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Buyer Username" ></TextInput>
                     <TextInput onChangeText={(name)=>setItemName(name)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Name" ></TextInput>
-                    <TextInput onChangeText={(price)=>setItemPrice(price)}  placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Price" ></TextInput>
-                    <TextInput onChangeText={(specs)=>setItemSpecs(specs)}  placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Specifications" ></TextInput>
-                    <TextInput onChangeText={(amount)=>setInstallmentAmount(amount)}   placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Installment Amount" ></TextInput>
+                    <TextInput onChangeText={(price)=>setItemPrice(price)}  keyboardType="numeric" placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Price" ></TextInput>
+                    <TextInput onChangeText={(specs)=>setItemSpecs(specs)}  keyboardType="numeric" placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Specifications" ></TextInput>
+                    <TextInput onChangeText={(amount)=>setInstallmentDuration(amount)}   keyboardType="numeric" placeholderTextColor="#C2C6CC"  style={styles.textBoxStyle} placeholder="Installment Duration" ></TextInput>
                     
                     <View style={styles.button}>
                         <Pressable onPressIn={continueButton}>

@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable, Modal, ToastAndroid} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable, Modal} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import CameraCapture from './Camera';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -33,19 +33,20 @@ export default function PaymentForm(){
      )=>{console.log("Client ID:" + clientidProp + "\nOrder ID: " + orderIdProp + "\nFull Price: "+ priceProp)  },[])
 
 
+     /*
      const toastTransactionFailed = () => {
       ToastAndroid.showWithGravity(
         'Transaction Failed',
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
-    };
+    };*/
 
     const confirmContract = () =>{
       handleSubmit()
 
       if(error===false){
-        toastTransactionFailed()
+        //toastTransactionFailed()
         handleModal()
       }else{
         navigation.navigate('DuePayments')
