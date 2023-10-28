@@ -50,13 +50,22 @@ export interface IData{
 
 }
 
-export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any] => {
+export interface ScheduledReminder {
+  id: number;
+  reminderTitle: String;
+  reminderDateTime: String;
+  dueAmount: number;
+  paid: Boolean;
+}
+
+export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any] => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [client_user, setClientUser] = useState<IClient[]>([]); 
     const [reseller_user, setResellerUser] = useState<IReseller[]>(); 
     const [collector_user, setCollectorUser] = useState<ICollector[]>(); 
     const [contract, setContract] = useState<Contract[]>([]);
+    const [scheduledReminders, setScheduledReminders] = useState<ScheduledReminder[]>([]); 
     const [data, setData] = useState<IData[]>();
 
     const navigation = useNavigation<CheckScreenNavigationprop>();
@@ -71,6 +80,13 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
                 setResellerUser(response.data);
                 setCollectorUser(response.data);
                 setContract(response.data);
+                setScheduledReminders(response.data);
+                if (Array.isArray(response.data)) {
+                  console.log("Scheduled Reminders Log:", response.data);
+              } else {
+                  console.log("Response data is not an array:", response.data);
+              }
+                
             })
             .catch((error) => {
                 setError(error.message);
@@ -120,6 +136,6 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
 
 
 
-    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract];
+    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders];
 
 }

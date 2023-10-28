@@ -31,6 +31,7 @@ import CameraShot from './src/Components/Client/Camera';
 import CollectPayments from './src/Components/Reseller/CollectPayments';
 import ImagePreview2 from './src/Components/Client/ImagePreview2';
 import DefaultDashboard from './src/Components/Dashboard';
+import ScheduleNewPaymentReminder from './src/Components/Client/ScheduleNewPaymentReminder';
 
 
 
@@ -49,6 +50,7 @@ export type RootStackParamList = {
   PaymentReminders: undefined; 
   TransactionHistory: undefined; 
   PaymentRecrods: undefined; 
+  ScheduleNewPaymentReminders: undefined; 
   
   
   
@@ -112,6 +114,7 @@ export default function App(){
       <Stack.Screen name="Collect" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="FollowUp" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="ScheduleNewPaymentReminders" component={ScheduleNewPaymentReminder} options={{headerShown: false}}/>
       
       <Stack.Screen name="ActiveContractScreen" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>

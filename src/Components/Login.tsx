@@ -74,7 +74,7 @@ export default function Login(){
                         </View>
                     ):(
                         <View style={styles.button}>                        
-                        <Pressable onPressIn={handleLogin}>
+                        <Pressable onPress={handleLogin}>
                                 <Text style={styles.buttonLabel}>Login</Text>
                         </Pressable>
                     
