@@ -39,12 +39,13 @@ export default function SchedulePayments(){
     return (
             <View style={styles.container}>
                 {loading ? (
-                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={styles.container}>
                         <ActivityIndicator style={{ margin: hp(25) }} size="large" />
                     </View>
                 ) : error ? (
                     <Text>{error}</Text>
                 ) : scheduledReminders.length > 0 ? (
+                    
                     <FlatList
                         data={scheduledReminders}
                         keyExtractor={(reminder) => reminder.id.toString()}
@@ -61,10 +62,18 @@ export default function SchedulePayments(){
                                 </React.Fragment>
                             );
                         }}
+                        
                     />
+
+
                 ) : (
                     <Text>No scheduled reminders available.</Text>
                 )}
+                    <View style={styles.footer}>
+                        <Pressable onPress={() => navigation.navigate('ScheduleNewPaymentReminders')}>
+                            <Text style={{ color: '#F7931E', fontSize: hp(2) }}>Schedule a Payment</Text>
+                        </Pressable>
+                    </View>
             </View>
     );
     
@@ -84,6 +93,7 @@ const styles = StyleSheet.create({
     }, 
     footer:{ 
         marginRight: hp(2.5),
+        marginBottom: hp(2.5),
         alignItems: 'flex-end', 
         justifyContent: 'flex-end'
     }
