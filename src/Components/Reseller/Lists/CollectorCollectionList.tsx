@@ -33,7 +33,7 @@ export default function CollectorCollectionList(props: CollectorCollectionListPr
                 <View style={styles.buttonMainContainer}>
                     <View style={styles.buttonContainer}>
                         <Pressable style={styles.button} onPress={gotoAssignCollector}>
-                            <Text style={styles.buttonLabel}>Pay</Text>
+                            <Text style={styles.buttonLabel}>Assign</Text>
                         </Pressable>
                     </View>
                 </View>    

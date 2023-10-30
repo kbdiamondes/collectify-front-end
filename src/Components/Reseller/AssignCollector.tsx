@@ -1,4 +1,4 @@
-import { SafeAreaView,View,  StyleSheet, Text, ScrollView, Pressable, Button, FlatList } from "react-native";
+import { SafeAreaView,View,  StyleSheet, Text, ScrollView, Pressable, Button, FlatList, ActivityIndicator } from "react-native";
 import {Ionicons} from '@expo/vector-icons'; 
 import { RouteProp, useRoute, useNavigation } from "@react-navigation/native";
 import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
@@ -38,42 +38,52 @@ export default function AssignCollectorScreen(){
       
     return(
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={{fontSize: hp(4), fontWeight: 'bold',color: '#203949'}}>Assign Collector</Text>
-                <Text style={{fontSize: hp(1.8),flexWrap: 'wrap'}} >Prioritize your deals by assigning collectors to borrowers whom you have lent to.</Text>
-            </View>
-
-            <View style={styles.main}>
-                <View style={styles.body}>
-                    
-                <FlatList
-                    style={{height: '56%', paddingVertical: 5, marginTop: 12, marginBottom: 17}}
-                    data={client_user}
-                    keyExtractor={(collector: ICollector) => collector.collector_id.toString()}
-                    renderItem={({ item: collector}) => (
-                    <React.Fragment>
-                        <AssignCollectorList collector_id={collector.collector_id} collectorname={collector.fullName} collectoraddress={collector.address} onSend={handleSendButton}/>
-                    </React.Fragment>
-                    )}
-                />
-                    <View style={styles.body2}>
-                        <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Select only available collectors.</Text>
-                        <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Make sure to assign collectors with relevant expertise to the task.</Text>
-                        <Text style={styles.messageStyle}><Ionicons name="close-circle" color='#97231E' size={15}/>   Please review before assigning a collector for this task.</Text>
-                    </View>   
+            {loading?(
+                <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+                    <ActivityIndicator style={{margin: hp(25)}} size="large"/>
                 </View>
-            </View>
-
-
-            <View style={styles.footer}>
-
-                <View>
-                    <Pressable style={styles.button} onPress={()=>navigation.goBack()}>
-                        <Text style={styles.buttonLabel}>Back</Text>
-                    </Pressable>
+            )
+            :
+            (
+                <View style={styles.container}>
+                <View style={styles.header}>
+                    <Text style={{fontSize: hp(4), fontWeight: 'bold',color: '#203949'}}>Assign Collector</Text>
+                    <Text style={{fontSize: hp(1.8),flexWrap: 'wrap'}} >Prioritize your deals by assigning collectors to borrowers whom you have lent to.</Text>
                 </View>
-
-            </View>
+    
+                <View style={styles.main}>
+                    <View style={styles.body}>
+                        
+                    <FlatList
+                        style={{height: '56%', paddingVertical: 5, marginTop: 12, marginBottom: 17}}
+                        data={client_user}
+                        keyExtractor={(collector: ICollector) => collector.collector_id.toString()}
+                        renderItem={({ item: collector}) => (
+                        <React.Fragment>
+                            <AssignCollectorList collector_id={collector.collector_id} collectorname={collector.fullName} collectoraddress={collector.address} onSend={handleSendButton}/>
+                        </React.Fragment>
+                        )}
+                    />
+                        <View style={styles.body2}>
+                            <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Select only available collectors.</Text>
+                            <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Make sure to assign collectors with relevant expertise to the task.</Text>
+                            <Text style={styles.messageStyle}><Ionicons name="close-circle" color='#97231E' size={15}/>   Please review before assigning a collector for this task.</Text>
+                        </View>   
+                    </View>
+                </View>
+    
+    
+                <View style={styles.footer}>
+    
+                    <View>
+                        <Pressable style={styles.button} onPress={()=>navigation.goBack()}>
+                            <Text style={styles.buttonLabel}>Back</Text>
+                        </Pressable>
+                    </View>
+    
+                </View>
+                </View>
+            )}
 
         </SafeAreaView>
         

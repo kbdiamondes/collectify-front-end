@@ -5,7 +5,10 @@ import { useNavigation } from "@react-navigation/native";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {Ionicons} from '@expo/vector-icons'
-import { useState } from "react";
+import { useContext, useState } from "react";
+import axios from "axios";
+import { BASE_URL } from "../../../config";
+import { AuthContext } from "../../Context/AuthContext";
 
 export default function MonthlyPaymentmentScreen(){
     const navigation = useNavigation<CheckScreenNavigationprop>()
@@ -14,9 +17,11 @@ export default function MonthlyPaymentmentScreen(){
     const [itemName, setItemName] = useState<String>(""); 
     const [itemPrice, setItemPrice] = useState<String>(""); 
     const [itemSpecs, setItemSpecs] = useState<String>(""); 
-    const [installmentAmount, setInstallmentAmount] = useState<String>(""); 
+    const [installmentDuration, setInstallmentDuration] = useState<String>(""); 
 
     const [isModalVisible, setIsModalVisible] = useState(false)
+
+    const auth = useContext(AuthContext);
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
 
 
@@ -26,22 +31,43 @@ export default function MonthlyPaymentmentScreen(){
         console.log(itemName);
         console.log(itemPrice);
         console.log(itemSpecs);
-        console.log(installmentAmount);
+        console.log(installmentDuration);
         handleModal() //shows the modal
     }
 
-    const confirmContract = () =>{
-        alert("Purchase confirmed")
-        handleModal() //hides the modal
-        //pass value here
+    const confirmContract = () => {
+        // Construct the request payload
+        const contractData = {
+            resellerId: auth?.user.entityId, // Replace with the actual resellerId
+            clientUsername: buyerName, // Replace with the actual clientUsername
+            contract: {
+                username: buyerName,
+                itemName: itemName,
+                fullPrice: itemPrice, // Assuming itemPrice is a number
+                isPaid: false, // You may need to change this based on your logic
+                installmentDuration: installmentDuration, // You may need to change this based on your logic
+                isMonthly: true, // You may need to change this based on your logic
+            }
+        };
+    
+        // Make the POST request using Axios
+        axios.post(BASE_URL+`/resellers/${contractData.resellerId}/clients/${contractData.clientUsername}/contracts`, contractData.contract)
+            .then(response => {
+                // Handle the response here (e.g., show a success message)
+                alert("Purchase confirmed");
+                handleModal();
+                const message = "Name: " + buyerName + "\nItem Name: " + itemName + "\nItem Price: " + itemPrice + "\nItem Specs: " + itemSpecs + "\nInstallment Duration: " + installmentDuration; 
+                console.log(message);
+                navigation.goBack();
+                navigation.goBack();
+            })
+            .catch(error => {
+                // Handle any errors (e.g., show an error message)
+                alert("Error confirming purchase");
+                console.error(error);
+            });
 
-        var message = "Name:" + buyerName +  "\nItem Name:" + itemName + "\nItem Price: "+ itemPrice + "\nItem Specs:" +itemSpecs + "\nInstallment Amount: "+installmentAmount;
-
-        console.log(message)
-        navigation.goBack();
-        navigation.goBack();
-    }   
-
+    };
 
     return(
         
@@ -73,9 +99,9 @@ export default function MonthlyPaymentmentScreen(){
                 <Text style={styles.textStyleSubheader}>Easily track and manage monthly installments with our user-friendly interface. </Text>
                     <TextInput onChangeText={(name)=>setBuyername(name)}   placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Buyer Username" ></TextInput>
                     <TextInput onChangeText={(name)=>setItemName(name)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Name" ></TextInput>
-                    <TextInput onChangeText={(price)=>setItemPrice(price)}  placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Price" ></TextInput>
+                    <TextInput onChangeText={(price)=>setItemPrice(price)}  keyboardType="numeric" placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Item Price" ></TextInput>
                     <TextInput onChangeText={(specs)=>setItemSpecs(specs)}  placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Specifications" ></TextInput>
-                    <TextInput onChangeText={(amount)=>setInstallmentAmount(amount)}   placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Installment Amount" ></TextInput>
+                    <TextInput onChangeText={(amount)=>setInstallmentDuration(amount)}   keyboardType="numeric" placeholderTextColor="#C2C6CC"  style={styles.textBoxStyle} placeholder="Installment Duration" ></TextInput>
                     
                     <View style={styles.button}>
                         <Pressable onPressIn={continueButton}>

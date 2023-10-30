@@ -8,7 +8,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { Camera } from 'expo-camera';
 import { AuthContext } from '../../Context/AuthContext';
 import { BASE_URL } from '../../../config';
-
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
 export default function CollectPayments() {
     const contractIdprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
@@ -16,7 +16,7 @@ export default function CollectPayments() {
     
     const [requiredCollectible, setrequiredCollectible] = useState(dueAmountprop)
     const [contractId, setContractId] = useState(contractIdprop)
-    const [paymentType, setpaymentType] = useState("GCash")
+    const [paymentType, setpaymentType] = useState("")
     const [transactionProof, settransactionProof] = useState<any>(null)
     const [selected, setselected] = useState (0)
     const [isModalVisible, setIsModalVisible] = useState(false)
@@ -28,6 +28,7 @@ export default function CollectPayments() {
 
     const [error, setError] = useState(false)
 
+    const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext); 
 
      //checks passed data from console
@@ -44,6 +45,7 @@ export default function CollectPayments() {
       
         alert("Success");
         handleModal();
+        navigation.goBack(); 
 
       };
       
@@ -67,9 +69,10 @@ export default function CollectPayments() {
         formData.append('base64Image', CapturedImage);
         formData.append('fileName', uniqueFilename);
         formData.append('contentType', 'image/png');
+        formData.append('paymentType', paymentType);
         //https://collectify-backend-lzknxa3dha-uw.a.run.app/collect-payments/1/contracts/3/collect-payment?paymentType=CreditCard
-        console.log(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType )
-        axios.post(BASE_URL+`/collect-payments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
+        //console.log(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType )
+        axios.post(BASE_URL+`/collectPayments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
@@ -92,7 +95,7 @@ export default function CollectPayments() {
       }
       
 
-    let camera: Camera
+    let camera: Camera | null
 
     const requestCameraPermissions = async () => {
         const { status } = await Camera.requestCameraPermissionsAsync();
@@ -105,6 +108,7 @@ export default function CollectPayments() {
       };
   
 
+      /*
     const __takePicture = async () => {
         if (!camera) return;
 
@@ -132,6 +136,40 @@ export default function CollectPayments() {
             }
         };
         reader.readAsDataURL(data);
+    };*/
+
+    const __takePicture = async () => {
+      if (!camera) return;
+  
+      const photo = await camera.takePictureAsync();
+  
+      const manipResult = await manipulateAsync(
+        photo.uri,
+        [],
+        { compress: 0.5, format: SaveFormat.JPEG }
+      );
+  
+      if (manipResult.uri) {
+        // Fetch the manipulated image and convert it to a Blob
+        const response = await fetch(manipResult.uri);
+        const data = await response.blob();
+  
+        // Convert the Blob to a base64 string
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (reader.result !== null && typeof reader.result === 'string') {
+            const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/jpeg;base64,' part
+  
+            // Now you have the base64Image without the data URL prefix
+            console.log(manipResult);
+            setCapturedImage(base64Image);
+
+            setImagePreview(true)
+          }
+        };
+  
+        reader.readAsDataURL(data);
+      }
     };
 
     const goBack = () => {
@@ -143,6 +181,20 @@ export default function CollectPayments() {
     }
 
     
+    const setCashButton = () => {
+      setselected(0) 
+      setpaymentType("Cash")
+    }
+
+    const setOnlineBankingButton = () => {
+      setselected(1) 
+      setpaymentType("Online Banking")
+    }
+
+    const setOverTheCounterButton = () => {
+      setselected(3) 
+      setpaymentType("Over The Counter")
+    }
 
 
 
@@ -220,25 +272,6 @@ export default function CollectPayments() {
         );
     }
 
-/*
-    if(showImagePreview==true){
-        console.log("show image prev im here!!")
-        return (
-            <SafeAreaView style={image_preview.container}>
-              <Image
-                source={{ uri: `data:image/png;base64,${CapturedImage}`}}
-                style={image_preview.image}
-                resizeMode="contain" // You can choose the resizeMode that fits your needs
-              />
-              <View style={image_preview.buttonContainer}>
-                <TouchableOpacity style={image_preview.button} onPress={()=> setImagePreview(false)}>
-                    <Ionicons name="arrow-forward" color="#000000" size={25} />
-                  </TouchableOpacity>
-              </View>
-            </SafeAreaView>
-          );
-    }*/
-    
 
     return(
         <SafeAreaView>
@@ -268,11 +301,11 @@ export default function CollectPayments() {
                 <View>
                     <Text style={styles.textLabel}>Collectibles</Text>
                     <TextInput style={styles.textInput} editable={false} defaultValue={requiredCollectible.toString()} placeholder='Enter amount to be collected'></TextInput>
-                    <Text style={styles.textLabel}>Type of Payment</Text>
+                    <Text style={styles.textLabel}>Mode of Payment</Text>
                 <View style={styles.buttonGrid}>
 
                     <View style={selected==0? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={()=>setselected(0)} style={selected==0? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setCashButton} style={selected==0? styles.buttonSelected:styles.buttonnotSelected }>
                                 <Text style={selected==0? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Cash
                                 </Text>
@@ -280,7 +313,7 @@ export default function CollectPayments() {
                     </View>
                     
                     <View style={selected==1? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={()=>setselected(1)} style={selected==1? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setOnlineBankingButton} style={selected==1? styles.buttonSelected:styles.buttonnotSelected}>
                             <Text style={selected==1? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Online Banking
                                 </Text>
@@ -288,7 +321,7 @@ export default function CollectPayments() {
                     </View>
                     
                     <View style={selected==2? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={()=>setselected(2)} style={selected==2? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setOverTheCounterButton} style={selected==2? styles.buttonSelected:styles.buttonnotSelected}>
                             <Text style={selected==2? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Over the Counter
                                 </Text>

@@ -16,7 +16,7 @@ export default function MyCollectorList(props: MyCollectorListProps){
                 <View style={styles.square}/>
                     <View style={styles.itemText}>
                         <Text style={{color:'#363636', fontSize: hp(1.8)}}>{props.personName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.4)}}>{props.itemCollectible}</Text>                                  
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.4)}}>Collectibles: Php{props.itemCollectible}</Text>                                  
                     </View>
                 <View style={styles.textRightContainer}>
                     <View style={styles.textRightContainer}>

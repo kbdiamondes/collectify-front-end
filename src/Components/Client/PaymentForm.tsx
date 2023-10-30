@@ -33,19 +33,11 @@ export default function PaymentForm(){
      )=>{console.log("Client ID:" + clientidProp + "\nOrder ID: " + orderIdProp + "\nFull Price: "+ priceProp)  },[])
 
 
-    /* const toastTransactionFailed = () => {
-      ToastAndroid.showWithGravity(
-        'Transaction Failed',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-      );
-    };
-*/
+
     const confirmContract = () =>{
       handleSubmit()
 
       if(error===false){
-       // toastTransactionFailed()
         handleModal()
       }else{
         navigation.navigate('DuePayments')

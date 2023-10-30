@@ -4,8 +4,7 @@ import {Camera} from 'expo-camera'
 import CameraPreview from './CameraPreview';
 import { CheckScreenNavigationprop, RootStackParamList } from "../../../App";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import ImageResizer from 'react-native-image-resizer';
-
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
 export default function CameraShot(){
   const nameProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.nameprop;
@@ -41,37 +40,44 @@ export default function CameraShot(){
 
       const __takePicture = async () => {
         if (!camera) return;
-
+    
         const photo = await camera.takePictureAsync();
-
-        // Fetch the image and convert it to a Blob
-        const response = await fetch(photo.uri);
-        const data = await response.blob();
-
-        // Convert the Blob to a base64 string
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (reader.result !== null && typeof reader.result === 'string') {
-            const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/png;base64,' part
-            // Now you have the base64Image without the data URL prefix
-
-            console.log(photo);
-            navigation.navigate('ImageScreenPreview', {
-              imageprop: base64Image,
-              nameprop: nameProp,
-              priceprop: priceProp,
-              contractId: contractIdProp,
-              clientId: clientIdProp
-            });
-          }
-        };
-
-        console.log(priceProp); 
-        reader.readAsDataURL(data);
+    
+        const manipResult = await manipulateAsync(
+          photo.uri,
+          [],
+          { compress: 0.5, format: SaveFormat.JPEG }
+        );
+    
+        if (manipResult.uri) {
+          // Fetch the manipulated image and convert it to a Blob
+          const response = await fetch(manipResult.uri);
+          const data = await response.blob();
+    
+          // Convert the Blob to a base64 string
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            if (reader.result !== null && typeof reader.result === 'string') {
+              const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/jpeg;base64,' part
+    
+              // Now you have the base64Image without the data URL prefix
+              console.log(manipResult);
+              navigation.navigate('ImageScreenPreview', {
+                imageprop: base64Image,
+                nameprop: nameProp,
+                priceprop: priceProp,
+                contractId: contractIdProp,
+                clientId: clientIdProp,
+              });
+            }
+          };
+    
+          reader.readAsDataURL(data);
+        }
       };
       
         
-    let camera: Camera
+    let camera: Camera | null;
     return(
       <SafeAreaView style={{flex:1, justifyContent:"center", alignItems:"center"}}>
             <Camera
@@ -79,11 +85,13 @@ export default function CameraShot(){
               ref={(r) => {
                 camera = r
               }}
+              ratio='16:9'
             >
               <View
                 style={{
                   flex: 1,
                   width: '100%',
+                  height: '100%',
                   backgroundColor: 'transparent',
                   flexDirection: 'row'
                 }}

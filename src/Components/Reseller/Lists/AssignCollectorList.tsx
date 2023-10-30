@@ -8,6 +8,7 @@ import { RestAPI } from '../../../Services/RestAPI';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { AuthContext } from '../../../Context/AuthContext';
 import axios from 'axios';
+import { BASE_URL } from '../../../../config';
 
 
 type AssignCollectorProps = {
@@ -41,7 +42,7 @@ export default function AssignCollectorList(props: AssignCollectorProps){
         
             
         // Construct the URL with the collectorId as a query parameter
-        const url = `http://192.168.134.53:8080/assigncollectors/${reseller_id}/contracts/${contract_id}/assign-collector?collectorId=${props.collector_id}`;
+        const url = BASE_URL + `/assigncollectors/${reseller_id}/contracts/${contract_id}/assign-collector?collectorId=${props.collector_id}`;
         
         const config = {
           headers: {

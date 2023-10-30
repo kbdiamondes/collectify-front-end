@@ -4,7 +4,6 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 
 type ScheduledPaymentProps = {
-    key:number, 
     itemName:String; 
     itemCollectible: number; 
     paymentStatus: String; 

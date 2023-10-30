@@ -4,23 +4,6 @@ import { useState } from "react";
 import { Alert } from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 
-
-/*
-export interface IUser {
-    userId: number, 
-    username: string, 
-    password: string,
-    email:string, 
-
-}
-
-export interface IDuePayments{
-    itemName: string; 
-    requiredCollectible: number; 
-    dueStatus: Boolean
-}
-*/
-
 export interface IClient{
     client_id: number, 
     username: String, 
@@ -38,6 +21,7 @@ export interface Contract{
     dueAmount: number, 
     fullPrice: number, 
     isPaid: Boolean,
+    isMonthly: Boolean,
 }
 
 export interface ICollector{
@@ -47,6 +31,7 @@ export interface ICollector{
     fullName: String, 
     address: String, 
     email: String, 
+    contracts: Contract[]
 }
 
 export interface IReseller{
@@ -65,12 +50,22 @@ export interface IData{
 
 }
 
-export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any] => {
+export interface ScheduledReminder {
+  id: number;
+  reminderTitle: String;
+  reminderDateTime: String;
+  dueAmount: number;
+  paid: Boolean;
+}
+
+export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any] => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [client_user, setClientUser] = useState<IClient[]>([]); 
     const [reseller_user, setResellerUser] = useState<IReseller[]>(); 
     const [collector_user, setCollectorUser] = useState<ICollector[]>(); 
+    const [contract, setContract] = useState<Contract[]>([]);
+    const [scheduledReminders, setScheduledReminders] = useState<ScheduledReminder[]>([]); 
     const [data, setData] = useState<IData[]>();
 
     const navigation = useNavigation<CheckScreenNavigationprop>();
@@ -84,6 +79,14 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
                 setClientUser(response.data); //YOU NEED TO ADD THIS TO PUT ALL RESPONSES TO THE USESTATE
                 setResellerUser(response.data);
                 setCollectorUser(response.data);
+                setContract(response.data);
+                setScheduledReminders(response.data);
+                if (Array.isArray(response.data)) {
+                  console.log("Scheduled Reminders Log:", response.data);
+              } else {
+                  console.log("Response data is not an array:", response.data);
+              }
+                
             })
             .catch((error) => {
                 setError(error.message);
@@ -133,6 +136,6 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
 
 
 
-    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user];
+    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders];
 
 }
