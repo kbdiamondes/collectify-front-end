@@ -65,7 +65,7 @@ export type RootStackParamList = {
   FollowUp: undefined;
   Assurance: undefined; 
   TellUsMoreAboutYourself: undefined; 
-  CollectPaymentForm: undefined;
+  CollectorCollectPaymentForm: {contractId: any};
   CollectAllPaymentForm: undefined;
 
   //Reseller
@@ -135,7 +135,7 @@ export default function App(){
       <Stack.Screen name="ImageScreenPreview" component={ImagePreview} options={{ headerShown: false}}/>
       <Stack.Screen name="ImageScreenPreview2" component={ImagePreview2} options={{ headerShown: false}}/>
       <Stack.Screen name="CollectPayments" component={CollectPayments} options={{ headerShown: false}}/>
-      <Stack.Screen name="CollectPaymentForm" component={CollectPaymentForm} options={{ headerShown: false}}/>
+      <Stack.Screen name="CollectorCollectPaymentForm" component={CollectPaymentForm} options={{ headerShown: false}}/>
       <Stack.Screen name="CollectAllPaymentForm" component={CollectAllPaymentForm} options={{ headerShown: false}}/>
 
     </Stack.Navigator>

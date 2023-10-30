@@ -34,7 +34,7 @@ export function CollectorTabNavigator() {
                          navigation.push('CollectAllPaymentForm')}})}  
                          options={{title:'Collect All', 
                          tabBarIcon: ()=>(<Ionicons name="add-circle-sharp" color='#fff'  size={35}></Ionicons>)}}/>
-           <Tab.Screen name='Assurance' component={PaymentAssurance} options={{headerTitle: 'Payment Assurnace',title: 'Payment Assurance',   tabBarIcon: ()=>(<Ionicons name="shield-checkmark" color='#fff' size={20}></Ionicons>)}}/>
+           <Tab.Screen name='Assurance' component={PaymentAssurance} options={{headerTitle: 'Payment Assurance',title: 'Payment Assurance',   tabBarIcon: ()=>(<Ionicons name="shield-checkmark" color='#fff' size={20}></Ionicons>)}}/>
            <Tab.Screen name='Record' component={PaymentRecord} options={{headerTitle: 'Payment Record',title: 'Payment Record',  tabBarIcon: ()=>(<Ionicons name="card" color='#fff' size={20}></Ionicons>)}}/>
         </Tab.Navigator>
    )

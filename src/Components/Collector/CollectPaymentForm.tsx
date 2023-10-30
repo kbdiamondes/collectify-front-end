@@ -8,14 +8,15 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { Camera } from 'expo-camera';
 import { AuthContext } from '../../Context/AuthContext';
 import { BASE_URL } from '../../../config';
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
 
 export default function CollectPaymentForm() {
-    
+    const contractIdprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
 
     const [requiredCollectible, setrequiredCollectible] = useState()
-    const [contractId, setContractId] = useState()
-    const [paymentType, setpaymentType] = useState("GCash")
+    const [contractId, setContractId] = useState(contractIdprop)
+    const [paymentType, setpaymentType] = useState("")
     const [transactionProof, settransactionProof] = useState<any>(null)
     const [selected, setselected] = useState (0)
     const [isModalVisible, setIsModalVisible] = useState(false)
@@ -66,9 +67,8 @@ export default function CollectPaymentForm() {
         formData.append('base64Image', CapturedImage);
         formData.append('fileName', uniqueFilename);
         formData.append('contentType', 'image/png');
-        //https://collectify-backend-lzknxa3dha-uw.a.run.app/collect-payments/1/contracts/3/collect-payment?paymentType=CreditCard
-        console.log(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType )
-        axios.post(BASE_URL+`/collect-payments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
+        formData.append('paymentType', paymentType);
+        axios.post(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
@@ -91,7 +91,7 @@ export default function CollectPaymentForm() {
       }
       
 
-    let camera: Camera
+    let camera: Camera | null; 
 
     const requestCameraPermissions = async () => {
         const { status } = await Camera.requestCameraPermissionsAsync();
@@ -104,42 +104,63 @@ export default function CollectPaymentForm() {
       };
   
 
-    const __takePicture = async () => {
+      const __takePicture = async () => {
         if (!camera) return;
-
+    
         const photo = await camera.takePictureAsync();
-
-        // Fetch the image and convert it to a Blob
-        const response = await fetch(photo.uri);
-        const data = await response.blob();
-
-        // Convert the Blob to a base64 string
-        const reader = new FileReader();
-        reader.onloadend = () => {
+    
+        const manipResult = await manipulateAsync(
+          photo.uri,
+          [],
+          { compress: 0.5, format: SaveFormat.JPEG }
+        );
+    
+        if (manipResult.uri) {
+          // Fetch the manipulated image and convert it to a Blob
+          const response = await fetch(manipResult.uri);
+          const data = await response.blob();
+    
+          // Convert the Blob to a base64 string
+          const reader = new FileReader();
+          reader.onloadend = () => {
             if (reader.result !== null && typeof reader.result === 'string') {
-            const base64Image = reader.result.split(',')[1];
-            setCapturedImage(base64Image);
-            console.log(CapturedImage); 
-            setImagePreview(true)
-
-
-            console.log(showImagePreview)
-
-            
-
-            console.log(photo);
+              const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/jpeg;base64,' part
+    
+              // Now you have the base64Image without the data URL prefix
+              console.log(manipResult);
+              setCapturedImage(base64Image);
+  
+              setImagePreview(true)
             }
-        };
-        reader.readAsDataURL(data);
-    };
-
-    const goBack = () => {
-        if(showImagePreview){
-            setImagePreview(false)
-            setStartCamera(false)
-            console.log(CapturedImage)
+          };
+    
+          reader.readAsDataURL(data);
         }
-    }
+      };
+  
+      const goBack = () => {
+          if(showImagePreview){
+              setImagePreview(false)
+              setStartCamera(false)
+              console.log(CapturedImage)
+          }
+      }
+  
+      
+      const setCashButton = () => {
+        setselected(0) 
+        setpaymentType("Cash")
+      }
+  
+      const setOnlineBankingButton = () => {
+        setselected(1) 
+        setpaymentType("Online Banking")
+      }
+  
+      const setOverTheCounterButton = () => {
+        setselected(3) 
+        setpaymentType("Over The Counter")
+      }
 
     
 
@@ -173,6 +194,8 @@ export default function CollectPaymentForm() {
                   ref={(r) => {
                     camera = r
                   }}
+                  ratio='16:9'
+                  focusable={true}
                 >
                   <View
                     style={{
@@ -218,27 +241,7 @@ export default function CollectPaymentForm() {
           </SafeAreaView>
         );
     }
-
-/*
-    if(showImagePreview==true){
-        console.log("show image prev im here!!")
-        return (
-            <SafeAreaView style={image_preview.container}>
-              <Image
-                source={{ uri: `data:image/png;base64,${CapturedImage}`}}
-                style={image_preview.image}
-                resizeMode="contain" // You can choose the resizeMode that fits your needs
-              />
-              <View style={image_preview.buttonContainer}>
-                <TouchableOpacity style={image_preview.button} onPress={()=> setImagePreview(false)}>
-                    <Ionicons name="arrow-forward" color="#000000" size={25} />
-                  </TouchableOpacity>
-              </View>
-            </SafeAreaView>
-          );
-    }*/
     
-
     return(
         <SafeAreaView>
             <Modal animationType="slide" transparent={true} visible={isModalVisible}>
@@ -266,12 +269,12 @@ export default function CollectPaymentForm() {
                
                 <View>
                     <Text style={styles.textLabel}>Collectibles</Text>
-                    <TextInput style={styles.textInput} editable={false} placeholder='Enter amount to be collected'></TextInput>
+                    <TextInput style={styles.textInput} editable={true} keyboardType="numeric" placeholder='Enter amount to be collected'></TextInput>
                     <Text style={styles.textLabel}>Type of Payment</Text>
                 <View style={styles.buttonGrid}>
 
                     <View style={selected==0? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={()=>setselected(0)} style={selected==0? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setCashButton} style={selected==0? styles.buttonSelected:styles.buttonnotSelected}>
                                 <Text style={selected==0? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Cash
                                 </Text>
@@ -279,7 +282,7 @@ export default function CollectPaymentForm() {
                     </View>
                     
                     <View style={selected==1? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={()=>setselected(1)} style={selected==1? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setOnlineBankingButton} style={selected==1? styles.buttonSelected:styles.buttonnotSelected}>
                             <Text style={selected==1? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Online Banking
                                 </Text>
@@ -287,7 +290,7 @@ export default function CollectPaymentForm() {
                     </View>
                     
                     <View style={selected==2? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={()=>setselected(2)} style={selected==2? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setOnlineBankingButton} style={selected==2? styles.buttonSelected:styles.buttonnotSelected}>
                             <Text style={selected==2? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Over the Counter
                                 </Text>

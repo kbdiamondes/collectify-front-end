@@ -70,8 +70,6 @@ export default function CollectPayments() {
         formData.append('fileName', uniqueFilename);
         formData.append('contentType', 'image/png');
         formData.append('paymentType', paymentType);
-        //https://collectify-backend-lzknxa3dha-uw.a.run.app/collect-payments/1/contracts/3/collect-payment?paymentType=CreditCard
-        //console.log(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType )
         axios.post(BASE_URL+`/collectPayments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
@@ -106,37 +104,6 @@ export default function CollectPayments() {
           Alert.alert('Access denied');
         }
       };
-  
-
-      /*
-    const __takePicture = async () => {
-        if (!camera) return;
-
-        const photo = await camera.takePictureAsync();
-
-        // Fetch the image and convert it to a Blob
-        const response = await fetch(photo.uri);
-        const data = await response.blob();
-
-        // Convert the Blob to a base64 string
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            if (reader.result !== null && typeof reader.result === 'string') {
-            const base64Image = reader.result.split(',')[1];
-            setCapturedImage(base64Image);
-            console.log(CapturedImage); 
-            setImagePreview(true)
-
-
-            console.log(showImagePreview)
-
-            
-
-            console.log(photo);
-            }
-        };
-        reader.readAsDataURL(data);
-    };*/
 
     const __takePicture = async () => {
       if (!camera) return;
@@ -226,6 +193,7 @@ export default function CollectPayments() {
                   ref={(r) => {
                     camera = r
                   }}
+                  ratio='16:9'
                 >
                   <View
                     style={{

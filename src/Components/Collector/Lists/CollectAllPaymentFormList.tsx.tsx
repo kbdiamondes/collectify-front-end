@@ -28,12 +28,9 @@ export default function CollectAllPaymentFormList(props: CollectAllPaymentFormPr
             <View style={styles.itemLeft}>    
 
                 <View style={styles.itemText}>
-                    <Text style={{color:'#363636', fontSize: hp(4), fontWeight: 'bold'}}>{props.clientname}</Text>
-                    <Text style={{color: '#92A0A8', fontSize: hp(3)}}>Required Collectible: {props.requiredcollectible}</Text>  
-                   
-                                                   
+                    <Text style={{color:'#363636', fontSize: hp(2.5), fontWeight: 'bold'}}>{props.clientname}</Text>
+                    <Text style={{color: '#92A0A8', fontSize: hp(1)}}>Required Collectible: {props.requiredcollectible}</Text>                                                                    
                 </View>
-
                   
             </View>
         </SafeAreaView>
@@ -45,7 +42,7 @@ const styles = StyleSheet.create({
     item:{
         flex:1, 
         backgroundColor: '#fff',
-        padding: 20, 
+        padding: 5, 
         marginBottom: hp(2), 
         marginLeft: hp(1), 
         marginRight: hp(1), 

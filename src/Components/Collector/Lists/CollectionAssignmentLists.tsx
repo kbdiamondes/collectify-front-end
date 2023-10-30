@@ -7,33 +7,40 @@ import { AuthContext } from '../../../Context/AuthContext';
 
 type CollectionAssignmentProps = {
     key:number, 
-    personName:String; 
-    itemCollectible: number; 
-    transactionDate: String; 
+    clientName:String; 
+    requiredCollectible: number; 
+    collectionStatus: boolean;
+    contractId: number; 
 }
 
-export default function CollectionAssignment(props: CollectionAssignmentProps){
+export default function CollectionAssignmentLists(props: CollectionAssignmentProps){
     const navigation = useNavigation<CheckScreenNavigationprop>();
-    
+
+    const gotoCollectPayments =()=>{
+        if(!props.collectionStatus){
+            alert('Client has not yet paid the required collectible');
+        }else if(props.collectionStatus){
+            navigation.navigate('CollectorCollectPaymentForm', { contractId: props.contractId});
+        }
+        
+    }
+
+    const statusText = props.collectionStatus ? 'Ready to Collect' : 'Unpaid';
 
     return(
         <SafeAreaView style={styles.item}>
-            <View style={styles.itemLeft}>
-                <View style={styles.square}/>
-                    <View style={styles.itemText}>
-                        <Text style={{color:'#363636',fontSize: 14}}>{props.personName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: 12}}>{props.transactionDate}</Text>                                  
+            <Pressable onPress={gotoCollectPayments}>
+                <View style={styles.itemLeft}>
+                    
+                        <View style={styles.itemText}>
+                            <Text style={{color:'#363636',fontSize: 14}}>{props.clientName}</Text>
+                            <Text style={{ color: props.collectionStatus ? '#00B761' : '#FF0000', fontSize: 12 }}>{statusText}</Text>                               
+                        </View>
+                    <View style={styles.priceContainer}>
+                                <Text style={styles.priceLabel}>Php {props.requiredCollectible}</Text>
                     </View>
-                <View style={styles.priceContainer}>
-                <Pressable onPress={() => {
-                        navigation.navigate("CollectPaymentForm");
-    
-                        }}
-                        >
-                        <Text style={styles.priceLabel}>Php {props.itemCollectible}</Text>
-                        </Pressable>
                 </View>
-            </View>
+            </Pressable>
             
         </SafeAreaView>
     );
@@ -79,8 +86,9 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     }, 
     priceContainer: {
-        flex: .8, 
-        justifyContent: 'center'
+        flex: .7, 
+        justifyContent: 'center', 
+        alignItems: 'flex-end',
     }, 
     priceLabel:{
         color: '#363636', 

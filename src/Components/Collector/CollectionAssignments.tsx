@@ -1,40 +1,59 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, ActivityIndicator, FlatList} from 'react-native';
 
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CollectionAssignment from './Lists/CollectionAssignmentLists';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 import { CheckScreenNavigationprop } from '../../../App';
-
-const recentTransaction= [
-    {
-        personName:'John Doe', 
-        transactionDate:  'August 15, 2015',
-        itemCollectible: 2500
-    },
-]
-
+import { AuthContext } from '../../Context/AuthContext';
+import { BASE_URL } from '../../../config';
+import CollectionAssignmentLists from './Lists/CollectionAssignmentLists';
+import { RestAPI } from '../../Services/RestAPI';
 
 export default function Collection(){
-    const navigation = useNavigation <CheckScreenNavigationprop>();
-    const gotoCollectPayments =()=>{
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
+    const auth = useContext(AuthContext); 
     
-       // navigation.navigate('CollectPayments', { contractId: props.contractId, dueAmount: props.requiredCollectible});
-    }
+    const navigation = useNavigation <CheckScreenNavigationprop>();
+
+
+    useEffect(() => {
+        sendRequest({ 
+            method: 'GET', 
+            url: BASE_URL+"/collection/" + auth?.user.entityId + "/assigned-uncollected-contracts"
+        })
+        console.log(auth?.user.entityId)
+
+    },[] )
+    
     return(
 
-        <SafeAreaView>
-            <ScrollView>
-            <View style={styles.container}>
-                <Text style={styles.textHeader}>Recent Assignments</Text>
-                {
-                    recentTransaction.map((item, index)=>{
-                        return <CollectionAssignment key={index} personName={item.personName} itemCollectible={item.itemCollectible} transactionDate={item.transactionDate}/>
-                    })
-                }
-            </View>    
-            </ScrollView>     
-        </SafeAreaView>
+        <View style={styles.container}>
+                {loading?(
+                    <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+                        <ActivityIndicator style={{margin: hp(25)}}size="large" />
+                    </View>
+                )
+                :(
+                    <View style={styles.container}>
+                    <Text style={styles.textHeader} >Recent Tasks</Text>
+                    
+                    <FlatList
+                        data={contract} // Use contracts instead of client_user
+                        keyExtractor={(contract) => contract.contract_id.toString()} // Adjust keyExtractor
+                        renderItem={({ item: contract }) => (
+                            <CollectionAssignmentLists
+                            key={contract.contract_id.toString()} 
+                            contractId={contract.contract_id} 
+                            clientName={contract.username} 
+                            requiredCollectible={contract.dueAmount} 
+                            collectionStatus={contract.paid}
+                            />                    
+                        )}
+                    />
+                </View>
+                )}
+        </View>        
 
     );
 }

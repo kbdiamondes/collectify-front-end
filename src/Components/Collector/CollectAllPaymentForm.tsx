@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, Image,  TextInput, Pressable, Modal, Button, Alert, TouchableOpacity, FlatList} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, Image,  TextInput, Pressable, Modal, Button, Alert, TouchableOpacity, FlatList, ActivityIndicator} from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
@@ -10,13 +10,12 @@ import { AuthContext } from '../../Context/AuthContext';
 import { BASE_URL } from '../../../config';
 import { ICollector, RestAPI } from '../../Services/RestAPI';
 import CollectAllPaymentFormList from './Lists/CollectAllPaymentFormList.tsx';
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
+
 
 
 export default function CollectAllPaymentForm() {
   const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
-
-
-   
     const [paymentType, setpaymentType] = useState("GCash")
     const [transactionProof, settransactionProof] = useState<any>(null)
     const [selected, setselected] = useState (0)
@@ -27,11 +26,12 @@ export default function CollectAllPaymentForm() {
     const [CapturedImage, setCapturedImage] = useState<any>(); 
     const [showImagePreview, setImagePreview] = useState(false); 
 
+    const [errors, setError] = useState(false)
 
     useEffect(() => {
       sendRequest({ 
           method: 'GET', 
-          url: BASE_URL+"/collection/1/assigned-paid-contracts" //butanganan unya sa path 
+          url: BASE_URL+"/collection/"+ auth?.user.entityId +"/assigned-paid-contracts"
       })
     },[] )
     const auth = useContext(AuthContext); 
@@ -44,17 +44,54 @@ export default function CollectAllPaymentForm() {
     }
 
     const confirmContract = () => {
-        //handleSubmit();
+        handleSubmit();
       
         alert("Success");
         handleModal();
 
       };
 
+    const generateUniqueFilename = (fileExtension: string) => {
+      const uniqueId = new Date().getTime(); // Use a timestamp as a unique identifier
+      return `${uniqueId}.${fileExtension}`;
+    };
 
+    
+    const handleSubmit = async () => {
+      const formData = new FormData();
+
+          // Generate a unique filename
+      const fileExtension = 'png'; // Change this to the actual file extension
+      const uniqueFilename = generateUniqueFilename(fileExtension);
+
+
+     
+      formData.append('base64Image', CapturedImage);
+      formData.append('fileName', uniqueFilename);
+      formData.append('contentType', 'image/png');
+      formData.append('paymentType', paymentType);
+      axios.post(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/collect-all-payments?paymentType=`+ paymentType, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Corrected header value
+        }
+      })
+      .then(function (response) {
+        console.log(CapturedImage);
+        console.log("Filename: " + uniqueFilename);
+        console.log(response);
+        setError(false); 
+      })
+      .catch(function (error) {
+        console.log(error);
+        setError(!error)
+       
+      });
+      
+      console.log(CapturedImage);
+    }
       
 
-    let camera: Camera
+    let camera: Camera | null;
 
     const requestCameraPermissions = async () => {
         const { status } = await Camera.requestCameraPermissionsAsync();
@@ -68,33 +105,39 @@ export default function CollectAllPaymentForm() {
   
 
     const __takePicture = async () => {
-        if (!camera) return;
-
-        const photo = await camera.takePictureAsync();
-
-        // Fetch the image and convert it to a Blob
-        const response = await fetch(photo.uri);
+      if (!camera) return;
+  
+      const photo = await camera.takePictureAsync();
+  
+      const manipResult = await manipulateAsync(
+        photo.uri,
+        [],
+        { compress: 0.5, format: SaveFormat.JPEG }
+      );
+  
+      if (manipResult.uri) {
+        // Fetch the manipulated image and convert it to a Blob
+        const response = await fetch(manipResult.uri);
         const data = await response.blob();
-
+  
         // Convert the Blob to a base64 string
         const reader = new FileReader();
         reader.onloadend = () => {
-            if (reader.result !== null && typeof reader.result === 'string') {
-            const base64Image = reader.result.split(',')[1];
+          if (reader.result !== null && typeof reader.result === 'string') {
+            const base64Image = reader.result.split(',')[1]; // Remove the 'data:image/jpeg;base64,' part
+  
+            // Now you have the base64Image without the data URL prefix
+            console.log(manipResult);
             setCapturedImage(base64Image);
-            console.log(CapturedImage); 
+
             setImagePreview(true)
-
-
-            console.log(showImagePreview)
-
-            
-
-            console.log(photo);
-            }
+          }
         };
+  
         reader.readAsDataURL(data);
+      }
     };
+  
 
     const goBack = () => {
         if(showImagePreview){
@@ -103,6 +146,22 @@ export default function CollectAllPaymentForm() {
             console.log(CapturedImage)
         }
     }
+
+    const setCashButton = () => {
+      setselected(0) 
+      setpaymentType("Cash")
+    }
+
+    const setOnlineBankingButton = () => {
+      setselected(1) 
+      setpaymentType("Online Banking")
+    }
+
+    const setOverTheCounterButton = () => {
+      setselected(3) 
+      setpaymentType("Over The Counter")
+    }
+
 
     if(startCamera) {
     return(
@@ -132,6 +191,7 @@ export default function CollectAllPaymentForm() {
                   ref={(r) => {
                     camera = r
                   }}
+                  ratio='16:9'
                 >
                   <View
                     style={{
@@ -197,33 +257,39 @@ export default function CollectAllPaymentForm() {
                     </View>
                 </View>
             </Modal>
-            <ScrollView>
 
-            <View style={styles.container}>
-                <Text style={styles.textHeader} >Collect All Payment</Text>
-                <Text style={styles.textSubHeader} >Enter the amount of required collectibles and take a picture of your proof of payment such as receipt & etc.</Text>
+            {loading?(
+              <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+                  <ActivityIndicator style={{margin: hp(25)}}size="large" />
+              </View>
+            )
+            :(
+              <View style={styles.container}>
+              <Text style={styles.textHeader} >Collect All Payment</Text>
+              <Text style={styles.textSubHeader} >Enter the amount of required collectibles and take a picture of your proof of payment such as receipt & etc.</Text>
                 
-                   <FlatList
-                        style={{ height: '56%', paddingVertical: 5, marginTop: 12, marginBottom: 17 }}
-                        data={client_user}
-                        keyExtractor={(item, index) => (item.collector_id ? item.collector_id.toString() : index.toString())}
-                        renderItem={({ item: collector }) => (
-                    <React.Fragment>
-                                <CollectAllPaymentFormList clientname={collector.username} requiredcollectible={collector.dueAmount} />
-                    </React.Fragment>
-        )}
-      />
+                 <FlatList
+                      style={{ height: '19.9%', paddingVertical: 5, marginTop: 12, marginBottom: 17 }}
+                      data={client_user}
+                      keyExtractor={(item, index) => (item.collector_id ? item.collector_id.toString() : index.toString())}
+                      renderItem={({ item: collector }) => (
+                      <React.Fragment>
+                        <ScrollView>
+                          <CollectAllPaymentFormList clientname={collector.username} requiredcollectible={collector.dueAmount} />
+                        </ScrollView>
+                      </React.Fragment>
+                    )}
+                  />
 
-                
-               
-                <View>
-                    <Text style={styles.textLabel}>Collectibles</Text>
-                    <TextInput style={styles.textInput} editable={false} placeholder='Enter amount to be collected'></TextInput>
-                    <Text style={styles.textLabel}>Type of Payment</Text>
-                <View style={styles.buttonGrid}>
+              <View>
+                  <Text style={styles.textLabel}>Collectibles</Text>
+                  <TextInput style={styles.textInput} editable={false} placeholder='Enter amount to be collected'></TextInput>
+                  <Text style={styles.textLabel}>Type of Payment</Text>
+                  
+                  <View style={styles.buttonGrid}>
 
                     <View style={selected==0? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={()=>setselected(0)} style={selected==0? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setCashButton} style={selected==0? styles.buttonSelected:styles.buttonnotSelected}>
                                 <Text style={selected==0? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Cash
                                 </Text>
@@ -231,7 +297,7 @@ export default function CollectAllPaymentForm() {
                     </View>
                     
                     <View style={selected==1? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={()=>setselected(1)} style={selected==1? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setOnlineBankingButton} style={selected==1? styles.buttonSelected:styles.buttonnotSelected}>
                             <Text style={selected==1? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Online Banking
                                 </Text>
@@ -239,43 +305,43 @@ export default function CollectAllPaymentForm() {
                     </View>
                     
                     <View style={selected==2? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={()=>setselected(2)} style={selected==2? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setOnlineBankingButton} style={selected==2? styles.buttonSelected:styles.buttonnotSelected}>
                             <Text style={selected==2? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Over the Counter
                                 </Text>
                         </Pressable>   
                     </View>
-                </View>
+              </View>
 
-                <Text style={styles.textLabel}>Transaction Proof</Text>
-                <View style={styles.buttonUnfilled}>
-                        <Pressable style={styles.button} onPress={requestCameraPermissions}>
-                        <Text style={styles.buttonUnfilledLabel}>
-                            <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
-                        </Text>
-                        </Pressable>
-                     
-                    </View>
+              <Text style={styles.textLabel}>Transaction Proof</Text>
+              <View style={styles.buttonUnfilled}>
+                      <Pressable style={styles.button} onPress={requestCameraPermissions}>
+                      <Text style={styles.buttonUnfilledLabel}>
+                          <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
+                      </Text>
+                      </Pressable>
+                   
+                  </View>
 
-                    <View style={styles.body2}>
-                        <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Must have the correct and valid collectibles.</Text>
-                        <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Check and review all details to verify integrity.</Text>
-                        <Text style={styles.messageStyle}><Ionicons name="close-circle" color='#97231E' size={15}/>   Can’t be false or deceptive information.</Text>
-                    </View>   
+                  <View style={styles.body2}>
+                      <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Must have the correct and valid collectibles.</Text>
+                      <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Check and review all details to verify integrity.</Text>
+                      <Text style={styles.messageStyle}><Ionicons name="close-circle" color='#97231E' size={15}/>   Can’t be false or deceptive information.</Text>
+                  </View>   
 
-                    <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPressIn={continueButton}>
-                        <Text style={styles.buttonLabel}>
-                            Continue
-                        </Text>
-                        </Pressable>
-                    </View>
-                </View>
+                  <View style={styles.buttonContainer}>
+                  <Pressable style={styles.button} onPressIn={continueButton}>
+                      <Text style={styles.buttonLabel}>
+                          Continue
+                      </Text>
+                      </Pressable>
+                  </View>
+              </View>
 
-            
-            </View>    
-            </ScrollView>     
-        </SafeAreaView>
+          
+          </View>  
+            )}
+      </SafeAreaView>
 
     );
 
@@ -287,7 +353,7 @@ export default function CollectAllPaymentForm() {
 
 const styles = StyleSheet.create({
     container:{
-        paddingTop: 120, 
+        paddingTop: hp(10), 
         paddingHorizontal: 21
     }, 
     image: {
@@ -310,6 +376,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     textLabel:{
+        justifyContent: 'flex-end',
         paddingTop: 15,
         fontSize: 15,
         paddingHorizontal: 15,
@@ -332,13 +399,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         borderRadius: 5, 
       }, 
-      button:{
-          borderRadius: 10 ,
-          width: '100%', 
-          height: '100%', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          flexDirection: 'row'
+    button:{
+        borderRadius: 10 ,
+        width: '100%', 
+        height: '100%', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        flexDirection: 'row'
     },
     buttonLabel:{
           color: '#fff', 
@@ -382,7 +449,6 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
     buttonGrid:{
-        flex: 1,
         flexDirection: 'row',
         alignItems: 'stretch', 
         justifyContent: 'space-between'

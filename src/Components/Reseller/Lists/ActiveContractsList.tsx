@@ -27,10 +27,9 @@ export default function ActiveContractsList(props: ActiveContractProps){
         <SafeAreaView style={styles.item}>
             <Pressable onPress={gotoCollectPayments}>
             <View style={styles.itemLeft}>
-                <View style={styles.square}/>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636', fontSize: hp(1.3) }}>{props.clientName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>{props.itemName}</Text>                                  
+                        <Text style={{color:'#363636', fontSize: hp(2) }}>{props.clientName}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.itemName}</Text>                                  
                     </View>
                 <View style={styles.textRightContainer}>
                     <View style={styles.textRight}>
@@ -90,7 +89,8 @@ const styles = StyleSheet.create({
     }, 
     textRightContainer: {
         margin: hp(1.5),
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'flex-end',
     }, 
     textRight:{
         alignItems: 'flex-start', 
