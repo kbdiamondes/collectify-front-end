@@ -1,5 +1,9 @@
 import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { CheckScreenNavigationprop } from '../../../../App';
+import { useNavigation } from '@react-navigation/native';
+import { useContext } from 'react';
+import { AuthContext } from '../../../Context/AuthContext';
 
 type CollectionAssignmentProps = {
     key:number, 
@@ -9,6 +13,9 @@ type CollectionAssignmentProps = {
 }
 
 export default function CollectionAssignment(props: CollectionAssignmentProps){
+    const navigation = useNavigation<CheckScreenNavigationprop>();
+    
+
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
@@ -18,7 +25,13 @@ export default function CollectionAssignment(props: CollectionAssignmentProps){
                         <Text style={{color: '#92A0A8', fontSize: 12}}>{props.transactionDate}</Text>                                  
                     </View>
                 <View style={styles.priceContainer}>
+                <Pressable onPress={() => {
+                        navigation.navigate("CollectPaymentForm");
+    
+                        }}
+                        >
                         <Text style={styles.priceLabel}>Php {props.itemCollectible}</Text>
+                        </Pressable>
                 </View>
             </View>
             
