@@ -7,6 +7,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { CheckScreenNavigationprop } from '../../../App';
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../Context/AuthContext';
+import DashboardHeader from '../DashboardHeader';
 
 
 const recentPaymentRecords= [
@@ -59,11 +60,7 @@ export default function PaymentRecords(){
             <ScrollView>
             <View style={styles.container}>
                 <Pressable style={styles.header} onPress={() => navigation.goBack()}>
-                        <View style={styles.square}/>
-                            <View style={{alignItems:'flex-start'}}>
-                                <Text style={{ color:'#363636', fontSize:hp(1.5)}}>Hello {auth?.user.username}</Text>
-                                <Text style={{color: '#92A0A8', fontSize: hp(2), fontWeight: 'bold'}}>Welcome Back!</Text>              
-                            </View>
+                    <DashboardHeader username={auth?.user?.username ?? ''}/>
                 </Pressable>
                 <Text style={styles.textHeader} >Recent Payment Records</Text>
                 {

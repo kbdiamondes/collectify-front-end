@@ -15,6 +15,7 @@ import { AuthContext } from '../../Context/AuthContext';
 import {Ionicons} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { CheckScreenNavigationprop } from '../../../App';
+import DashboardHeader from '../DashboardHeader';
 
 export default function DuePayments(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders] = RestAPI(); 
@@ -22,6 +23,8 @@ export default function DuePayments(){
     const [unpaidContracts, setUnpaidContracts] = useState();
     const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext);
+
+
       useEffect(() => {
         if(auth?.user.entityId){
             sendRequest({ 
@@ -49,11 +52,7 @@ export default function DuePayments(){
                 ):client_user?( 
                     <View style={styles.container}>
                         <Pressable style={styles.header} onPress={() => navigation.goBack()}>
-                            <View style={styles.square}/>
-                            <View style={{alignItems:'flex-start'}}>
-                                <Text style={{ color:'#363636', fontSize:hp(1.5)}}>Hello {auth?.user.username}</Text>
-                                <Text style={{color: '#92A0A8', fontSize: hp(2), fontWeight: 'bold'}}>Welcome Back!</Text>              
-                            </View>
+                            <DashboardHeader username={auth?.user?.username ?? ''}/>
                         </Pressable>
 
                     <Text style={styles.textHeader}>Upcoming Dues</Text>
@@ -61,16 +60,18 @@ export default function DuePayments(){
                     data={client_user.contracts}
                     keyExtractor={(contract) => contract.contract_id.toString()}
                     renderItem={({ item: contract }) => (
-                        <DuePaymentList
-                        key={contract.contract_id}
-                        itemName={contract.itemName}
-                        requiredCollectible={contract.dueAmount}
-                        fullPrice={contract.fullPrice}
-                        contractId={contract.contract_id}
-                        clientId={client_user.client_id}
-                        orderId={contract.orderid}
-                        dueAmount={contract.dueAmount}
-                        />
+                        <ScrollView>
+                            <DuePaymentList
+                            key={contract.contract_id}
+                            itemName={contract.itemName}
+                            requiredCollectible={contract.dueAmount}
+                            fullPrice={contract.fullPrice}
+                            contractId={contract.contract_id}
+                            clientId={client_user.client_id}
+                            orderId={contract.orderid}
+                            dueAmount={contract.dueAmount}
+                            />
+                        </ScrollView>
                     )}
                     />
 

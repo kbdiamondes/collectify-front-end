@@ -12,6 +12,7 @@ import { AuthContext } from '../../Context/AuthContext';
 import { RestAPI } from '../../Services/RestAPI';
 import { BASE_URL } from '../../../config';
 import {Ionicons} from '@expo/vector-icons';
+import DashboardHeader from '../DashboardHeader';
 // Define the interface for the scheduled reminders
 
 export default function SchedulePayments(){
@@ -47,11 +48,7 @@ export default function SchedulePayments(){
                 ) : scheduledReminders.length > 0 ? (
                     <View style={styles.container}>
                         <Pressable style={styles.header} onPress={() => navigation.goBack()}>
-                            <View style={styles.square}/>
-                            <View style={{alignItems:'flex-start'}}>
-                                <Text style={{ color:'#363636', fontSize:hp(1.5)}}>Hello {auth?.user.username}</Text>
-                                <Text style={{color: '#92A0A8', fontSize: hp(2), fontWeight: 'bold'}}>Welcome Back!</Text>              
-                            </View>
+                            <DashboardHeader username={auth?.user?.username ?? ''}/>
                         </Pressable>
                     <Text style={styles.textHeader}>Scheduled Reminders</Text>
                     <FlatList

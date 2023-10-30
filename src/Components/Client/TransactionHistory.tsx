@@ -10,6 +10,7 @@ import { RestAPI } from '../../Services/RestAPI';
 import {Ionicons} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { CheckScreenNavigationprop } from '../../../App';
+import DashboardHeader from '../DashboardHeader';
 
 function formatDate(dateString:string): string {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -45,11 +46,7 @@ export default function TransactionHistory(){
             ) : transaction && transaction.length> 0 ? (
                 <View style={styles.container}>
                     <Pressable style={styles.header} onPress={() => navigation.goBack()}>
-                        <View style={styles.square}/>
-                            <View style={{alignItems:'flex-start'}}>
-                                <Text style={{ color:'#363636', fontSize:hp(1.5)}}>Hello {auth?.user.username}</Text>
-                                <Text style={{color: '#92A0A8', fontSize: hp(2), fontWeight: 'bold'}}>Welcome Back!</Text>              
-                            </View>
+                        <DashboardHeader username={auth?.user?.username ?? ''}/>
                     </Pressable>
                 <Text style={styles.textHeader}>Transaction History</Text>
                 <FlatList
