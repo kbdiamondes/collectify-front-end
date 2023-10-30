@@ -129,7 +129,7 @@ export default function ScheduleNewPaymentReminder(){
 
     return(
         
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <View style={styles.container}>
 
             <Modal animationType="slide" transparent={true} visible={isModalVisible}>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex:1, backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
@@ -209,7 +209,7 @@ export default function ScheduleNewPaymentReminder(){
             </View> 
             
         
-        </KeyboardAvoidingView>
+        </View>
     ); 
 }
 

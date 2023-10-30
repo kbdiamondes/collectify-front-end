@@ -15,7 +15,7 @@ import ClientDashboard from "./ClientDashboard";
 
 const Tab = createBottomTabNavigator()
 
-export function TabNavigator() {
+export function ClientDashboardTabNavigator() {
   return (
       <View style={styles.TabNavStyle} >             
          <Tab.Navigator
@@ -30,17 +30,14 @@ export function TabNavigator() {
                elevation: 5,
                backgroundColor: '#0A1C34',
                borderRadius: 30,
-               height: 80,
-               shadowColor: '#000',
-               shadowOpacity: 0.1,
-               shadowRadius: 20,
+               height: 60,
             },
             tabBarShowLabel: false,
             headerShown: false,
          })}>
-         <Tab.Screen
-          name="Home"
-          component={ClientDashboard}
+          <Tab.Screen
+          name="Dues"
+          component={DuePayments}
           options={{
             tabBarIcon: ({focused}) => (
               <View
@@ -48,7 +45,25 @@ export function TabNavigator() {
                   top: Platform.OS === 'ios' ? 10 : 0,
                 }}>
                      <Ionicons
-                        name='home'
+                        name='calendar'
+                        size={Platform.OS === 'ios' ? 30 : 30}                     
+                        color={focused ? '#7CB1EC' : '#fff'}
+                     />
+              </View>
+            ),
+          }}
+        />
+         <Tab.Screen
+          name="Schedule"
+          component={SchedulePayments}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View
+                style={{
+                  top: Platform.OS === 'ios' ? 10 : 0,
+                }}>
+                     <Ionicons
+                        name='time'
                         size={Platform.OS === 'ios' ? 30 : 30}                     
                         color={focused ? '#7CB1EC' : '#fff'}
                      />
@@ -91,10 +106,9 @@ export function TabNavigator() {
             }}
          />
 
-
-         <Tab.Screen
-          name="Reminders"
-          component={PaymentReminders}
+          <Tab.Screen
+          name="Transaction History"
+          component={TransactionHistory}
           options={{
             tabBarIcon: ({focused}) => (
               <View
@@ -102,7 +116,27 @@ export function TabNavigator() {
                   top: Platform.OS === 'ios' ? 10 : 0,
                 }}>
                      <Ionicons
-                        name='alert-circle'
+                        name='list'
+                        size={Platform.OS === 'ios' ? 30 : 30}                     
+                        color={focused ? '#7CB1EC' : '#fff'}
+                     />
+              </View>
+            ),
+            title: 'Transaction History',
+            headerTitle: 'Transaction History'
+          }}
+        />
+         <Tab.Screen
+          name="Payment Records"
+          component={PaymentRecords}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View
+                style={{
+                  top: Platform.OS === 'ios' ? 10 : 0,
+                }}>
+                     <Ionicons
+                        name='card'
                         size={Platform.OS === 'ios' ? 30 : 30}                     
                         color={focused ? '#7CB1EC' : '#fff'}
                      />

@@ -58,7 +58,23 @@ export interface ScheduledReminder {
   paid: Boolean;
 }
 
-export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any] => {
+export interface Transaction {
+  orderId: string;
+  amountPaid: number;
+  paymentDate: string;
+  transactionProof: {
+    id: string;
+    name: string;
+    type: string;
+    data: string; // This might be a file path, URL, or some form of data representation
+  };
+  productName: string;
+  clientName: string;
+}
+
+
+
+export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any, Transaction | any] => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [client_user, setClientUser] = useState<IClient[]>([]); 
@@ -67,6 +83,7 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
     const [contract, setContract] = useState<Contract[]>([]);
     const [scheduledReminders, setScheduledReminders] = useState<ScheduledReminder[]>([]); 
     const [data, setData] = useState<IData[]>();
+    const [transaction, setTransaction] = useState<Transaction[]>([]);
 
     const navigation = useNavigation<CheckScreenNavigationprop>();
     function sendRequest(config: AxiosRequestConfig<any>) {
@@ -81,7 +98,9 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
                 setCollectorUser(response.data);
                 setContract(response.data);
                 setScheduledReminders(response.data);
+                setTransaction(response.data);
                 if (Array.isArray(response.data)) {
+
                   console.log("Scheduled Reminders Log:", response.data);
               } else {
                   console.log("Response data is not an array:", response.data);
@@ -136,6 +155,6 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
 
 
 
-    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders];
+    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders, transaction];
 
 }

@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     itemLeft:{
         flex:1, 
         marginRight: hp(1),
+        marginLeft: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'

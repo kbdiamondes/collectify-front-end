@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../Context/AuthContext';
 import { RestAPI } from '../../Services/RestAPI';
 import { BASE_URL } from '../../../config';
-
+import {Ionicons} from '@expo/vector-icons';
 // Define the interface for the scheduled reminders
 
 export default function SchedulePayments(){
@@ -39,13 +39,21 @@ export default function SchedulePayments(){
     return (
             <View style={styles.container}>
                 {loading ? (
-                    <View style={styles.container}>
-                        <ActivityIndicator style={{ margin: hp(25) }} size="large" />
+                    <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+                     <ActivityIndicator style={{margin: hp(25)}}size="large" />
                     </View>
                 ) : error ? (
                     <Text>{error}</Text>
                 ) : scheduledReminders.length > 0 ? (
-                    
+                    <View style={styles.container}>
+                        <Pressable style={styles.header} onPress={() => navigation.goBack()}>
+                            <View style={styles.square}/>
+                            <View style={{alignItems:'flex-start'}}>
+                                <Text style={{ color:'#363636', fontSize:hp(1.5)}}>Hello {auth?.user.username}</Text>
+                                <Text style={{color: '#92A0A8', fontSize: hp(2), fontWeight: 'bold'}}>Welcome Back!</Text>              
+                            </View>
+                        </Pressable>
+                    <Text style={styles.textHeader}>Scheduled Reminders</Text>
                     <FlatList
                         data={scheduledReminders}
                         keyExtractor={(reminder) => reminder.id.toString()}
@@ -64,16 +72,17 @@ export default function SchedulePayments(){
                         }}
                         
                     />
+                    </View>
 
 
                 ) : (
-                    <Text>No scheduled reminders available.</Text>
-                )}
-                    <View style={styles.footer}>
-                        <Pressable onPress={() => navigation.navigate('ScheduleNewPaymentReminders')}>
-                            <Text style={{ color: '#F7931E', fontSize: hp(2) }}>Schedule a Payment</Text>
-                        </Pressable>
+                    <View style={styles.container}>
+                        <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                            <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                            <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No Scheduled Reminders</Text>
+                        </View>
                     </View>
+                )}
             </View>
     );
     
@@ -90,11 +99,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold', 
         color: '#9F9F9F',
         padding: hp(1.2)
+    },
+    header:{
+        justifyContent: 'flex-start',
+        flexDirection: 'row', 
+        height:hp(10), 
+        marginTop: hp(3), 
     }, 
-    footer:{ 
-        marginRight: hp(2.5),
-        marginBottom: hp(2.5),
-        alignItems: 'flex-end', 
-        justifyContent: 'flex-end'
-    }
+    square:{
+        width: wp(10),  
+        height: hp(5), 
+        marginRight: hp(1.5),
+        backgroundColor: '#92A0A8', 
+        borderRadius: 25
+    }, 
 });

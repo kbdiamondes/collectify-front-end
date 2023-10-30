@@ -27,7 +27,7 @@ export default function Login(){
 
             
             if (auth?.user.tableName === "Client") {
-              navigation.navigate('DuePayments');
+              navigation.navigate('ClientDashboard');
             } else if (auth?.user.tableName === "Reseller") {
               navigation.navigate('ActiveContractScreen');
             } else if (auth?.user.tableName === "Collector") {

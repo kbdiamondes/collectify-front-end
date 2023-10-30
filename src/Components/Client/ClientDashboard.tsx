@@ -1,21 +1,24 @@
 import { View, StyleSheet,Text } from "react-native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AuthContext } from "../Context/AuthContext";
+import { AuthContext } from "../../Context/AuthContext";
 import { useContext } from "react";
 import {Ionicons} from '@expo/vector-icons'
 import { Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { CheckScreenNavigationprop } from "../../../App";
 
-export default function DefaultDashboard(){
+export default function ClientDashboard(){
     const auth = useContext(AuthContext); 
     
+    const navigation = useNavigation<CheckScreenNavigationprop>();
 
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.square}/>
                 <View style={{alignItems:'flex-start'}}>
-                    <Text style={{ color:'#363636', fontSize:hp(1.5)}}>Hello Username</Text>
+                    <Text style={{ color:'#363636', fontSize:hp(1.5)}}>Hello {auth?.user.username}</Text>
                     <Text style={{color: '#92A0A8', fontSize: hp(2), fontWeight: 'bold'}}>Welcome Back!</Text>              
                 </View>
 
@@ -52,7 +55,7 @@ export default function DefaultDashboard(){
                     <View style={styles.miniButtonContainer}>
 
                         <View style={{justifyContent: 'center'}}>
-                            <Pressable onPress={()=>console.log("hello")}>
+                            <Pressable onPress={()=>navigation.navigate('DuePayments')}>
                             <View style={styles.miniButton}>
                                 <Ionicons name="cash" color="#444DD8"  size={hp(4)}/>
                             </View>
@@ -62,7 +65,7 @@ export default function DefaultDashboard(){
                         </View>
 
                         <View style={{justifyContent: 'center'}}>
-                            <Pressable onPress={()=>console.log("hello")}>
+                            <Pressable onPress={()=>navigation.navigate('ScheduledPayments')}>
                             <View style={styles.schedulesButton}>
                                 <Ionicons name="calendar" color="#DBC678"  size={hp(4)}/>
                             </View>
@@ -72,7 +75,7 @@ export default function DefaultDashboard(){
                         </View>
 
                         <View style={{justifyContent: 'center'}}>
-                            <Pressable onPress={()=>console.log("hello")}>
+                            <Pressable onPress={()=>navigation.navigate('PaymentReminders')}>
                             <View style={styles.remindersButton}>
                                 <Ionicons name="warning" color="#965E65"  size={hp(4)}/>
                             </View>
@@ -82,7 +85,7 @@ export default function DefaultDashboard(){
                         </View>
 
                         <View style={{justifyContent: 'center'}}>
-                            <Pressable onPress={()=>console.log("hello")}>
+                            <Pressable onPress={()=>navigation.navigate('TransactionHistory')}>
                             <View style={styles.duesButton}>
                                 <Ionicons name="receipt" color="#444DD8"  size={hp(4)}/>
                             </View>
@@ -92,7 +95,7 @@ export default function DefaultDashboard(){
                         </View>
 
                         <View style={{justifyContent: 'center'}}>
-                            <Pressable onPress={()=>console.log("hello")}>
+                            <Pressable onPress={()=>navigation.navigate('PaymentReminders')}>
                             <View style={styles.schedulesButton}>
                                 <Ionicons name="book" color="#DBC678"  size={hp(4)}/>
                             </View>

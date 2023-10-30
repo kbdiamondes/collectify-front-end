@@ -30,10 +30,12 @@ import { AuthContext, AuthContextProvider } from './src/Context/AuthContext';
 import CameraShot from './src/Components/Client/Camera';
 import CollectPayments from './src/Components/Reseller/CollectPayments';
 import ImagePreview2 from './src/Components/Client/ImagePreview2';
-import DefaultDashboard from './src/Components/Dashboard';
+import DefaultDashboard from './src/Components/Client/ClientDashboard';
 import CollectPaymentForm from './src/Components/Collector/CollectPaymentForm';
 import CollectAllPaymentForm from './src/Components/Collector/CollectAllPaymentForm';
 import ScheduleNewPaymentReminder from './src/Components/Client/ScheduleNewPaymentReminder';
+import ClientDashboard from './src/Components/Client/ClientDashboard';
+import { ClientDashboardTabNavigator } from './src/Components/Client/ClientDashboardTabNavigator';
 
 
 
@@ -44,11 +46,13 @@ export type RootStackParamList = {
   Register: undefined;
 
   //Client
+  ClientDashboard: undefined; 
   DuePayments: undefined; 
   PaymentForm: {nameprop: any, priceprop: any, contractId:any,photo?:any,clientId:any, orderId: any, dueAmount: any};
   CameraShot: {nameprop: any, priceprop: any, contractId:any, clientId:any}
   ImageScreenPreview: {imageprop: any, nameprop: any, priceprop: any, contractId:any, clientId:any};
   TabNavigator: undefined; 
+  ClientTabNavigator: undefined; 
   ScheduledPayments: undefined; 
   PaymentReminders: undefined; 
   TransactionHistory: undefined; 
@@ -112,7 +116,9 @@ export default function App(){
       <Stack.Screen name="GetStarted" component={GetStarted} options={{headerShown:false}}/>
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
-      <Stack.Screen name="DuePayments" component={TabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
+      
+      <Stack.Screen name="ClientDashboard" component={TabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
+      <Stack.Screen name="DuePayments" component={ClientDashboardTabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
       <Stack.Screen name="ScheduledPayments" component={TabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="PaymentReminders" component={TabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="TransactionHistory" component={TabNavigator} options={{headerShown: false}}/>
@@ -147,9 +153,9 @@ export default function App(){
 
 //Theme for the STACK
 const MyTheme = {
-  flex:1,
   dark: false,
   colors: {
+    flex:1,
     primary: 'rgb(255, 45, 85)',
     background: 'rgb(255, 255, 255)',
     card: 'rgb(21,98,199)',
@@ -159,7 +165,7 @@ const MyTheme = {
   },
 };
 /*
-
+<Stack.Screen name="DuePayments" component={TabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
 <Stack.Screen name="CreateNewContract" component={CreateNewContract} options={{headerShown: false}}/> -> add to stack if planning to open modal through bottom nav
 <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{headerShown: false}}/>
 */

@@ -2,24 +2,24 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-type TransactionHistoryProps = {
-    key:number, 
-    personName:String; 
-    itemCollectible: number; 
-    transactionDate: String; 
+type TransactionHistoryProps = { 
+    orderId: string;
+    amountPaid: number;
+    paymentDate: string;
+    productName: string;
+    clientName: string;
 }
 
 export default function DuePaymentList(props: TransactionHistoryProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
-                <View style={styles.square}/>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636',fontSize: 14}}>{props.personName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: 12}}>{props.transactionDate}</Text>                                  
+                        <Text style={{color:'#363636',fontSize: hp(2), fontWeight: 'bold'}}>{props.clientName}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.paymentDate}</Text>                                  
                     </View>
                 <View style={styles.priceContainer}>
-                        <Text style={styles.priceLabel}>Php {props.itemCollectible}</Text>
+                        <Text style={styles.priceLabel}>Php {props.amountPaid}</Text>
                 </View>
             </View>
             
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     item:{
         flex: 1, 
         backgroundColor: '#F5F7F9',
-        padding: 20, 
         borderRadius: 10, 
         marginBottom: hp(2),
         marginLeft: hp(1), 
@@ -46,6 +45,8 @@ const styles = StyleSheet.create({
     },
     itemLeft:{
         flex:1, 
+        marginRight: hp(1), 
+        marginLeft: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
@@ -60,11 +61,11 @@ const styles = StyleSheet.create({
     }, 
     itemText: {
         flex:1, 
-        maxWidth: '80%', 
+        maxWidth: '75%', 
         marginRight: hp(1.5), 
         justifyContent: 'center', 
         alignItems: 'flex-start', 
-        textAlign: 'left'
+        textAlign: 'center'
     }, 
     priceContainer: {
         flex: .8,
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
         height: hp(5.5), 
         margin: hp(1.5), 
         justifyContent:'space-evenly',
+        alignItems:'flex-end',
         borderRadius: 5,
         maxWidth: '80%'
     }, 

@@ -1,9 +1,12 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, Pressable} from 'react-native';
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PaymentRecordLists from './Lists/PaymentRecordList';
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { CheckScreenNavigationprop } from '../../../App';
+import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../../Context/AuthContext';
 
 
 const recentPaymentRecords= [
@@ -47,13 +50,21 @@ const recentPaymentRecords= [
 
 
 export default function PaymentRecords(){
-    
+    const navigation = useNavigation<CheckScreenNavigationprop>();
+    const auth = useContext(AuthContext);
 
     return(
 
         <SafeAreaView>
             <ScrollView>
             <View style={styles.container}>
+                <Pressable style={styles.header} onPress={() => navigation.goBack()}>
+                        <View style={styles.square}/>
+                            <View style={{alignItems:'flex-start'}}>
+                                <Text style={{ color:'#363636', fontSize:hp(1.5)}}>Hello {auth?.user.username}</Text>
+                                <Text style={{color: '#92A0A8', fontSize: hp(2), fontWeight: 'bold'}}>Welcome Back!</Text>              
+                            </View>
+                </Pressable>
                 <Text style={styles.textHeader} >Recent Payment Records</Text>
                 {
                     recentPaymentRecords.map((item, index)=>{
@@ -78,5 +89,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold', 
         color: '#9F9F9F',
         padding: hp(1.2)
-    }
+    },
+    header:{
+        justifyContent: 'flex-start',
+        flexDirection: 'row', 
+        height:hp(10), 
+        marginTop: hp(3), 
+    }, 
+    square:{
+        width: wp(10),  
+        height: hp(5), 
+        marginRight: hp(1.5),
+        backgroundColor: '#92A0A8', 
+        borderRadius: 25
+    }, 
 });
