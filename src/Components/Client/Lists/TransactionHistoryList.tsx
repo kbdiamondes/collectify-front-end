@@ -10,7 +10,7 @@ type TransactionHistoryProps = {
     clientName: string;
 }
 
-export default function DuePaymentList(props: TransactionHistoryProps){
+export default function TransactionHistoryList(props: TransactionHistoryProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
@@ -30,12 +30,13 @@ export default function DuePaymentList(props: TransactionHistoryProps){
 const styles = StyleSheet.create({
     item:{
         flex: 1, 
-        backgroundColor: '#F5F7F9',
+        backgroundColor: '#FFFFFF',
         borderRadius: 10, 
-        marginBottom: hp(2),
+        marginBottom: 20,
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000', 
+        shadowOpacity: 0.10,
         shadowOffset: {
             width:0,
             height: 2,
@@ -69,13 +70,13 @@ const styles = StyleSheet.create({
     }, 
     priceContainer: {
         flex: .8,
-        width: wp(19), 
+        width: wp(15), 
         height: hp(5.5), 
         margin: hp(1.5), 
         justifyContent:'space-evenly',
         alignItems:'flex-end',
         borderRadius: 5,
-        maxWidth: '80%'
+        maxWidth: '100%'
     }, 
     priceLabel:{
         color: '#363636', 

@@ -45,7 +45,7 @@ export default function TransactionHistory(){
                 <Text>{error}</Text>
             ) : transaction && transaction.length> 0 ? (
                 <View style={styles.container}>
-                    <Pressable style={styles.header} onPress={() => navigation.goBack()}>
+                    <Pressable style={styles.header} onPress={() => navigation.navigate('ClientTabNavigator')}>
                         <DashboardHeader username={auth?.user?.username ?? ''}/>
                     </Pressable>
                 <Text style={styles.textHeader}>Transaction History</Text>
@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
     container:{
         flex: 1, 
         paddingTop: hp(2), 
-        paddingHorizontal: hp(1.5)
+        paddingHorizontal: hp(1.5),
+        backgroundColor: '#F5F7F9'
     }, 
     textHeader:{
         fontSize: hp(2),

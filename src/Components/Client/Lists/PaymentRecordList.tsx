@@ -3,10 +3,12 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 type PaymentRecordProps = {
-    key:number, 
-    collectorName:String; 
-    transactionDate: String; 
-    recentMessage: String; 
+    orderId: string;
+    amountPaid: number;
+    paymentDate: string;
+    productName: string;
+    clientName: string;
+    collectorName: string;
     
 }
 
@@ -14,17 +16,16 @@ export default function PaymentRecordLists(props: PaymentRecordProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
-                <View style={styles.square}/>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636', fontSize: hp(1.8,)}}>{props.collectorName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>{props.recentMessage}</Text>                                  
+                        <Text style={{color:'#363636', fontSize: hp(1.7), fontWeight: 'bold'}}>{props.collectorName}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>Php {props.amountPaid}</Text>                                  
                     </View>
 
-                    <View style={styles.mainDateContainer}>
-                        <View style={styles.dateContainer}>
-                            <Text style={styles.dateLabel}>{props.transactionDate}</Text>        
-                        </View>                       
-                    </View>     
+                    
+                    <View style={styles.dateContainer}>
+                        <Text style={styles.dateLabel}>{props.paymentDate}</Text>        
+                    </View>                       
+                    
             </View>            
         </SafeAreaView>
     );
@@ -33,25 +34,31 @@ export default function PaymentRecordLists(props: PaymentRecordProps){
 const styles = StyleSheet.create({
     item:{
         flex:1, 
-        backgroundColor: '#F5F7F9',
-        padding: 20, 
+        backgroundColor: '#FFFFFF',     
+        alignContent:'center',
+        verticalAlign:'center',
         borderRadius: 10, 
         marginBottom: 20,
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000', 
+        shadowOpacity: 0.10,
         shadowOffset: {
             width:0,
             height: 2,
         },
         shadowRadius: 4,
-        elevation: 2
+        elevation: 2,       
+        
     },
     itemLeft:{
         flex:1, 
+        marginRight: hp(1),
+        marginLeft: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
-        flexWrap:'wrap'
+        flexWrap:'wrap',
+
     },
     square:{
         flex:.5, 
@@ -63,23 +70,26 @@ const styles = StyleSheet.create({
     }, 
     itemText: {
         flex:1, 
-        maxWidth: '80%', 
+        maxWidth: '75%', 
         marginRight: hp(1.5), 
         justifyContent: 'center', //vertical alignment
         alignItems: 'flex-start', 
         textAlign: 'center'
     }, 
     mainDateContainer:{
-        flex: .8, 
+        margin: hp(1.5), 
         justifyContent: 'center', 
-        textAlign: 'right'
+        
     },
     dateContainer: {
-        flex: .5, 
-        width: wp(15), 
-        height: hp(5.5),
+        flex: .8,
+        width: wp(19), 
+        height: hp(5.5), 
         margin: hp(1.5), 
-        justifyContent: 'space-evenly'
+        justifyContent:'space-evenly',
+        alignItems:'flex-end',
+        borderRadius: 5,
+        maxWidth: '80%'
     }, 
     dateLabel:{
         color: '#92A0A8', 

@@ -49,9 +49,9 @@ export default function DuePayments(){
                     </View>
                 ): error? (
                     <Text>{error}</Text>
-                ):client_user?( 
+                ): client_user?( 
                     <View style={styles.container}>
-                        <Pressable style={styles.header} onPress={() => navigation.goBack()}>
+                        <Pressable style={styles.header} onPress={() => navigation.navigate('ClientTabNavigator')}>
                             <DashboardHeader username={auth?.user?.username ?? ''}/>
                         </Pressable>
 
@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         paddingTop: hp(2), 
-        paddingHorizontal: hp(1.5)
+        paddingHorizontal: hp(1.5), 
+        backgroundColor: '#F5F7F9'
     }, 
     header:{
         justifyContent: 'flex-start',

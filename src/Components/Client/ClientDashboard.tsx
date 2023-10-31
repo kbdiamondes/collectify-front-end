@@ -1,18 +1,24 @@
-import { View, StyleSheet,Text } from "react-native";
+import { View, StyleSheet,Text, ActivityIndicator, FlatList, ScrollView } from "react-native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthContext } from "../../Context/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {Ionicons} from '@expo/vector-icons'
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { CheckScreenNavigationprop } from "../../../App";
 import { LinearGradient } from 'expo-linear-gradient';
-import { Avatar } from '@rneui/themed';
 import DashboardHeader from "../DashboardHeader";
+import { BASE_URL } from "../../../config";
+import TransactionHistoryList from "./Lists/TransactionHistoryList";
+import { RestAPI } from "../../Services/RestAPI";
+import RecentTransactionList from "./Lists/RecentTransactionList";
+import axios from "axios";
 
 export default function ClientDashboard(){
     const [shown, setShown] = useState(false);
+    const [selected, setSelected] = useState<Number>();
+    const [totalDueAmount, setTotalDueAmount] = useState(null);
     const auth = useContext(AuthContext); 
     
     const navigation = useNavigation<CheckScreenNavigationprop>();
@@ -21,8 +27,27 @@ export default function ClientDashboard(){
         setShown(!shown)
     }
 
+    function formatNumberWithCommas(number: any) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+
+    useEffect(() => {
+        const fetchTotalDueAmount = async () => {
+          try {
+            const response = await axios.get(BASE_URL+ `/clients/${auth?.user.entityId}/total-due-amount`);
+            setTotalDueAmount(response.data);
+          } catch (error) {
+            // Handle error, e.g., set error state
+            console.error('Error fetching total due amount:', error);
+          }
+        };
+    
+        fetchTotalDueAmount();
+      }, [auth?.user?.entityId]);
+
     return(
         <SafeAreaView style={styles.container}>
+            <View style={styles.secondaryContainer}>
             <View style={styles.header}>
                 <DashboardHeader username={auth?.user?.username ?? ''}/>
             </View>
@@ -55,8 +80,21 @@ export default function ClientDashboard(){
 
                                 <Text style={{ color:'#141414', fontSize:hp(1.5)}}>Your total due amount</Text>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    {shown?(<Text style={{marginTop: hp(.5), color: '#141414', fontSize: hp(5), fontWeight: 'bold'}}>P55,250.00</Text>):
-                                    (<Text style={{marginTop: hp(.5), color: '#141414', fontSize: hp(5), fontWeight: 'bold'}}>P**********</Text>)}     
+                                {shown ? (
+                                    totalDueAmount && totalDueAmount > 0 ? (
+                                        <Text style={{marginTop: hp(.5), color: '#141414', fontSize: hp(5), fontWeight: 'bold'}}>
+                                        P{formatNumberWithCommas(totalDueAmount)}
+                                        </Text>
+                                    ) : (
+                                        <Text style={{marginTop: hp(.5), color: '#141414', fontSize: hp(5), fontWeight: 'bold'}}>
+                                        P0.00
+                                        </Text>
+                                    )
+                                    ) : (
+                                    <Text style={{marginTop: hp(.5), color: '#141414', fontSize: hp(5), fontWeight: 'bold'}}>
+                                        P**********
+                                    </Text>
+                                    )}
                                     <View style={{alignItems: 'center'}}>
                                         <Pressable onPress={hideAmount}>
                                             {shown ? 
@@ -70,10 +108,10 @@ export default function ClientDashboard(){
                             
                     </LinearGradient> 
                 </View> 
-
+                
                 <View style={styles2.miniButtonContainer}>
                     <View style={styles2.miniButtonWrapper}>
-                        <Pressable onPress={() => navigation.navigate('DuePayments')} style={styles2.miniButtonPressable}>
+                        <Pressable onPress={() => {navigation.navigate('ClientDashboardTabNavigator', {screen: 'Dues'})}} style={styles2.miniButtonPressable}>
                         <View style={styles2.miniButton}>
                             <Ionicons name="calendar" color="#444DD8" size={hp(4)} />
                         </View>
@@ -82,7 +120,7 @@ export default function ClientDashboard(){
                     </View>
 
                     <View style={styles2.miniButtonWrapper}>
-                        <Pressable onPress={() => navigation.navigate('ScheduledPayments')} style={styles2.miniButtonPressable}>
+                    <Pressable onPress={()=>( navigation.navigate('ClientDashboardTabNavigator', { screen: 'Schedule' }))} style={styles2.miniButtonPressable}>   
                         <View style={styles2.scheduleMiniButton}>
                             <Ionicons name="time" color="#DBC678"  size={hp(4)}/>
                         </View>
@@ -91,7 +129,7 @@ export default function ClientDashboard(){
                     </View>
 
                     <View style={styles2.miniButtonWrapper}>
-                        <Pressable onPress={() => navigation.navigate('PaymentReminders')} style={styles2.miniButtonPressable}>
+                        <Pressable onPress={() => (navigation.navigate('PaymentReminders'))} style={styles2.miniButtonPressable}>
                         <View style={styles2.reminderMiniButton}>
                         <Ionicons name="alert-circle" color="#965E65"  size={hp(4)}/>
                         </View>
@@ -100,7 +138,7 @@ export default function ClientDashboard(){
                     </View>
 
                     <View style={styles2.miniButtonWrapper}>
-                        <Pressable onPress={() => navigation.navigate('TransactionHistory')} style={styles2.miniButtonPressable}>
+                        <Pressable onPress={() => (navigation.navigate('ClientDashboardTabNavigator', { screen: 'Transaction History' }))} style={styles2.miniButtonPressable}>
                         <View style={styles2.miniButton}>
                             <Ionicons name="receipt" color="#444DD8"  size={hp(4)}/>
                         </View>
@@ -109,7 +147,7 @@ export default function ClientDashboard(){
                     </View>
 
                     <View style={styles2.miniButtonWrapper}>
-                        <Pressable onPress={() => navigation.navigate('PaymentRecrods')} style={styles2.miniButtonPressable}>
+                        <Pressable onPress={() => (navigation.navigate('ClientDashboardTabNavigator', { screen: 'Records' }))} style={styles2.miniButtonPressable}>
                         <View style={styles2.scheduleMiniButton}>
                             <Ionicons name="book" color="#DBC678"  size={hp(4)}/>
                         </View>
@@ -121,47 +159,125 @@ export default function ClientDashboard(){
                 </View>
 
 
-                    <View style={{flexDirection:'row'}}>
-                        <View style={{marginTop: hp(2), marginBottom: hp(2),  alignItems:'flex-start'}}><Text style={{fontSize: hp(2)}}> Recent Transactions</Text></View>
+                    <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+                        
+                        <View style={{marginTop: hp(2), marginBottom: hp(2),  alignItems:'flex-start'}}>
+                            <Text style={{fontSize: hp(2)}}> Recent Transactions</Text>
+                        </View>                
+
                     </View>
-
-                    <View style={styles.itemTransaction}>
-                        <View style={styles.itemLeft}>
-                                <View style={styles.itemText}>
-                                    <Text style={{color:'#363636', fontSize: hp(1.5)}}>John Doe</Text>
-                                    <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>Pay Dues</Text>                                  
-                                </View>
-
-                            <View style={styles.textRightContainer}>
-                                <View style={styles.textRight}>
-                                    <Text style={{color: '#363636', fontWeight: 'bold', fontSize: hp(2)}}>-P4500.00</Text>
-                                    <Text style={styles.textRightText}>25-12-2023 5:00pm</Text>
-                                </View>
-                            </View>
-                        </View>
-                    
-                    </View>
-
+                    <RecentTransaction/>
                 </View>
 
                 
 
-
+                
             </View>
-
-            
+         </View>
         </SafeAreaView>
     );
 }
 
+function formatDate(dateString:string): string {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = new Date(dateString).toLocaleDateString('en-US', options);
+    return formattedDate;
+}
 
+function RecentTransaction(){
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, transaction] = RestAPI(); 
+    const auth = useContext(AuthContext);
+ 
+    useEffect(() => {
+        if (auth?.user.entityId) {
+            sendRequest({
+                method: 'GET',
+                url: BASE_URL + "/transaction-history/client/" + auth?.user.entityId
+            });
+        } else {
+            alert("Error: Missing user entityId");
+        }
+    },[]);
+
+    return(
+
+        <View style={styles3.container}>
+            {loading ? (
+                <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+                    <ActivityIndicator style={{margin: hp(25)}}size="large" />
+                </View>
+            ) : error ? (
+                <Text>{error}</Text>
+            ) : transaction && transaction.length> 0 ? (
+                <View style={styles3.container}>
+                <FlatList
+                  data={transaction}
+                  keyExtractor={(item) => item.orderId}
+                  renderItem={({ item }) => (
+                        <RecentTransactionList
+                        orderId={item.orderId}
+                        clientName={item.clientName}
+                        paymentDate={formatDate(item.paymentDate)}
+                        amountPaid={item.amountPaid}
+                        productName={item.productName}
+                        />
+                  )}
+                />
+              </View>
+
+
+            ) : (
+                <View style={styles3.container}>
+                    <View style={{alignItems:'center', justifyContent:'center'}}>
+                      
+                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" />
+                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No recent transactions yet.</Text>
+
+                    </View>
+                 </View>
+            )}
+        </View>
+
+    );
+}
+
+const styles3 = StyleSheet.create({
+    container:{
+        flex:1, 
+ 
+
+    }, 
+    textHeader:{
+        fontSize: hp(2),
+        fontWeight: 'bold', 
+        color: '#9F9F9F',
+        padding: hp(1.2)
+    },
+    header:{
+        justifyContent: 'flex-start',
+        flexDirection: 'row', 
+        height:hp(10), 
+    }, 
+    square:{
+        width: wp(10),  
+        height: hp(5), 
+        marginRight: hp(1.5),
+        backgroundColor: '#92A0A8', 
+        borderRadius: 25
+    }, 
+});
 
 const styles = StyleSheet.create({
     container:{
         flex: 1,
         height: hp(100),
-        marginHorizontal: hp(2.5),
+        backgroundColor: '#F5F7F9'
     },
+    secondaryContainer: {
+        flex:1,
+        height: hp(100),
+        marginHorizontal: hp(2.5),
+    }, 
     header:{
         flexDirection: 'row', 
         height:hp(10), 
@@ -477,3 +593,25 @@ const styles2 = StyleSheet.create({
   });
 
 ////
+
+
+/*
+                    <View style={styles.itemTransaction}>
+                        
+                        <View style={styles.itemLeft}>
+                                <View style={styles.itemText}>
+                                    <Text style={{color:'#363636', fontSize: hp(1.5)}}>John Doe</Text>
+                                    <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>Pay Dues</Text>                                  
+                                </View>
+
+                            <View style={styles.textRightContainer}>
+                                <View style={styles.textRight}>
+                                    <Text style={{color: '#363636', fontWeight: 'bold', fontSize: hp(2)}}>-P4500.00</Text>
+                                    <Text style={styles.textRightText}>25-12-2023 5:00pm</Text>
+                                </View>
+                            </View>
+                        </View>
+                    
+                    </View>
+
+*/

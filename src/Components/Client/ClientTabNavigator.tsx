@@ -93,7 +93,7 @@ export function TabNavigator() {
 
 
          <Tab.Screen
-          name="Reminders"
+          name="Profile"
           component={PaymentReminders}
           options={{
             tabBarIcon: ({focused}) => (
@@ -102,7 +102,7 @@ export function TabNavigator() {
                   top: Platform.OS === 'ios' ? 10 : 0,
                 }}>
                      <Ionicons
-                        name='alert-circle'
+                        name='person'
                         size={Platform.OS === 'ios' ? 30 : 30}                     
                         color={focused ? '#7CB1EC' : '#fff'}
                      />

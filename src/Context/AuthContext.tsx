@@ -8,7 +8,7 @@ type UserCredentials = {
   password: string;
   isLoggedIn: boolean;
   entityId: any; // Add entityId property
-  tableName: any; // Add tableName property
+  tableName: any; // Add tableName propertya
 };
 
 type AuthContextProviderProps = {
@@ -29,8 +29,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     password: "",
     isLoggedIn: false,
     entityId: '',
-    tableName: ""
-
+    tableName: "",
   });
 
   const login = (username: string) => {
@@ -63,7 +62,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   
 
   const logout = () => {
-    setUser({ username: "", password: "", isLoggedIn: false, entityId: '', tableName: "" });
+    setUser({ username: "", password: "", isLoggedIn: false, entityId: '', tableName: ""});
   };
 
   const authValue: AuthContextType = {

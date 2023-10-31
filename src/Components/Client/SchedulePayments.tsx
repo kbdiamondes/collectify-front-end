@@ -47,7 +47,7 @@ export default function SchedulePayments(){
                     <Text>{error}</Text>
                 ) : scheduledReminders.length > 0 ? (
                     <View style={styles.container}>
-                        <Pressable style={styles.header} onPress={() => navigation.goBack()}>
+                        <Pressable style={styles.header} onPress={() => navigation.navigate('ClientTabNavigator')}>
                             <DashboardHeader username={auth?.user?.username ?? ''}/>
                         </Pressable>
                     <Text style={styles.textHeader}>Scheduled Reminders</Text>
@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
     container:{
         flex:1, 
         paddingTop: hp(2), 
-        paddingHorizontal: hp(1.5)
+        paddingHorizontal: hp(1.5),
+        backgroundColor: '#F5F7F9'
     }, 
     textHeader:{
         fontSize: hp(2),

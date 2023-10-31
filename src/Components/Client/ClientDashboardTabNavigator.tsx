@@ -11,11 +11,14 @@ import {SafeAreaView, View, StyleSheet, Platform} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import ScheduleNewPaymentReminder from "./ScheduleNewPaymentReminder";
 import ClientDashboard from "./ClientDashboard";
+import { AuthContext } from "../../Context/AuthContext";
+import { useContext } from "react";
 
 
 const Tab = createBottomTabNavigator()
 
 export function ClientDashboardTabNavigator() {
+  const auth = useContext(AuthContext)
   return (
       <View style={styles.TabNavStyle} >             
          <Tab.Navigator
@@ -30,7 +33,7 @@ export function ClientDashboardTabNavigator() {
                elevation: 5,
                backgroundColor: '#0A1C34',
                borderRadius: 30,
-               height: 60,
+               height: 80,
             },
             tabBarShowLabel: false,
             headerShown: false,
@@ -127,7 +130,7 @@ export function ClientDashboardTabNavigator() {
           }}
         />
          <Tab.Screen
-          name="Payment Records"
+          name="Records"
           component={PaymentRecords}
           options={{
             tabBarIcon: ({focused}) => (
@@ -145,6 +148,8 @@ export function ClientDashboardTabNavigator() {
           }}
         />
          </Tab.Navigator>
+
+
       </View>
 
       

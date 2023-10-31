@@ -36,6 +36,7 @@ import CollectAllPaymentForm from './src/Components/Collector/CollectAllPaymentF
 import ScheduleNewPaymentReminder from './src/Components/Client/ScheduleNewPaymentReminder';
 import ClientDashboard from './src/Components/Client/ClientDashboard';
 import { ClientDashboardTabNavigator } from './src/Components/Client/ClientDashboardTabNavigator';
+import PaymentReminders from './src/Components/Client/PaymentReminders';
 
 
 
@@ -46,6 +47,7 @@ export type RootStackParamList = {
   Register: undefined;
 
   //Client
+  ClientDashboardTabNavigator: {screen: any};
   ClientDashboard: undefined; 
   DuePayments: undefined; 
   PaymentForm: {nameprop: any, priceprop: any, contractId:any,photo?:any,clientId:any, orderId: any, dueAmount: any};
@@ -56,7 +58,7 @@ export type RootStackParamList = {
   ScheduledPayments: undefined; 
   PaymentReminders: undefined; 
   TransactionHistory: undefined; 
-  PaymentRecrods: undefined; 
+  PaymentRecords: undefined; 
   ScheduleNewPaymentReminders: undefined; 
   
   
@@ -117,11 +119,14 @@ export default function App(){
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
       
+      <Stack.Screen name="ClientTabNavigator" component={TabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="ClientDashboardTabNavigator" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="ClientDashboard" component={TabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
       <Stack.Screen name="DuePayments" component={ClientDashboardTabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
-      <Stack.Screen name="ScheduledPayments" component={TabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="PaymentReminders" component={TabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="TransactionHistory" component={TabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="ScheduledPayments" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="PaymentReminders" component={PaymentReminders} options={{headerShown: false}}/>
+      <Stack.Screen name="TransactionHistory" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="PaymentRecords" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="Collect" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="FollowUp" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
