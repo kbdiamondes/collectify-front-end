@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { KeyboardAvoidingView, SafeAreaView, Text, View, StyleSheet, Pressable, TextInput, ActivityIndicator} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 
@@ -11,6 +11,7 @@ export default function Login(){
     const [userName, setUserName] = useState<string>('');
     const [passWord, setPassword] = useState<string>('');
     const [loading, setLoading] = useState(false); 
+    const [loginAttempted, setLoginAttempted] = useState(false);
     const auth = useContext(AuthContext);
 
     useFocusEffect(
@@ -19,27 +20,29 @@ export default function Login(){
         }, [])
       );
 
+    useEffect(() => {
+    if (auth?.user.tableName === "Client") {
+        navigation.navigate('ClientDashboard');
+    } else if (auth?.user.tableName === "Reseller") {
+        navigation.navigate('ActiveContractScreen');
+    } else if (auth?.user.tableName === "Collector") {
+        navigation.navigate('Collect');
+    } else if (auth?.user.tableName === "Not Found") {
+        alert('User not found');
+    }
+    }, [auth?.user.tableName, loginAttempted]);
+
     const handleLogin = async () => {
         setLoading(true);
-        await auth?.login(userName, passWord);
-        
-        try {
 
-            
-            if (auth?.user.tableName === "Client") {
-              navigation.navigate('ClientDashboard');
-            } else if (auth?.user.tableName === "Reseller") {
-              navigation.navigate('ActiveContractScreen');
-            } else if (auth?.user.tableName === "Collector") {
-              navigation.navigate('Collect');
-            } else if (auth?.user.tableName === "Not Found") {
-              alert('User not found');
-            }
+        try {
+            await auth?.login(userName, passWord);
+
           } catch (error) {
-            // Handle any login errors here
             console.error('Login error:', error);
           } finally {
             setLoading(false);
+            setLoginAttempted(true)
           }
     }
         
