@@ -17,7 +17,7 @@ export default function ScheduledPaymentsList(props: ScheduledPaymentProps){
                 <View style={styles.square}/>
                     <View style={styles.itemText}>
                         <Text style={{color:'#363636', fontSize: hp(1.3) }}>{props.itemName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>{props.paymentStatus}</Text>                                  
+                        <Text style={{color: props.paymentStatus === 'Paid' ? 'green':'red', fontSize: hp(1.2)}}>{props.paymentStatus}</Text>                                  
                     </View>
                 <View style={styles.textRightContainer}>
                     <View style={styles.textRight}>

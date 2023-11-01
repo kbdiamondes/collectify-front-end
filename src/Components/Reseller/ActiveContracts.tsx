@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, Pressable, FlatList, ActivityIndicator} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, Pressable, FlatList, ActivityIndicator, RefreshControl} from 'react-native';
 import ActiveContractsList from './Lists/ActiveContractsList';
 
 import React, { useContext, useEffect, useState } from 'react';
@@ -27,6 +27,14 @@ export default function ActiveContractListScreen(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
     const auth = useContext(AuthContext); 
 
+    const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
     useEffect(() => {
         sendRequest({ 
@@ -51,11 +59,15 @@ export default function ActiveContractListScreen(){
                         <ActivityIndicator style={{margin: hp(25)}}size="large" />
                     </View>
                 )
-                :(
+                :(  
+                    
                     <View style={styles.container}>
                     <Text style={styles.textHeader} >Active Contracts</Text>
                     
                     <FlatList
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                      }
                         data={contract} // Use contracts instead of client_user
                         keyExtractor={(contract) => contract.contract_id.toString()} // Adjust keyExtractor
                         renderItem={({ item: contract }) => (
@@ -66,13 +78,15 @@ export default function ActiveContractListScreen(){
                             itemName={contract.itemName} 
                             requiredCollectible={contract.dueAmount} 
                             paymentType={contract.isMonthly? "Installment" : "Full"}
+                            
                             />                    
                         )}
                     />
                 </View>
+                
                 )}
             </View>    
-   
+
 
     );
 }

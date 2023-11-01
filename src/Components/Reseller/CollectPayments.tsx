@@ -27,7 +27,7 @@ export default function CollectPayments() {
     const [showImagePreview, setImagePreview] = useState(false); 
 
     const [error, setError] = useState(false)
-
+    const [fileName, setfileName] = useState("")
     const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext); 
 
@@ -62,12 +62,13 @@ export default function CollectPayments() {
 
             // Generate a unique filename
         const fileExtension = 'png'; // Change this to the actual file extension
-        const uniqueFilename = generateUniqueFilename(fileExtension);
+
+        
 
 
         formData.append('amount', requiredCollectible);
         formData.append('base64Image', CapturedImage);
-        formData.append('fileName', uniqueFilename);
+        formData.append('fileName', fileName);
         formData.append('contentType', 'image/png');
         formData.append('paymentType', paymentType);
         axios.post(BASE_URL+`/collectPayments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
@@ -77,7 +78,7 @@ export default function CollectPayments() {
         })
         .then(function (response) {
           console.log(CapturedImage);
-          console.log("Filename: " + uniqueFilename);
+          console.log("Filename: " + fileName);
           console.log("Collectible:" + requiredCollectible); 
           console.log(response);
           setError(false); 
@@ -130,7 +131,7 @@ export default function CollectPayments() {
             // Now you have the base64Image without the data URL prefix
             console.log(manipResult);
             setCapturedImage(base64Image);
-
+            setfileName(generateUniqueFilename('png'));
             setImagePreview(true)
           }
         };
@@ -141,7 +142,7 @@ export default function CollectPayments() {
 
     const goBack = () => {
         if(showImagePreview){
-            setImagePreview(false)
+            setImagePreview(true)
             setStartCamera(false)
             console.log(CapturedImage)
         }
@@ -159,7 +160,7 @@ export default function CollectPayments() {
     }
 
     const setOverTheCounterButton = () => {
-      setselected(3) 
+      setselected(2) 
       setpaymentType("Over The Counter")
     }
 
@@ -298,14 +299,24 @@ export default function CollectPayments() {
                 </View>
 
                 <Text style={styles.textLabel}>Transaction Proof</Text>
-                <View style={styles.buttonUnfilled}>
-                        <Pressable style={styles.button} onPress={requestCameraPermissions}>
-                        <Text style={styles.buttonUnfilledLabel}>
-                            <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
-                        </Text>
-                        </Pressable>
-                     
-                    </View>
+
+                      <View style={styles.buttonUnfilled}>
+            {showImagePreview ? (
+             
+             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <Ionicons name="image" color="#000000" size={15} style={{ marginRight: 5 }} />
+      <Text style={{ fontSize: 15 }}>{fileName}</Text>
+    </View>
+             
+            ) : (
+              <Pressable style={styles.button} onPress={requestCameraPermissions}>
+                <Text style={styles.buttonUnfilledLabel}>
+                  
+                  <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
+                </Text>
+              </Pressable>
+            )}
+          </View>
 
                     <View style={styles.body2}>
                         <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Must have the correct and valid collectibles.</Text>
@@ -453,15 +464,20 @@ const styles = StyleSheet.create({
         alignContent: 'center'
     },
     containerSelected:{
-        padding: 5,
-        height: hp(8),
-        width: hp(10),
-        marginLeft: hp(2), 
-        marginRight: hp(2),
-        backgroundColor:'#2C85E7',
-        justifyContent:'space-evenly',
-        borderRadius: 5,
-        alignSelf:'center',
+      flex:1,
+      borderRadius: 5,
+      borderWidth: 2, 
+      borderColor: '#F0F2F4',
+      padding: 5,
+      height: hp(8),
+      width: hp(15),
+      marginLeft: hp(.01), 
+      marginRight: hp(2),
+      justifyContent:'space-evenly',
+      backgroundColor:'#2C85E7',
+      alignSelf:'center',
+        
+       
     },
     containerNotSelected:{
         flex:1,
@@ -509,7 +525,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderWidth: 2, 
         borderColor: '#F0F2F4',
-        height: hp(7), 
+        height: hp(10), 
         alignItems: 'center', 
         justifyContent: 'center', 
         flexDirection: 'row', 
@@ -558,6 +574,7 @@ const image_preview = StyleSheet.create({
       justifyContent: 'center',
     },
   });
+
 
 function generateUniqueFilename(fileExtension: string) {
   throw new Error('Function not implemented.');

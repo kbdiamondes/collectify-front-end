@@ -144,6 +144,7 @@ export default function CollectAllPaymentForm() {
             setImagePreview(false)
             setStartCamera(false)
             console.log(CapturedImage)
+            
         }
     }
 
@@ -158,7 +159,7 @@ export default function CollectAllPaymentForm() {
     }
 
     const setOverTheCounterButton = () => {
-      setselected(3) 
+      setselected(2) 
       setpaymentType("Over The Counter")
     }
 
@@ -305,7 +306,7 @@ export default function CollectAllPaymentForm() {
                     </View>
                     
                     <View style={selected==2? styles.containerSelected:styles.containerNotSelected}>
-                        <Pressable onPress={setOnlineBankingButton} style={selected==2? styles.buttonSelected:styles.buttonnotSelected}>
+                        <Pressable onPress={setOverTheCounterButton} style={selected==2? styles.buttonSelected:styles.buttonnotSelected}>
                             <Text style={selected==2? styles.buttonLabel: styles.buttonNotSelectedLabel}>
                                     Over the Counter
                                 </Text>
@@ -469,15 +470,19 @@ const styles = StyleSheet.create({
         alignContent: 'center'
     },
     containerSelected:{
+        flex:1,
+        borderRadius: 5,
+        borderWidth: 2, 
+        borderColor: '#F0F2F4',
         padding: 5,
         height: hp(8),
-        width: hp(10),
-        marginLeft: hp(2), 
+        width: hp(15),
+        marginLeft: hp(.01), 
         marginRight: hp(2),
-        backgroundColor:'#2C85E7',
         justifyContent:'space-evenly',
-        borderRadius: 5,
         alignSelf:'center',
+        backgroundColor:'#2C85E7',
+        
     },
     containerNotSelected:{
         flex:1,
