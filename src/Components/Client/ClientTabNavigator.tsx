@@ -15,6 +15,8 @@ import ClientDashboard from "./ClientDashboard";
 
 const Tab = createBottomTabNavigator()
 
+const PlaceHolder = () => <View/>
+
 export function TabNavigator() {
   return (
       <View style={styles.TabNavStyle} >             
@@ -92,24 +94,32 @@ export function TabNavigator() {
          />
 
 
-         <Tab.Screen
-          name="Profile"
-          component={PaymentReminders}
-          options={{
-            tabBarIcon: ({focused}) => (
-              <View
-                style={{
-                  top: Platform.OS === 'ios' ? 10 : 0,
-                }}>
-                     <Ionicons
-                        name='person'
-                        size={Platform.OS === 'ios' ? 30 : 30}                     
-                        color={focused ? '#7CB1EC' : '#fff'}
-                     />
-              </View>
-            ),
-          }}
-        />
+          <Tab.Screen
+            name="Profile"
+            component={PlaceHolder}
+            listeners={({ navigation }) => ({
+              tabPress: (e) => {
+                e.preventDefault();
+                navigation.push('ClientProfileModal');
+              },
+            })}
+            options={{
+              title: 'My Profile',
+              tabBarIcon: ({ focused }) => (
+                <View
+                  style={{
+                    top: Platform.OS === 'ios' ? 10 : 0,
+                  }}
+                >
+                  <Ionicons
+                    name="person"
+                    size={Platform.OS === 'ios' ? 30 : 30}
+                    color={focused ? '#7CB1EC' : '#fff'}
+                  />
+                </View>
+              ),
+            }}
+          />
          </Tab.Navigator>
       </View>
 

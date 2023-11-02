@@ -37,7 +37,9 @@ import ScheduleNewPaymentReminder from './src/Components/Client/ScheduleNewPayme
 import ClientDashboard from './src/Components/Client/ClientDashboard';
 import { ClientDashboardTabNavigator } from './src/Components/Client/ClientDashboardTabNavigator';
 import PaymentReminders from './src/Components/Client/PaymentReminders';
+import ClientProfileModals from './src/Components/Client/Modals/ClientProfileModal';
 
+import Toast from 'react-native-toast-message';
 
 
 
@@ -47,6 +49,7 @@ export type RootStackParamList = {
   Register: undefined;
 
   //Client
+  ClientProfileModal: undefined; 
   ClientDashboardTabNavigator: {screen: any};
   ClientDashboard: undefined; 
   DuePayments: undefined; 
@@ -119,6 +122,7 @@ export default function App(){
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
       
+      <Stack.Screen name="ClientProfileModal" component={ClientProfileModals} options={{headerShown: false}}/>
       <Stack.Screen name="ClientTabNavigator" component={TabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="ClientDashboardTabNavigator" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="ClientDashboard" component={TabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
@@ -149,10 +153,15 @@ export default function App(){
       <Stack.Screen name="CollectorCollectPaymentForm" component={CollectPaymentForm} options={{ headerShown: false}}/>
       <Stack.Screen name="CollectAllPaymentForm" component={CollectAllPaymentForm} options={{ headerShown: false}}/>
 
+      
     </Stack.Navigator>
 
   </NavigationContainer>
+
+  <Toast/>
   </AuthContextProvider>
+
+  
   );
 }
 

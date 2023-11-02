@@ -5,6 +5,7 @@ import { CheckScreenNavigationprop } from "../../App";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { AuthContext } from "../Context/AuthContext";
+import Toast from "react-native-toast-message";
 
 export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
@@ -22,16 +23,38 @@ export default function Login(){
 
     useEffect(() => {
     if (auth?.user.tableName === "Client") {
+        showSuccessToast();
         navigation.navigate('ClientDashboard');
     } else if (auth?.user.tableName === "Reseller") {
+        showSuccessToast();
         navigation.navigate('ActiveContractScreen');
     } else if (auth?.user.tableName === "Collector") {
+        showSuccessToast();
         navigation.navigate('Collect');
     } else if (auth?.user.tableName === "Not Found") {
-        alert('User not found');
+        showFailedToast();
     }
-    }, [auth?.user.tableName, loginAttempted]);
 
+        console.log("Login: "+ auth?.user.isLoggedIn)
+    }, [auth?.user.tableName, loginAttempted, auth?.user.isLoggedIn]);
+
+    const showSuccessToast = () => {
+        Toast.show({
+          type: 'success',
+          text1: 'Successfully logged in!',
+        });
+      }
+
+    const showFailedToast = () => {
+        Toast.show({
+          type: 'error',        
+          text1: 'Login failed!',
+          text2: 'Please check your username and password.',
+          visibilityTime: 4000,
+          position: 'bottom', 
+        });
+      }
+      
     const handleLogin = async () => {
         setLoading(true);
 
@@ -39,6 +62,7 @@ export default function Login(){
             await auth?.login(userName, passWord);
 
           } catch (error) {
+
             console.error('Login error:', error);
           } finally {
             setLoading(false);
@@ -80,10 +104,8 @@ export default function Login(){
                         <Pressable onPress={handleLogin}>
                                 <Text style={styles.buttonLabel}>Login</Text>
                         </Pressable>
-                    
                     </View>
                     )}
-
 
 
                 </View>

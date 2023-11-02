@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 import { credentials } from "./AuthCredentials";
 import axios from "axios";
 import { BASE_URL } from "../../config";
+import Toast from "react-native-toast-message";
 
 type UserCredentials = {
   username: string;
@@ -41,7 +42,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       })
       .then(function (response) {
         // Check if the response status is successful (e.g., 200 OK)
-        if (response.status === 200) {
+        if (response.status === 200 && response.data.tableName !== "Not Found") {
           console.log(response.data)
           setUser({
             username: username,
@@ -50,16 +51,35 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             tableName: response.data.tableName,
             isLoggedIn: true,
           });
+        }else{
+          showFailedToast()
         }
       })
       .catch(function (error) {
         // Handle the error here
         console.log(error);
-        alert("Authentication failed. Server error.");
+
       });
   };
   
-  
+  const showSuccessToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Welcome back!',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
+
+  const showFailedToast = () => {
+    Toast.show({
+      type: 'error',        
+      text1: 'Login failed!',
+      text2: 'Please check your username and password.',
+      visibilityTime: 4000,
+      position: 'top', 
+    });
+  }
 
   const logout = () => {
     setUser({ username: "", password: "", isLoggedIn: false, entityId: '', tableName: ""});
