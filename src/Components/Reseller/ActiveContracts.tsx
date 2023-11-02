@@ -10,17 +10,8 @@ import { useNavigation } from '@react-navigation/native';
 import { IClient, RestAPI } from '../../Services/RestAPI';
 import { BASE_URL } from '../../../config';
 import { AuthContext } from '../../Context/AuthContext';
-
-
-/*
-const  activeContractData = [
-    {
-        clientName: 'Marilyn Monroe', 
-        itemName: 'iPhone 14 Pro Max', 
-        requiredCollectible: 5600, 
-        paymentType: "Installment" 
-    }
-]*/
+import DashboardHeader from '../DashboardHeader';
+import {Ionicons} from '@expo/vector-icons';
 
 
 export default function ActiveContractListScreen(){
@@ -38,10 +29,6 @@ export default function ActiveContractListScreen(){
     },[] )
 
     const navigation = useNavigation<CheckScreenNavigationprop>();
-    const toLogout = () => {
-        auth?.logout;
-        navigation.navigate('Login');
-    }
     
     return(
 
@@ -50,9 +37,13 @@ export default function ActiveContractListScreen(){
                     <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
                         <ActivityIndicator style={{margin: hp(25)}}size="large" />
                     </View>
-                )
-                :(
+                ): error?(
+                    <Text>{error}</Text>
+                ):contract? (
                     <View style={styles.container}>
+                        <Pressable style={styles.header} onPress={() => navigation.navigate('ResellerDashboardTabNavigator')}>
+                            <DashboardHeader username={auth?.user?.username ?? ''}/>
+                        </Pressable>
                     <Text style={styles.textHeader} >Active Contracts</Text>
                     
                     <FlatList
@@ -70,6 +61,13 @@ export default function ActiveContractListScreen(){
                         )}
                     />
                 </View>
+                ):(
+                <View style={styles.container}>
+                    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active contracts yet.</Text>
+                    </View>
+                 </View>
                 )}
             </View>    
    
@@ -111,7 +109,14 @@ const styles = StyleSheet.create({
     container:{
         flex:1, 
         paddingTop: hp(2), 
-        paddingHorizontal: hp(1.5)
+        paddingHorizontal: hp(1.5),
+        backgroundColor: '#F5F7F9'
+    }, 
+    header:{
+        justifyContent: 'flex-start',
+        flexDirection: 'row', 
+        height:hp(10), 
+        marginTop: hp(3), 
     }, 
     textHeader:{
         fontSize: hp(2),

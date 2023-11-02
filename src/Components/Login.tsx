@@ -23,37 +23,15 @@ export default function Login(){
 
     useEffect(() => {
     if (auth?.user.tableName === "Client") {
-        showSuccessToast();
         navigation.navigate('ClientDashboard');
     } else if (auth?.user.tableName === "Reseller") {
-        showSuccessToast();
-        navigation.navigate('ActiveContractScreen');
+        navigation.navigate('ResellerDashboard');
     } else if (auth?.user.tableName === "Collector") {
-        showSuccessToast();
         navigation.navigate('Collect');
     } else if (auth?.user.tableName === "Not Found") {
-        showFailedToast();
     }
-
         console.log("Login: "+ auth?.user.isLoggedIn)
     }, [auth?.user.tableName, loginAttempted, auth?.user.isLoggedIn]);
-
-    const showSuccessToast = () => {
-        Toast.show({
-          type: 'success',
-          text1: 'Successfully logged in!',
-        });
-      }
-
-    const showFailedToast = () => {
-        Toast.show({
-          type: 'error',        
-          text1: 'Login failed!',
-          text2: 'Please check your username and password.',
-          visibilityTime: 4000,
-          position: 'bottom', 
-        });
-      }
       
     const handleLogin = async () => {
         setLoading(true);
@@ -62,7 +40,6 @@ export default function Login(){
             await auth?.login(userName, passWord);
 
           } catch (error) {
-
             console.error('Login error:', error);
           } finally {
             setLoading(false);

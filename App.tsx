@@ -40,6 +40,9 @@ import PaymentReminders from './src/Components/Client/PaymentReminders';
 import ClientProfileModals from './src/Components/Client/Modals/ClientProfileModal';
 
 import Toast from 'react-native-toast-message';
+import ResellerDashboard from './src/Components/Reseller/ResellerDashboard';
+import { ResellerDashboardTabNavigator } from './src/Components/Reseller/ResellerDashboardTabNavigator';
+import ResellerProfileModals from './src/Components/Reseller/Modals/ResellerProfileModal';
 
 
 
@@ -78,6 +81,10 @@ export type RootStackParamList = {
   CollectAllPaymentForm: undefined;
 
   //Reseller
+  ResellerProfileModal: undefined; 
+  ResellerTabNavigator: {screen: any}; 
+  ResellerDashboardTabNavigator: undefined;
+  ResellerDashboard: undefined; 
   CreateNewContractModal: undefined; 
   SoldItems: undefined; 
   MyCollector: undefined; 
@@ -136,6 +143,11 @@ export default function App(){
       <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="ScheduleNewPaymentReminders" component={ScheduleNewPaymentReminder} options={{headerShown: false}}/>
       
+
+      <Stack.Screen name="ResellerProfileModal" component={ResellerProfileModals} options={{headerShown: false}}/>
+      <Stack.Screen name="ResellerTabNavigator" component={ResellerTabNavigator} options={{headerShown: false}}/> 
+      <Stack.Screen name="ResellerDashboardTabNavigator" component={ResellerDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="ResellerDashboard" component={ResellerDashboardTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="ActiveContractScreen" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="CreateNewContractModal" component={CreateNewContractModal} options={{headerShown: false}}/>

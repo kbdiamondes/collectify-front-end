@@ -51,6 +51,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             tableName: response.data.tableName,
             isLoggedIn: true,
           });
+          showSuccessToast()
         }else{
           showFailedToast()
         }
@@ -66,6 +67,14 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     Toast.show({
       type: 'success',
       text1: 'Welcome back!',
+      visibilityTime: 4000, 
+    });
+  }
+
+  const showLogoutToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'See you later!',
       visibilityTime: 4000,
       position: 'bottom', 
     });
@@ -77,12 +86,14 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       text1: 'Login failed!',
       text2: 'Please check your username and password.',
       visibilityTime: 4000,
-      position: 'top', 
+      position: 'bottom', 
     });
   }
 
   const logout = () => {
+    showLogoutToast();
     setUser({ username: "", password: "", isLoggedIn: false, entityId: '', tableName: ""});
+
   };
 
   const authValue: AuthContextType = {

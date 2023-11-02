@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator, Pressable} from 'react-native';
 import DuePaymentList from './Lists/CollectorCollectionList';
 
 import React, { Key, useContext, useEffect, useState } from 'react';
@@ -8,10 +8,14 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import CollectorCollectionList from './Lists/CollectorCollectionList';
 import { BASE_URL } from '../../../config';
 import { AuthContext } from '../../Context/AuthContext';
+import DashboardHeader from '../DashboardHeader';
+import { useNavigation } from '@react-navigation/native';
+import { CheckScreenNavigationprop } from '../../../App';
+import {Ionicons} from '@expo/vector-icons';
 
 export default function CollectorCollection(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
-
+    const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext)
 
     useEffect(() => {
@@ -19,7 +23,7 @@ export default function CollectorCollection(){
             method: 'GET', 
             url: BASE_URL+"/contracts/unpaid/" + auth?.user.entityId
         })
-    },[] )
+    },[auth] )
 
     return (
         <View style={styles.container}>
@@ -27,8 +31,13 @@ export default function CollectorCollection(){
             <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
               <ActivityIndicator style={{ margin: hp(25) }} size="large" />
             </View>
-          ) : (
+          ) : error? (
+            <Text>{error}</Text> 
+            ) : contract? (
             <View style={styles.container}>
+            <Pressable style={styles.header} onPress={() => navigation.navigate('ResellerDashboardTabNavigator')}>
+                <DashboardHeader username={auth?.user?.username ?? ''}/>
+            </Pressable>
             <Text style={styles.textHeader}>Clients with Debt</Text>
             <FlatList
               data={contract} // Use contracts instead of client_user
@@ -43,6 +52,14 @@ export default function CollectorCollection(){
               )}
             />
           </View>
+            ):(
+            <View style={styles.container}>
+            <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active contracts yet.</Text>
+            </View>
+            </View>
+        
           )}
         </View>
       );
@@ -52,7 +69,14 @@ const styles = StyleSheet.create({
     container:{
         flex:1 ,
         paddingTop: hp(2), 
-        paddingHorizontal: hp(1.5)
+        paddingHorizontal: hp(1.5),
+        backgroundColor: '#F5F7F9'
+    }, 
+    header:{
+        justifyContent: 'flex-start',
+        flexDirection: 'row', 
+        height:hp(10), 
+        marginTop: hp(3), 
     }, 
     textHeader:{
         fontSize: hp(2),

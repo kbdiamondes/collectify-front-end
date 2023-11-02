@@ -50,13 +50,13 @@ export default function ActiveContractsList(props: ActiveContractProps){
 const styles = StyleSheet.create({
     item:{
         flex:1, 
-        backgroundColor: '#F5F7F9',
-        padding: 20, 
+        backgroundColor: '#FFFFFF',
         borderRadius: 10, 
         marginBottom: 20,
         marginLeft: hp(1), 
         marginRight: hp(1), 
-        shadowColor: '#000', 
+        shadowColor: '#000',
+        shadowOpacity: 0.10, 
         shadowOffset: {
             width:0,
             height: 2,
