@@ -43,6 +43,8 @@ import Toast from 'react-native-toast-message';
 import ResellerDashboard from './src/Components/Reseller/ResellerDashboard';
 import { ResellerDashboardTabNavigator } from './src/Components/Reseller/ResellerDashboardTabNavigator';
 import ResellerProfileModals from './src/Components/Reseller/Modals/ResellerProfileModal';
+import CollectorProfileModals from './src/Components/Collector/Modals/CollectorProfileModal';
+import { CollectorDashboardTabNavigator } from './src/Components/Collector/CollectorDashboardTabNavigator';
 
 
 
@@ -73,6 +75,10 @@ export type RootStackParamList = {
  
 
   //Collector
+  CollectorProfileModal: undefined; 
+  CollectorTabNavigator: {screen: any};
+  CollectorDashboardTabNavigator: undefined; 
+  CollectorDashboard: undefined; 
   Collect: undefined; 
   FollowUp: undefined;
   Assurance: undefined; 
@@ -138,11 +144,16 @@ export default function App(){
       <Stack.Screen name="PaymentReminders" component={PaymentReminders} options={{headerShown: false}}/>
       <Stack.Screen name="TransactionHistory" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="PaymentRecords" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="Collect" component={CollectorTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="FollowUp" component={CollectorTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="ScheduleNewPaymentReminders" component={ScheduleNewPaymentReminder} options={{headerShown: false}}/>
-      
+
+
+      <Stack.Screen name="CollectorDashboard" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="CollectorProfileModal" component={CollectorProfileModals} options={{headerShown: false}}/>
+      <Stack.Screen name="CollectorTabNavigator" component={CollectorTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="CollectorDashboardTabNavigator" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="Collect" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="FollowUp" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="Assurance" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
 
       <Stack.Screen name="ResellerProfileModal" component={ResellerProfileModals} options={{headerShown: false}}/>
       <Stack.Screen name="ResellerTabNavigator" component={ResellerTabNavigator} options={{headerShown: false}}/> 

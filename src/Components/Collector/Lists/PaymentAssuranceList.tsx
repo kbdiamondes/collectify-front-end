@@ -13,7 +13,7 @@ export default function PaymentAssuranceList(props: PaymentAssuranceProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
-                <View style={styles.square}/>
+                
                     <View style={styles.itemText}>
                         <Text style={{color:'#363636',fontSize: 14}}>{props.personName}</Text>
                         <Text style={{color: '#92A0A8', fontSize: 12}}>{props.responseStatus}</Text>                                  
@@ -30,13 +30,13 @@ export default function PaymentAssuranceList(props: PaymentAssuranceProps){
 const styles = StyleSheet.create({
     item:{
         flex:1, 
-        backgroundColor: '#F5F7F9',
-        padding: 20, 
+        backgroundColor: '#FFFFFF',
         borderRadius: 10, 
         marginBottom: 20,
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000', 
+        shadowOpacity: 0.10,
         shadowOffset: {
             width:0,
             height: 2,
@@ -46,6 +46,9 @@ const styles = StyleSheet.create({
     },
     itemLeft:{
         flex:1, 
+        padding: hp(1.5),
+        marginLeft: hp(1), 
+        marginRight: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
     }, 
     itemText: {
         flex:1, 
-        maxWidth: '80%', 
+        maxWidth: '75%', 
         marginRight: hp(1.5), 
         justifyContent: 'center', 
         alignItems :'flex-start', 
@@ -68,6 +71,7 @@ const styles = StyleSheet.create({
     }, 
     followupContainer: {
         flex: .5, 
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'flex-end',
     }, 
 }); 

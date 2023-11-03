@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, ActivityIndicator, FlatList} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, ActivityIndicator, FlatList, Pressable} from 'react-native';
 
 import React, { useContext, useEffect, useState } from 'react';
 import CollectionAssignment from './Lists/CollectionAssignmentLists';
@@ -9,6 +9,7 @@ import { AuthContext } from '../../Context/AuthContext';
 import { BASE_URL } from '../../../config';
 import CollectionAssignmentLists from './Lists/CollectionAssignmentLists';
 import { RestAPI } from '../../Services/RestAPI';
+import DashboardHeader from '../DashboardHeader';
 
 export default function Collection(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
@@ -36,6 +37,11 @@ export default function Collection(){
                 )
                 :(
                     <View style={styles.container}>
+                    <View style={styles.header}>
+                        <Pressable onPress={()=>navigation.navigate('CollectorDashboard')}>
+                            <DashboardHeader username={auth?.user?.username ?? ''}/>
+                        </Pressable>
+                    </View>
                     <Text style={styles.textHeader} >Recent Tasks</Text>
                     
                     <FlatList
@@ -62,7 +68,14 @@ const styles = StyleSheet.create({
     container:{
         flex:1 , 
         paddingTop: hp(2), 
-        paddingHorizontal: hp(1.5)
+        paddingHorizontal: hp(1.5),
+        backgroundColor: '#F5F7F9'
+    }, 
+    header:{
+        justifyContent: 'flex-start',
+        flexDirection: 'row', 
+        height:hp(10), 
+        marginTop: hp(3), 
     }, 
     textHeader:{
         fontSize: hp(2),

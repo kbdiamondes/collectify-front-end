@@ -27,7 +27,7 @@ export default function Login(){
     } else if (auth?.user.tableName === "Reseller") {
         navigation.navigate('ResellerDashboard');
     } else if (auth?.user.tableName === "Collector") {
-        navigation.navigate('Collect');
+        navigation.navigate('CollectorDashboard');
     } else if (auth?.user.tableName === "Not Found") {
     }
         console.log("Login: "+ auth?.user.isLoggedIn)
@@ -70,7 +70,7 @@ export default function Login(){
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                        <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
+                        <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" clearButtonMode='while-editing'></TextInput>
                         <TextInput onChangeText={(passWordAuth)=>setPassword(passWordAuth)}placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
                     {loading?(
                         <View style={styles.buttonLoading}>                        
