@@ -201,7 +201,7 @@ function RecentContracts(){
             ) : error ? (
                 <Text>{error}</Text>
             ) : contract? (
-                <View style={styles3.container}>
+                <View style={{height: hp(40)}}>
                 <FlatList
                   data={contract}
                   keyExtractor={(contract) => contract.contract_id.toString()}
@@ -239,7 +239,6 @@ const styles3 = StyleSheet.create({
     container:{
         flex:1, 
  
-
     }, 
     textHeader:{
         fontSize: hp(2),

@@ -72,9 +72,26 @@ export interface Transaction {
   clientName: string;
 }
 
+export interface CollectionHistory{
+  orderId: string; 
+  collectedAmount: number; 
+  collectionDate: string;
+  paymentType: string; 
+  itemName: string;
+  reseller_name: string;
+  client_username: string;
+  collector_username: string;
+  transactionProof:{
+    id: string;
+    name: string;
+    type: string;
+    data: string;
+  };
+}
 
 
-export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any, Transaction | any] => {
+
+export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any, Transaction | any, CollectionHistory | any] => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [client_user, setClientUser] = useState<IClient[]>([]); 
@@ -84,7 +101,7 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
     const [scheduledReminders, setScheduledReminders] = useState<ScheduledReminder[]>([]); 
     const [data, setData] = useState<IData[]>();
     const [transaction, setTransaction] = useState<Transaction[]>([]);
-
+    const [collectionHistory, setCollectionHistory] = useState<CollectionHistory[]>([]);
     const navigation = useNavigation<CheckScreenNavigationprop>();
     function sendRequest(config: AxiosRequestConfig<any>) {
         setLoading(true);
@@ -99,9 +116,11 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
                 setContract(response.data);
                 setScheduledReminders(response.data);
                 setTransaction(response.data);
+                setCollectionHistory(response.data);
+                
                 if (Array.isArray(response.data)) {
-
-                  console.log("Scheduled Reminders Log:", response.data);
+                  
+                  //console.log("Collection Log:", response.data.collectionHistory);
               } else {
                   console.log("Response data is not an array:", response.data);
               }
@@ -155,6 +174,6 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
 
 
 
-    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders, transaction];
+    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders, transaction, collectionHistory];
 
 }

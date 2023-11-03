@@ -3,33 +3,35 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 type RecentCollectionProps = { 
-    orderId: string;
-    requiredCollectible: number;
-    paymentType: string; 
-    productName: string;
-    clientName: string;
-    paymentStatus: string; 
+    collectedAmount: number;
+    itemName: string;
+    resellerName: string;
+    collectionDate: string; 
+
 }
 
-export default function RecentCollectionList(props: RecentCollectionProps){
+export default function RecentCollectionsList(props: RecentCollectionProps){
     return(
-        <SafeAreaView style={styles.item}>
+        <View style={styles.item}>
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636',fontSize: hp(1.7), fontWeight: 'normal'}}>{props.productName}</Text>
-                        <Text style={[styles.paymentLabel, { color: props.paymentStatus === 'Paid' ? 'green' : 'red' }]}>
-                            {props.paymentStatus}
-                        </Text>
+                    <Text style={{color:'#363636',fontSize: hp(1.7), fontWeight: 'normal'}}>
+                        {props.itemName ? props.itemName : "null"}
+                    </Text>
+                    <Text style={styles.paymentLabel}>
+                        {props.resellerName ? props.resellerName : "null"}
+                    </Text>
                     </View>
                 <View style={styles.priceContainer}>
-                        <Text style={styles.priceLabel}>Php {props.requiredCollectible}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.paymentType}</Text>                                  
+                        <Text style={styles.priceLabel}>Php {props.collectedAmount}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.collectionDate}</Text>                                  
                 </View>
             </View>
             
-        </SafeAreaView>
+        </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     item:{

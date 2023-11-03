@@ -11,8 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import DashboardHeader from "../DashboardHeader";
 import { BASE_URL } from "../../../config";
 import { RestAPI } from "../../Services/RestAPI";
-import axios from "axios";
-import RecentCollectionList from "./Lists/RecentContractList";
+import RecentCollectionList from "./Lists/RecentCollectionList";
 
 
 export default function CollectorDashboard(){
@@ -178,14 +177,14 @@ function formatDate(dateString:string): string {
 
 
 function RecentCollections(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, transaction] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, transaction, collectionHistory] = RestAPI(); 
     const auth = useContext(AuthContext);
  
     useEffect(() => {
         if (auth?.user.entityId) {
             sendRequest({
                 method: 'GET',
-                url: BASE_URL + "/collector-payment-records/collector/" + auth?.user.entityId
+                url: BASE_URL + "/collection-history/collector/" + auth?.user.entityId
             });
         } else {
             alert("Error: Missing user entityId");
@@ -201,23 +200,24 @@ function RecentCollections(){
                 </View>
             ) : error ? (
                 <Text>{error}</Text>
-            ) : contract? (
-                <View style={styles3.container}>
-                <FlatList
-                  data={contract}
-                  keyExtractor={(contract) => contract.contract_id.toString()}
-                  renderItem={({ item: contract }) => (
-                        <RecentCollectionList
-                        key={contract.contract_id.toString()}
-                        orderId={contract.orderId}
-                        clientName={contract.username}
-                        paymentType={contract.isMonthly ? "Installment" : "Full"}
-                        requiredCollectible={contract.dueAmount}
-                        productName={contract.itemName}
-                        paymentStatus={contract.paid ? "Paid" : "Unpaid"}
-                        />
-                  )}
-                />
+            ) : collectionHistory?(
+                <View style={{height:hp(40)}}>
+                    <FlatList
+                    data={collectionHistory}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <ScrollView>
+                            <RecentCollectionList
+                                key={item.id.toString()}
+                                resellerName={item.reseller_username}
+                                itemName={item.itemName}
+                                collectedAmount={item.collectedAmount}
+                                collectionDate={formatDate(item.collectionDate)}                    
+                            />
+                            </ScrollView>
+                    )}
+                    />
+
               </View>
 
 
@@ -236,6 +236,32 @@ function RecentCollections(){
     );
 }
 
+/*
+                <FlatList
+                data={collectionHistory}
+                keyExtractor={(item) => item.id.toString()}
+                  renderItem={({ item }) => (
+                        <RecentCollectionList
+                            key={item.id.toString()}
+                            client_username={item.client_username}
+                            reseller_username={item.reseller_username}
+                            itemName={item.itemName}
+                            collectedAmount={item.collectedAmount}
+                            collectionDate={formatDate(item.collectionDate)}                    
+                        />
+                  )}
+                />
+                    <FlatList
+                    data={collectionHistory}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <Text>
+                        {`ID: ${item.id}, Client: ${item.client_username}, Reseller: ${item.reseller_username}, Item: ${item.itemName}`}
+                        </Text>
+                    )}
+                    />
+
+*/
 const styles3 = StyleSheet.create({
     container:{
         flex:1, 

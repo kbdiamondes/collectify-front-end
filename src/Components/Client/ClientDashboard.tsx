@@ -209,7 +209,7 @@ function RecentTransaction(){
             ) : error ? (
                 <Text>{error}</Text>
             ) : transaction && transaction.length> 0 ? (
-                <View style={styles3.container}>
+                <View style={{height:hp(40)}}>
                 <FlatList
                   data={transaction}
                   keyExtractor={(item) => item.orderId}
