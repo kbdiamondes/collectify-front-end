@@ -12,11 +12,12 @@ import DashboardHeader from "../DashboardHeader";
 import { BASE_URL } from "../../../config";
 import { RestAPI } from "../../Services/RestAPI";
 import axios from "axios";
+import RecentContractList from "./Lists/RecentContractList";
 
 export default function ResellerDashboard(){
     const [shown, setShown] = useState(false);
     const [selected, setSelected] = useState<Number>();
-    const [totalDueAmount, setTotalDueAmount] = useState(123);
+    const [totalActiveContracts, setTotalActiveContracts] = useState(null);
     const auth = useContext(AuthContext); 
     
     const navigation = useNavigation<CheckScreenNavigationprop>();
@@ -29,21 +30,21 @@ export default function ResellerDashboard(){
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
 
-    /* To work upon
+
     useEffect(() => {
-        const fetchTotalDueAmount = async () => {
+        const fetchTotalActiveContract = async () => {
           try {
-            const response = await axios.get(BASE_URL+ `/clients/${auth?.user.entityId}/total-due-amount`);
-            setTotalDueAmount(response.data);
+            const response = await axios.get(BASE_URL+ `/resellers/${auth?.user.entityId}/active-unpaid-contracts/count`);
+            setTotalActiveContracts(response.data);
           } catch (error) {
             // Handle error, e.g., set error state
-            console.error('Error fetching total due amount:', error);
+            console.error('Error fetching total active contracts:', error);
           }
         };
     
-        fetchTotalDueAmount();
+        fetchTotalActiveContract(); 
       }, [auth?.user?.entityId]);
-    */
+    
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.secondaryContainer}>
@@ -77,16 +78,16 @@ export default function ResellerDashboard(){
                             }}>
                         <View style={{alignItems:'flex-start'}}>
 
-                                <Text style={{ color:'#141414', fontSize:hp(1.5)}}>Your total due amount</Text>
+                                <Text style={{ color:'#141414', fontSize:hp(1.5)}}>Your total active contracts</Text>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 {shown ? (
-                                    totalDueAmount && totalDueAmount > 0 ? (
+                                    totalActiveContracts && totalActiveContracts > 0 ? (
                                         <Text style={{marginTop: hp(.5), color: '#141414', fontSize: hp(5), fontWeight: 'bold'}}>
-                                        P{formatNumberWithCommas(totalDueAmount)}
+                                        {formatNumberWithCommas(totalActiveContracts)}
                                         </Text>
                                     ) : (
                                         <Text style={{marginTop: hp(.5), color: '#141414', fontSize: hp(5), fontWeight: 'bold'}}>
-                                        P0.00
+                                        No contracts
                                         </Text>
                                     )
                                     ) : (
@@ -151,10 +152,11 @@ export default function ResellerDashboard(){
                     <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                         
                         <View style={{marginTop: hp(2), marginBottom: hp(2),  alignItems:'flex-start'}}>
-                            <Text style={{fontSize: hp(2)}}> Recent Transactions</Text>
+                            <Text style={{fontSize: hp(2)}}> Recent Contracts</Text>
                         </View>                
 
                     </View>
+                    <RecentContracts/>
                     
                 </View>
 
@@ -173,8 +175,8 @@ function formatDate(dateString:string): string {
     return formattedDate;
 }
 
-/*
-function RecentTransaction(){
+
+function RecentContracts(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, transaction] = RestAPI(); 
     const auth = useContext(AuthContext);
  
@@ -182,12 +184,12 @@ function RecentTransaction(){
         if (auth?.user.entityId) {
             sendRequest({
                 method: 'GET',
-                url: BASE_URL + "/transaction-history/client/" + auth?.user.entityId
+                url: BASE_URL + "/contracts/reseller/" + auth?.user.entityId
             });
         } else {
             alert("Error: Missing user entityId");
         }
-    },[]);
+    },[auth?.user.entityId]);
 
     return(
 
@@ -198,18 +200,20 @@ function RecentTransaction(){
                 </View>
             ) : error ? (
                 <Text>{error}</Text>
-            ) : transaction && transaction.length> 0 ? (
+            ) : contract? (
                 <View style={styles3.container}>
                 <FlatList
-                  data={transaction}
-                  keyExtractor={(item) => item.orderId}
-                  renderItem={({ item }) => (
-                        <RecentTransactionList
-                        orderId={item.orderId}
-                        clientName={item.clientName}
-                        paymentDate={formatDate(item.paymentDate)}
-                        amountPaid={item.amountPaid}
-                        productName={item.productName}
+                  data={contract}
+                  keyExtractor={(contract) => contract.contract_id.toString()}
+                  renderItem={({ item: contract }) => (
+                        <RecentContractList
+                        key={contract.contract_id.toString()}
+                        orderId={contract.orderId}
+                        clientName={contract.clientName}
+                        paymentType={contract.isMonthly ? "Installment" : "Full"}
+                        requiredCollectible={contract.dueAmount}
+                        productName={contract.itemName}
+                        paymentStatus={contract.paid ? "Paid" : "Unpaid"}
                         />
                   )}
                 />
@@ -229,7 +233,7 @@ function RecentTransaction(){
         </View>
 
     );
-}*/
+}
 
 const styles3 = StyleSheet.create({
     container:{

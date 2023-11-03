@@ -2,25 +2,28 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-type RecentTransactionProps = { 
+type RecentContractProps = { 
     orderId: string;
-    amountPaid: number;
-    paymentDate: string;
+    requiredCollectible: number;
+    paymentType: string; 
     productName: string;
     clientName: string;
+    paymentStatus: string; 
 }
 
-export default function RecentTransactionList(props: RecentTransactionProps){
+export default function RecentContractList(props: RecentContractProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636',fontSize: hp(2), fontWeight: 'normal'}}>{props.productName}</Text>
-                        <Text style={styles.paymentLabel}>Paid</Text>
+                        <Text style={{color:'#363636',fontSize: hp(1.7), fontWeight: 'normal'}}>{props.productName}</Text>
+                        <Text style={[styles.paymentLabel, { color: props.paymentStatus === 'Paid' ? 'green' : 'red' }]}>
+                            {props.paymentStatus}
+                        </Text>
                     </View>
                 <View style={styles.priceContainer}>
-                        <Text style={styles.priceLabel}>Php {props.amountPaid}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.paymentDate}</Text>                                  
+                        <Text style={styles.priceLabel}>Php {props.requiredCollectible}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.paymentType}</Text>                                  
                 </View>
             </View>
             
