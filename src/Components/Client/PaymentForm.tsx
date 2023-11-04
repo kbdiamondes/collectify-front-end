@@ -1,13 +1,15 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable, Modal} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable, Modal, Platform} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import CameraCapture from './Camera';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
 import { CheckScreenNavigationprop, RootStackParamList } from '../../../App';
-import { Picker } from '@react-native-picker/picker';
+import { Picker, PickerIOS } from '@react-native-picker/picker';
 import {Ionicons} from '@expo/vector-icons'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { BASE_URL } from '../../../config';
+import Toast from "react-native-toast-message";
+
 
 export default function PaymentForm(){
     const nameProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.nameprop;
@@ -25,26 +27,19 @@ export default function PaymentForm(){
     const [paymentType, setpaymentType] = useState('')
     const [transactionProof, settransactionProof] = useState<any>(null)
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [isModalVisible2, setIsModalVisible2] = useState(false)
+    const [selectedValue, setSelectedValue] = useState('');
 
     const [error, setError] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
     
     useEffect((
-     )=>{console.log("Client ID:" + clientidProp + "\nOrder ID: " + orderIdProp + "\nFull Price: "+ priceProp)  },[])
+     )=>{console.log("Client ID:" + clientidProp + "\nOrder ID: " + orderIdProp + "\nFull Price: "+ priceProp + "\nMode of Payment: " + selectedValue)  },[])
 
 
 
     const confirmContract = () =>{
       handleSubmit()
-
-      if(error===false){
-        handleModal()
-      }else{
-        navigation.navigate('DuePayments')
-        alert("Success")
-        handleModal() 
-
-      }
     }
 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
@@ -67,13 +62,19 @@ export default function PaymentForm(){
           console.log(contractIdProp);
           console.log(requiredCollectible); 
           console.log(response);
+          showSuccessToast(); 
+          handleModal();
           setError(false); 
+          navigation.goBack();
+          navigation.goBack();
         })
         .catch(function (error) {
+          showFailedToast();
           console.log(error);
           console.log(contractIdProp);
           console.log(clientidProp);
           setError(true); 
+          handleModal();
          
         });
         
@@ -86,23 +87,28 @@ export default function PaymentForm(){
 
     return(
         <SafeAreaView>
-            <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+            <Modal animationType="fade" transparent={true} visible={isModalVisible}>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex:1, backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
 
                     <View style={styles.modalView}>
 
-                        <Ionicons name="warning-sharp" color="grey" size={hp(12)}></Ionicons>
-                        <Text style={{fontSize: hp(2.5)}}>Confirm Purchase?</Text>
-                        <Text style={{fontSize: hp(1.2), fontWeight: '300', flexWrap: 'wrap', padding: hp(1.2)}}>Are you sure about this purchase?</Text>
+                        <Ionicons name="help" color="grey" size={hp(12)}></Ionicons>
+                        <Text style={{fontSize: hp(2.5)}}>Confirm Payment?</Text>
+                        <Text style={{fontSize: hp(1.5), fontWeight: '300', flexWrap: 'wrap', marginTop: hp(1)}}>Make sure to confirm your payment details. </Text>
                         <View style={styles.modalButtonConfirmation}>
                             <Pressable onPressIn={confirmContract}>
-                                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
+                                <Text style={{fontSize: hp(1.7), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
                             </Pressable>
-                        </View>         
+                        </View> 
+
+                        <View style={styles.modalButtonCancel}>
+                            <Pressable onPressIn={handleModal}>
+                                <Text style={{fontSize: hp(1.7), fontWeight: 'bold', color: '#fff'}}>Cancel</Text>
+                            </Pressable>
+                        </View>           
                     </View>
                 </View>
-            </Modal>
-            <ScrollView>
+            </Modal>            
             <View style={styles.container}>
                 <Text style={styles.textHeader} >Pay Dues</Text>
                 <Text style={styles.textSubHeader} >Easily pay your outstanding dues online with our convenient and secure payment platform.</Text>
@@ -118,14 +124,54 @@ export default function PaymentForm(){
                     <TextInput defaultValue={requiredCollectible.toString()} editable={false} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Reference Number</Text>
-                    <TextInput defaultValue = {referenceNumber} editable={false} style={styles.textInput}></TextInput>
+                    <TextInput defaultValue = {referenceNumber ? referenceNumber : null} editable={false} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Type of Payment</Text>
-                    <Picker mode='dropdown'style={styles.textInput} >
+
+                    {Platform.OS === 'ios' ? (
+                      <View style={styles.textInput}>
+                      <Pressable onPress={()=> (setIsModalVisible2(true))}>
+                        <Text style={{textAlignVertical: 'center', alignItems: 'center', paddingTop: hp(1.2)}}>{selectedValue}</Text>
+                        </Pressable>
+                        <Modal                 
+                          animationType="slide"
+                          transparent={false}
+                          visible={isModalVisible2}
+                          onRequestClose={() => setIsModalVisible2(false)}
+                        >
+                          
+                          <View style={{justifyContent: 'center', alignContent: 'center', marginHorizontal: hp(2), marginVertical: hp(25)}}>
+                          <View>
+                            <Text style={{textAlign: 'center', fontSize: hp(2),color: '#203949', fontWeight: 'bold', marginBottom: hp(2)}}> Select your mode of payment</Text>
+                          </View>
+                          <PickerIOS
+                            selectedValue={selectedValue}
+                            onValueChange={(itemValue:any) => {
+                              setSelectedValue(itemValue);
+                              setIsModalVisible2(false);
+                            }}                        
+                          >
                             <Picker.Item label='Bank' value={'Bank'}/> 
-                            <Picker.Item label='Cash' value={'Cash'}/> 
+                            <Picker.Item label='Cash' value={'Cash'}/>
                             <Picker.Item label='Over the Counter' value={'Over the Counter'}/> 
-                    </Picker>   
+                          </PickerIOS>
+                          </View>
+                        </Modal>
+
+                      </View>
+
+                    ) : (
+                      <Picker mode='dropdown' style={styles.textInput} selectedValue={selectedValue}
+                      onValueChange={(itemValue: any)=>{
+                        setSelectedValue(itemValue);
+                      }}>
+                        <Picker.Item label='Bank' value={'Bank'}/> 
+                        <Picker.Item label='Cash' value={'Cash'}/>
+                        <Picker.Item label='Over the Counter' value={'Over the Counter'}/> 
+                      </Picker>
+                    )}  
+
+
 
                     <View style={styles.buttonUnfilled}>
                         <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot',{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp, clientId:clientidProp})}>
@@ -143,8 +189,7 @@ export default function PaymentForm(){
                         </Pressable>
                     </View>
                 </View>
-            </View>    
-            </ScrollView>     
+            </View>     
         </SafeAreaView>
 
     );
@@ -153,24 +198,19 @@ export default function PaymentForm(){
 
 const styles = StyleSheet.create({
     container:{
-        marginTop: hp(1), 
-        marginBottom: hp(1),
-        paddingTop: 50, 
-        paddingHorizontal: 21
+        marginTop: hp(1),
+        paddingHorizontal: Platform.OS === 'ios' ? hp(3) : hp(3), 
+        paddingTop: Platform.OS === 'ios' ? hp(1) : hp(5)
     }, 
     textHeader:{
-        fontSize: 32,
+        fontSize: hp(4),
         fontWeight: 'bold', 
-        color: '#203949',
-        paddingHorizontal: 15,
-        
+        color: '#203949',        
     },
     textSubHeader:{
-        fontSize: 18,
+        fontSize: hp(2),
         color: '#203949',
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        marginBottom: 10,
+        paddingVertical: hp(1),
     },
     textLabel:{
         paddingTop: 15,
@@ -179,9 +219,9 @@ const styles = StyleSheet.create({
         marginVertical: 5
     },
     textInput:{
-        height: 50, 
+        height: Platform.OS === 'ios' ? hp(5) : hp(5),
         paddingLeft: hp(3),
-        marginBottom: hp(1.5), 
+        marginBottom: Platform.OS === 'ios' ? hp(1) : hp(1.5), 
         borderColor: '#F0F2F4', 
         borderWidth: 2,
         color:'#363636',
@@ -215,12 +255,21 @@ const styles = StyleSheet.create({
     modalButtonConfirmation:{
         marginTop: hp(2), 
         backgroundColor: '#2C85E7',
-        width: wp(35),
-        height: hp(6.5),
+        width: wp(60),
+        height: hp(5),
         alignItems: 'center', 
         justifyContent: 'center', 
         borderRadius: 5, 
     }, 
+    modalButtonCancel:{
+      marginTop: hp(1), 
+      backgroundColor: '#707070',
+      width: wp(60),
+      height: hp(5),
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      borderRadius: 5, 
+  }, 
     modalView: {
         alignItems: 'center', 
         justifyContent: 'center', 
@@ -240,13 +289,13 @@ const styles = StyleSheet.create({
     buttonUnfilled:{
         borderRadius: 5,
         borderWidth: 2, 
+        borderStyle: 'dashed',
         borderColor: '#F0F2F4',
-        height: hp(7), 
+        height: Platform.OS === 'ios' ? hp(8) : hp(8), 
         alignItems: 'center', 
         justifyContent: 'center', 
         flexDirection: 'row', 
         backgroundColor: '#fff', 
-        marginTop: '5%'
     },
     buttonUnfilledLabel:{
       color: '#4A5B6B', 
@@ -254,6 +303,25 @@ const styles = StyleSheet.create({
 
 });
     
+
+const showSuccessToast = () => {
+  Toast.show({
+    type: 'success',
+    text1: 'Payment Successful!',
+    visibilityTime: 4000, 
+  });
+}
+
+const showFailedToast = () => {
+  Toast.show({
+    type: 'error',        
+    text1: 'Payment Failed!',
+    text2: 'Please check your payment details.',
+    visibilityTime: 4000,
+    position: 'bottom', 
+  });
+}
+
 
 
 

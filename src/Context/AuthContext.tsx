@@ -3,6 +3,7 @@ import { credentials } from "./AuthCredentials";
 import axios from "axios";
 import { BASE_URL } from "../../config";
 import Toast from "react-native-toast-message";
+import { ActivityIndicator, Modal } from "react-native";
 
 type UserCredentials = {
   username: string;
@@ -25,6 +26,7 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<UserCredentials>({
     username: "",
     password: "",
@@ -34,6 +36,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   });
 
   const login = (username: string) => {
+    setLoading(true)
     axios
       .post(BASE_URL+'/login', { username }, {
         headers: {
@@ -41,6 +44,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         }
       })
       .then(function (response) {
+        setLoading(false)
         // Check if the response status is successful (e.g., 200 OK)
         if (response.status === 200 && response.data.tableName !== "Not Found") {
           console.log(response.data)
@@ -59,8 +63,10 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       .catch(function (error) {
         // Handle the error here
         console.log(error);
+        setLoading(false)
 
       });
+      
   };
   
   const showSuccessToast = () => {
@@ -105,6 +111,9 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   return (
     <AuthContext.Provider value={authValue}>
       {children}
+      <Modal visible={loading} transparent={true}>
+        <ActivityIndicator size="large" />
+      </Modal>
     </AuthContext.Provider>
   );
 };

@@ -51,9 +51,10 @@ export default function TransactionHistory(){
                 <Text style={styles.textHeader}>Transaction History</Text>
                 <FlatList
                   data={transaction}
-                  keyExtractor={(item) => item.orderId}
+                  keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <TransactionHistoryList
+                      key = {item.orderId || Math.random().toString()}
                       orderId={item.orderId}
                       clientName={item.clientName}
                       paymentDate={formatDate(item.paymentDate)}

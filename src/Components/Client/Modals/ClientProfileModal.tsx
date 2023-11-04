@@ -36,7 +36,7 @@ export default function ClientProfileModals(){
         <SafeAreaView style={{ alignItems: 'center' }}>
         {isLoggedIn && ( // Display the sign out option only if the user is logged in
           <Pressable onPress={logOut}>
-            <Text style={{ flexDirection: 'row', textAlignVertical: 'center' }}>Sign out</Text>
+            <Text style={{ flexDirection: 'row', textAlignVertical: 'center', marginTop: hp(5) }}>Sign out</Text>
           </Pressable>
         )}
       </SafeAreaView>
