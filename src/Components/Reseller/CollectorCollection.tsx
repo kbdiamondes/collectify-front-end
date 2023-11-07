@@ -22,12 +22,16 @@ const indebtPerson = [
 export default function CollectorCollection(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user] = RestAPI(); 
 
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     useEffect(() => {
+        setIsLoading(true);
         sendRequest({ 
             method: 'GET', 
             url: "http://192.168.1.6:8080/client"
         })
-    },[] )
+        setIsLoading(false)
+    }, []);
 
     return(
 

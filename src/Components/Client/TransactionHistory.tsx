@@ -27,7 +27,10 @@ export default function TransactionHistory(){
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     useEffect(()=>{
+      setIsLoading(true)
         axios.get('/TransactionHistory/client/', {
             params: {
               clientId: clientId
@@ -39,6 +42,10 @@ export default function TransactionHistory(){
           .catch(function (error) {
             console.log(error);
           })
+          .finally(function () {
+            // always executed
+        });
+        setIsLoading(false) 
         },[])
 
     return(
