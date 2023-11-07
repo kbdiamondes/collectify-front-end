@@ -1,13 +1,33 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import { SafeAreaView, Text, View, StyleSheet, Pressable, TextInput, KeyboardAvoidingView} from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView, Text, View, StyleSheet, Pressable, TextInput, KeyboardAvoidingView, ViewStyle} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-
 export default function Register(){
-    const navigation = useNavigation<CheckScreenNavigationprop>(); 
+    const navigation = useNavigation<CheckScreenNavigationprop>();
+
+        const [text, setText] = useState<string>('');
+
+        const handleTextChangeUsername = (inputText: string) => {
+            if (inputText.length <= 50) {
+              setText(inputText);
+            }
+            if (inputText.length >= 5) {
+              setText(inputText);
+            }
+          };
+      
+        const handleTextChangePassword = (inputText: string) => {
+          if (inputText.length <= 16) {
+            setText(inputText);
+          }
+          if (inputText.length >= 8) {
+            setText(inputText);
+          }
+        };
+     
 
     function registerComplete(){
         alert("Registered")
@@ -24,8 +44,8 @@ export default function Register(){
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} secureTextEntry={true} placeholder="Enter password" ></TextInput>
+                    <TextInput maxLength={50} multiline={true} onChangeText={handleTextChangeUsername} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
+                    <TextInput maxLength={16} multiline={true} onChangeText={handleTextChangePassword} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} secureTextEntry={true} placeholder="Enter password" ></TextInput>
                     <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Full Name" ></TextInput>
                     <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Email Address" ></TextInput>
                     
