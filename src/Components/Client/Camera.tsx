@@ -9,8 +9,7 @@ import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 export default function CameraShot(){
   const nameProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.nameprop;
   const priceProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.priceprop;
-  const contractIdProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.contractId;
-  const clientIdProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.clientId;
+  const paymentTransactionIdProp = useRoute<RouteProp<RootStackParamList, 'CameraShot'>>().params.paymentTransactionId;
 
     const [startCamera,setStartCamera] = React.useState(false)
     const [previewVisible, setPreviewVisible] = useState(false)
@@ -66,8 +65,7 @@ export default function CameraShot(){
                 imageprop: base64Image,
                 nameprop: nameProp,
                 priceprop: priceProp,
-                contractId: contractIdProp,
-                clientId: clientIdProp,
+                paymentTransactionId: paymentTransactionIdProp,                
               });
             }
           };

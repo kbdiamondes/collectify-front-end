@@ -73,8 +73,10 @@ export default function Login(){
                         <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" clearButtonMode='while-editing'></TextInput>
                         <TextInput onChangeText={(passWordAuth)=>setPassword(passWordAuth)}placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
                     {loading?(
-                        <View style={styles.buttonLoading}>                        
-                                    <ActivityIndicator size="large" color="#0000ff" />                     
+                        <View style={{justifyContent: 'center', alignItems: 'center', marginVertical: hp(25)}}>
+                    <View style={styles.buttonLoading}>                        
+                                <ActivityIndicator size="large" color="#0000ff" />                     
+                    </View>
                         </View>
                     ):(
                         <View style={styles.button}>                        

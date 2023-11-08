@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/collectify-icon.png",
     "userInterfaceStyle": "light",
-    
     "splash": {
       "image": "./assets/splash-screen.jpeg",
       "resizeMode": "cover",
@@ -16,25 +15,28 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true, 
+      "supportsTablet": true,
       "splash": {
         "image": "./assets/splash-screen.jpeg",
         "resizeMode": "cover",
         "backgroundColor": "#ffffff"
-      },
-
-    
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/collectify-icon.png",
-        "backgroundColor": "#ffffff",
-        "androidUsesCleartextTraffic": true
-      }
+        "backgroundColor": "#ffffff"
+      },
+      "androidUsesCleartextTraffic": true,
+      "package": "com.kbdiamondes.capstonev1.test"
     },
     "web": {
       "favicon": "./assets/collectify-icon.png"
-    }   
-    
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e79ee197-e553-4435-9ab0-68ff3f0f6cb2"
+      }
+    }
   }
 }

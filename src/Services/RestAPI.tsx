@@ -89,9 +89,28 @@ export interface CollectionHistory{
   };
 }
 
+export interface PaymentTransaction{
+  payment_transactionid: string;
+  orderid: string;
+  paymenttransactionid: string,
+  amountdue:  number,
+  startingDate: string,
+  endDate: string,
+  installmentNumber: number,
+  itemName: string, 
+  transactionProof:{
+    id: string;
+    name: string;
+    type: string;
+    data: string;
+  };
+  isPaid: boolean,
+  isCollected: boolean
+}
 
 
-export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any, Transaction | any, CollectionHistory | any] => {
+
+export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any, Transaction | any, CollectionHistory | any, PaymentTransaction | any] => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [client_user, setClientUser] = useState<IClient[]>([]); 
@@ -102,6 +121,8 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
     const [data, setData] = useState<IData[]>();
     const [transaction, setTransaction] = useState<Transaction[]>([]);
     const [collectionHistory, setCollectionHistory] = useState<CollectionHistory[]>([]);
+
+    const [paymentTransaction, setPaymentTransaction] = useState<PaymentTransaction[]>([]);
     const navigation = useNavigation<CheckScreenNavigationprop>();
     function sendRequest(config: AxiosRequestConfig<any>) {
         setLoading(true);
@@ -117,7 +138,7 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
                 setScheduledReminders(response.data);
                 setTransaction(response.data);
                 setCollectionHistory(response.data);
-                
+                setPaymentTransaction(response.data);
                 if (Array.isArray(response.data)) {
                   
                   //console.log("Collection Log:", response.data.collectionHistory);
@@ -174,6 +195,6 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
 
 
 
-    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders, transaction, collectionHistory];
+    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders, transaction, collectionHistory, paymentTransaction];
 
 }

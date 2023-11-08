@@ -18,7 +18,7 @@ import { CheckScreenNavigationprop } from '../../../App';
 import DashboardHeader from '../DashboardHeader';
 
 export default function DuePayments(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, paymentTransaction] = RestAPI(); 
 
     const [unpaidContracts, setUnpaidContracts] = useState();
     const navigation = useNavigation<CheckScreenNavigationprop>();
@@ -29,11 +29,11 @@ export default function DuePayments(){
         if(auth?.user.entityId){
             sendRequest({ 
                 method: 'GET', 
-                url: BASE_URL + "/due-payments/client/"+ auth?.user.entityId+"/unpaid-contracts"
+                url: BASE_URL + "/due-payments/client/"+ auth?.user.entityId+"/unpaid-transactions"
             })
 
-            setUnpaidContracts(client_user.contracts)
-            console.log(client_user)
+            setUnpaidContracts(paymentTransaction)
+            console.log(paymentTransaction)
         }else{
             alert("error")
         }
@@ -57,23 +57,24 @@ export default function DuePayments(){
 
                     <Text style={styles.textHeader}>Upcoming Dues</Text>
                     <FlatList
-                    data={client_user.contracts}
-                    keyExtractor={(contract) => contract.contract_id.toString()}
-                    renderItem={({ item: contract }) => (
-                        <ScrollView>
-                            <DuePaymentList
-                            key={contract.contract_id}
-                            itemName={contract.itemName}
-                            requiredCollectible={contract.dueAmount}
-                            fullPrice={contract.fullPrice}
-                            contractId={contract.contract_id}
-                            clientId={client_user.client_id}
-                            orderId={contract.orderid}
-                            dueAmount={contract.dueAmount}
+                            data={paymentTransaction}
+                            keyExtractor={(item) => item.payment_transactionid.toString()}
+                            renderItem={({ item }) => (
+                                <ScrollView>
+                                    <DuePaymentList
+                                        payment_transactionid={item.payment_transactionid}
+                                        orderid={item.orderid}
+                                        itemName={item.itemName}
+                                        amountdue={item.amountdue}
+                                        startingDate={item.startingDate}
+                                        endDate={item.endDate}
+                                        installmentNumber={item.installmentNumber}
+                                        isPaid={item.isPaid}
+                                        isCollected={item.isCollected}
+                                    />
+                                </ScrollView>
+                            )}
                             />
-                        </ScrollView>
-                    )}
-                    />
 
                   </View>
                 ):(

@@ -58,9 +58,9 @@ export type RootStackParamList = {
   ClientDashboardTabNavigator: {screen: any};
   ClientDashboard: undefined; 
   DuePayments: undefined; 
-  PaymentForm: {nameprop: any, priceprop: any, contractId:any,photo?:any,clientId:any, orderId: any, dueAmount: any};
-  CameraShot: {nameprop: any, priceprop: any, contractId:any, clientId:any}
-  ImageScreenPreview: {imageprop: any, nameprop: any, priceprop: any, contractId:any, clientId:any};
+  PaymentForm: {nameprop: any, paymentTransactionId:any,photo?:any, orderId: any, dueAmount: any};
+  CameraShot: {nameprop: any, priceprop: any, paymentTransactionId:any}
+  ImageScreenPreview: {imageprop: any, nameprop: any, priceprop: any, paymentTransactionId:any};
   TabNavigator: undefined; 
   ClientTabNavigator: undefined; 
   ScheduledPayments: undefined; 

@@ -11,8 +11,8 @@ import {Ionicons} from '@expo/vector-icons'
 export default function ImagePreview(){
   const nameProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.nameprop;
   const priceProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.priceprop;
-  const contractIdProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.contractId;
-  const clientIdProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.clientId;
+  const paymentTransactionIdProp = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.paymentTransactionId;
+  
   const imagePrev = useRoute<RouteProp<RootStackParamList, 'ImageScreenPreview'>>().params.imageprop;
   const orderIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.orderId;
   const dueAmountProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.dueAmount;
@@ -21,9 +21,8 @@ export default function ImagePreview(){
     const navigation = useNavigation <CheckScreenNavigationprop>();
     const nav=()=> { 
       
-        navigation.navigate("PaymentForm",{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp,photo:imagePrev,clientId:clientIdProp, orderId: orderIdProp, dueAmount: dueAmountProp})
+        navigation.navigate("PaymentForm",{nameprop:nameProp, paymentTransactionId:paymentTransactionIdProp,photo:imagePrev, orderId: orderIdProp, dueAmount: dueAmountProp})
        console.log(imagePrev)
-       console.log(contractIdProp)
        console.log(priceProp)
        console.log(dueAmountProp)
        console.log(orderIdProp)

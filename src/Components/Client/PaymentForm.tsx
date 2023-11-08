@@ -1,5 +1,5 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Pressable, Modal, Platform} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CameraCapture from './Camera';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
@@ -9,19 +9,20 @@ import {Ionicons} from '@expo/vector-icons'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { BASE_URL } from '../../../config';
 import Toast from "react-native-toast-message";
+import { AuthContext } from '../../Context/AuthContext';
 
 
 export default function PaymentForm(){
     const nameProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.nameprop;
-    const priceProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.priceprop;
-    const contractIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
+
+    const contractIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.paymentTransactionId;
     const photoProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.photo;
-    const clientidProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.clientId;
+    
     const orderIdProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.orderId;
     const dueAmountProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.dueAmount;
 
     const [itemName, setitemName] = useState('')
-    const [itemPrice, setitemPrice] = useState(priceProp)
+    const [itemPrice, setitemPrice] = useState(dueAmountProp)
     const [requiredCollectible, setrequiredCollectible] = useState(dueAmountProp) 
     const [referenceNumber, setreferenceNumber] = useState(orderIdProp)
     const [paymentType, setpaymentType] = useState('')
@@ -34,7 +35,7 @@ export default function PaymentForm(){
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
     
     useEffect((
-     )=>{console.log("Client ID:" + clientidProp + "\nOrder ID: " + orderIdProp + "\nFull Price: "+ priceProp + "\nMode of Payment: " + selectedValue)  },[])
+     )=>{console.log("\nOrder ID: " + orderIdProp + "\nFull Price: "+ dueAmountProp + "\nMode of Payment: " + selectedValue)  },[])
 
 
 
@@ -44,20 +45,23 @@ export default function PaymentForm(){
 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
 
+    const auth = useContext(AuthContext);
+    const clientidProp = auth?.user?.entityId ?? 0;
+
     const handleSubmit = async () => {
         const formData = new FormData();
         formData.append('amount', requiredCollectible);
         formData.append('base64Image', photoProp);
         formData.append('fileName', '3.png');
         formData.append('contentType', 'image/png');
-        console.log(BASE_URL+`/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
-        axios.post(BASE_URL+`/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`, formData, {
+        //console.log(BASE_URL+`/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
+        axios.post(BASE_URL+`/paydues/transaction/${contractIdProp}/pay`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
         })
         .then(function (response) {
-          console.log(priceProp);
+          
           console.log(photoProp);
           console.log(contractIdProp);
           console.log(requiredCollectible); 
@@ -78,7 +82,7 @@ export default function PaymentForm(){
          
         });
         
-        console.log("Full Amount: " + priceProp);
+        console.log("Full Amount: " + dueAmountProp);
         console.log("Due Amount: " + dueAmountProp);
         console.log(photoProp);
       }
@@ -174,7 +178,7 @@ export default function PaymentForm(){
 
 
                     <View style={styles.buttonUnfilled}>
-                        <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot',{nameprop:nameProp, priceprop:priceProp, contractId:contractIdProp, clientId:clientidProp})}>
+                        <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot',{nameprop:nameProp, paymentTransactionId: contractIdProp, priceprop: dueAmountProp})}>
                         <Text style={styles.buttonUnfilledLabel}>
                             <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
                         </Text>
