@@ -11,9 +11,37 @@ export default function Login(){
 
     const [userName, setUserName] = useState<string>('');
     const [passWord, setPassword] = useState<string>('');
+    const [userNameError, setUserNameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
     const auth = useContext(AuthContext);
 
+    function validateUsername(username:string) {
+        if (username.trim() === "") {
+          setUserNameError("Username is required");
+          return false;
+        } else if (username.length < 3 || username.length > 15) {
+          setUserNameError("Username must be between 3 and 15 characters");
+          return false;
+        }
+        setUserNameError("");
+        return true;
+      }
     
+      function validatePassword(password:string) {
+        if (password.trim() === "") {
+          setPasswordError("Password is required");
+          return false;
+        } else if (password.length < 6 || password.length > 25) {
+          setPasswordError("Password must be between 6 and 25 characters");
+          return false;
+        }
+        setPasswordError("");
+        return true;
+      }
+
+
+
+
 
     const handleLogin = () => {
         
@@ -49,8 +77,10 @@ export default function Login(){
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                        <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
-                        <TextInput onChangeText={(passWordAuth)=>setPassword(passWordAuth)}placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
+                        <TextInput value={userName} onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" > 
+                        {userNameError ? <Text style={styles.errorText}>{userNameError}</Text> : null}</TextInput>
+                        <TextInput  value={passWord} onChangeText={(passWordAuth)=>setPassword(passWordAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}> 
+                        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}</TextInput>
                     <View  style={styles.button}>
                         <Pressable onPressIn={handleLogin}>
                                 <Text style={styles.buttonLabel}>Login</Text>
@@ -151,6 +181,12 @@ const styles = StyleSheet.create({
     buttonUnfilledLabel:{
         color: '#4A5B6B', 
     }, 
+
+    errorText: {
+        color: "red",
+        fontSize: 12,
+        marginBottom: 8,
+      },
 
 });
 
