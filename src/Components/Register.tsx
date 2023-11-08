@@ -9,29 +9,51 @@ export default function Register(){
     const navigation = useNavigation<CheckScreenNavigationprop>();
 
         const [text, setText] = useState<string>('');
+        const [userName, setUserName] = useState("");
+        const [passWord, setPassword] = useState("");
+        const [email, setEmail] = useState("");
+        const [userNameError, setUserNameError] = useState("");
+        const [passwordError, setPasswordError] = useState("");
+        const [emailError, setEmailError] = useState("");
 
-        const handleTextChangeUsername = (inputText: string) => {
-            if (inputText.length <= 50) {
-              setText(inputText);
+        function validateUsername(username:string) {
+            if (username.trim() === "") {
+              setUserNameError("Username is required");
+              return false;
+            } else if (username.length < 3 || username.length > 15) {
+              setUserNameError("Username must be between 3 and 15 characters");
+              return false;
             }
-            if (inputText.length >= 5) {
-              setText(inputText);
+            setUserNameError("");
+            return true;
+          }
+        
+          function validatePassword(password:string) {
+            if (password.trim() === "") {
+              setPasswordError("Password is required");
+              return false;
+            } else if (password.length < 6 || password.length > 25) {
+              setPasswordError("Password must be between 6 and 25 characters");
+              return false;
             }
-          };
-      
-        const handleTextChangePassword = (inputText: string) => {
-          if (inputText.length <= 16) {
-            setText(inputText);
+            setPasswordError("");
+            return true;
           }
-          if (inputText.length >= 8) {
-            setText(inputText);
+        
+          function validateEmail(email:string) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.trim())) {
+              setEmailError("Invalid email address");
+              return false;
+            }
+            setEmailError("");
+            return true;
           }
-        };
      
 
-    function registerComplete(){
-        alert("Registered")
-        navigation.push('TellUsMoreAboutYourself')
+        function registerComplete(){
+            alert("Registered")
+            navigation.push('TellUsMoreAboutYourself')
     }
 
     return(
@@ -44,10 +66,13 @@ export default function Register(){
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                    <TextInput maxLength={50} multiline={true} onChangeText={handleTextChangeUsername} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
-                    <TextInput maxLength={16} multiline={true} onChangeText={handleTextChangePassword} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} secureTextEntry={true} placeholder="Enter password" ></TextInput>
+                    <TextInput value={userName} onChangeText={validateUsername} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" > 
+                    {userNameError ? <Text style={styles.errorText}>{userNameError}</Text> : null}</TextInput>
+                    <TextInput value={passWord} onChangeText={validatePassword} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} secureTextEntry={true} placeholder="Enter password" > 
+                    {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}</TextInput>
                     <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Full Name" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Email Address" ></TextInput>
+                    <TextInput value={email} onChangeText={validateEmail} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Email Address" > 
+                    {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}</TextInput>
                     
                     <View style={styles.button}>
                         <Pressable onPressIn={registerComplete}>
@@ -155,5 +180,11 @@ const styles = StyleSheet.create({
         color: '#4A5B6B', 
         fontSize: hp(1.2)
     }, 
+
+    errorText: {
+        color: "red",
+        fontSize: 12,
+        marginBottom: 8,
+      },
 
 });
