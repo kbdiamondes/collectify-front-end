@@ -10,7 +10,7 @@ import axios from "axios";
 import { BASE_URL } from "../../../config";
 import { AuthContext } from "../../Context/AuthContext";
 import {Picker, PickerIOS} from '@react-native-picker/picker';
-import { Contract } from "../../Services/RestAPI";
+import { Contract, PaymentTransaction } from "../../Services/RestAPI";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Toast from "react-native-toast-message";
 
@@ -29,20 +29,20 @@ export default function ScheduleNewPaymentReminder(){
     const auth = useContext(AuthContext);
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
 
-    const [unpaidContracts, setUnpaidContracts] = useState<Contract[]>([]);
-    const [selectedContract, setSelectedContract] = useState<string>('');
+    const [unpaidPaymentTransaction, setUnpaidPaymentTransaction] = useState<PaymentTransaction[]>([]);
+    const [selectedPaymentTransaction, setSelectedPaymentTransaction] = useState<string>('');
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     
 
     useEffect(() => {
       const clientId = auth?.user.entityId; // Replace this with the actual client ID
-      axios.get(BASE_URL+`/due-payments/client/${clientId}/unpaid-contracts`)
+      axios.get(BASE_URL+`/due-payments/client/${clientId}/unpaid-transactions`)
         .then((response) => {
-          setUnpaidContracts(response.data.contracts);
+          setUnpaidPaymentTransaction(response.data);
         })
         .catch((error) => {
-          alert('Failed to fetch unpaid contracts');
+          alert('Failed to fetch unpaid transactions');
           console.error(error);
         });
     }, []);
@@ -57,7 +57,7 @@ export default function ScheduleNewPaymentReminder(){
         const clientId = auth?.user.entityId; // Replace with your actual client ID
         const formData = new FormData();
         formData.append('clientId', clientId.toString());
-        formData.append('contractId', selectedContract.toString());
+        formData.append('paymentTransactionId', selectedPaymentTransaction.toString());
         formData.append('reminderTitle', reminderTitle.toString());
         formData.append('reminderDateTime', reminderDate.toString());
         
@@ -177,7 +177,7 @@ export default function ScheduleNewPaymentReminder(){
                     {Platform.OS === 'ios' ? (
                         <View style={styles.textInput}>
                             <Pressable onPress={()=>(setIsModalVisible2(true))}>
-                                <Text style={{textAlignVertical: 'center', alignItems: 'center', paddingTop: hp(1.2)}}>{selectedContract}</Text>
+                                <Text style={{textAlignVertical: 'center', alignItems: 'center', paddingTop: hp(1.2)}}>{selectedPaymentTransaction}</Text>
                             </Pressable>
                             <Modal                 
                                 animationType="slide"
@@ -191,16 +191,16 @@ export default function ScheduleNewPaymentReminder(){
                                     <Text style={{textAlign: 'center', fontSize: hp(2),color: '#203949', fontWeight: 'bold', marginBottom: hp(2)}}> Select your mode of payment</Text>
                                 </View>
                                     <PickerIOS
-                                        selectedValue={selectedContract}
+                                        selectedValue={selectedPaymentTransaction}
                                         onValueChange={(itemValue, itemIndex) =>
-                                        {setSelectedContract(itemValue.toString())
+                                        {setSelectedPaymentTransaction(itemValue.toString())
                                         setIsModalVisible2(false)                            
                                         }}>
-                                        {unpaidContracts.map((contract) => (
+                                        {unpaidPaymentTransaction.map((paymenttransaction) => (
                                         <Picker.Item
-                                            key={contract.contract_id}
-                                            label={contract.itemName.toString()}
-                                            value={contract.contract_id.toString()}
+                                            key={paymenttransaction.payment_transactionid}
+                                            label={paymenttransaction.itemName.toString()}
+                                            value={paymenttransaction.payment_transactionid.toString()}
                                         />
                                         
                                         ))}
@@ -213,15 +213,15 @@ export default function ScheduleNewPaymentReminder(){
                     :(
                         <Picker
                             dropdownIconColor={'#2C85E7'}
-                            selectedValue={selectedContract}
+                            selectedValue={selectedPaymentTransaction}
                             onValueChange={(itemValue, itemIndex) =>
-                            setSelectedContract(itemValue)
+                            setSelectedPaymentTransaction(itemValue)
                             }>
-                            {unpaidContracts.map((contract) => (
+                            {unpaidPaymentTransaction.map((paymenttransaction) => (
                             <Picker.Item
-                                key={contract.contract_id}
-                                label={contract.itemName.toString()}
-                                value={contract.contract_id.toString()}
+                                key={paymenttransaction.payment_transactionid}
+                                label={paymenttransaction.itemName.toString()}
+                                value={paymenttransaction.payment_transactionid.toString()}
                             />
                             
                             ))}
