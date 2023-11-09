@@ -22,6 +22,7 @@ export interface Contract{
     fullPrice: number, 
     isPaid: Boolean,
     isMonthly: Boolean,
+    paymenttransactions: PaymentTransaction[]
 }
 
 export interface ICollector{
@@ -41,6 +42,7 @@ export interface IReseller{
     fullName: String, 
     address: String, 
     email: String, 
+    contracts: Contract[]
 }
 
 export interface IData{

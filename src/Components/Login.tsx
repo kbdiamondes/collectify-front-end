@@ -70,7 +70,7 @@ export default function Login(){
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                        <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" clearButtonMode='while-editing'></TextInput>
+                        <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" clearButtonMode="always"></TextInput>
                         <TextInput onChangeText={(passWordAuth)=>setPassword(passWordAuth)}placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
                     {loading?(
                         <View style={{justifyContent: 'center', alignItems: 'center', marginVertical: hp(25)}}>

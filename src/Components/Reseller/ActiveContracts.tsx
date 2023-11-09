@@ -15,18 +15,18 @@ import {Ionicons} from '@expo/vector-icons';
 
 
 export default function ActiveContractListScreen(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, paymentTransaction] = RestAPI(); 
     const auth = useContext(AuthContext); 
 
 
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: BASE_URL+"/contracts/unpaid/" + auth?.user.entityId
+            url: BASE_URL+"/payment-transactions/reseller/uncollected-unassigned/" + auth?.user.entityId
         })
         console.log(auth?.user.entityId)
 
-    },[] )
+    },[auth] )
 
     const navigation = useNavigation<CheckScreenNavigationprop>();
     
@@ -44,19 +44,19 @@ export default function ActiveContractListScreen(){
                         <Pressable style={styles.header} onPress={() => navigation.navigate('ResellerDashboardTabNavigator')}>
                             <DashboardHeader username={auth?.user?.username ?? ''}/>
                         </Pressable>
-                    <Text style={styles.textHeader} >Active Contracts</Text>
+                    <Text style={styles.textHeader} >Active Payment Transactions</Text>
                     
                     <FlatList
-                        data={contract} // Use contracts instead of client_user
-                        keyExtractor={(contract) => contract.contract_id.toString()} // Adjust keyExtractor
-                        renderItem={({ item: contract }) => (
+                        data={paymentTransaction} // Use paymenttransactions instead of transaction
+                        keyExtractor={(item) => item.payment_transactionid.toString()} // Adjust keyExtractor
+                        renderItem={({ item }) => (
                             <ActiveContractsList 
-                            key={contract.contract_id.toString()} 
-                            contractId={contract.contract_id} 
-                            clientName={contract.username} 
-                            itemName={contract.itemName} 
-                            requiredCollectible={contract.dueAmount} 
-                            paymentType={contract.isMonthly? "Installment" : "Full"}
+                            key={item.payment_transactionid.toString()} 
+                            contractId={item.payment_transactionid} 
+                            clientName={item.clientName} // Use username from contracts
+                            itemName={item.itemName} // Use itemName from contracts
+                            requiredCollectible={item.amountdue} // Use amountdue from transaction
+                            paymentType={(item.installmentNumber === null || item.installmentNumber === 0) ? "Full" : "Installment"}
                             />                    
                         )}
                     />

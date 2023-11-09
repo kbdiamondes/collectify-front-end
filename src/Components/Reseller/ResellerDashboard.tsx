@@ -115,7 +115,7 @@ export default function ResellerDashboard(){
                         <View style={styles2.miniButton}>
                             <Ionicons name="newspaper" color="#444DD8" size={hp(4)} />
                         </View>
-                        <Text style={styles2.textLabelStyle}>Contracts</Text>
+                        <Text style={styles2.textLabelStyle}>Orders</Text>
                         </Pressable>
                     </View>
 
