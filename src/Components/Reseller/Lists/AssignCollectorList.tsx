@@ -9,6 +9,26 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { AuthContext } from '../../../Context/AuthContext';
 import axios from 'axios';
 import { BASE_URL } from '../../../../config';
+import Toast from 'react-native-toast-message';
+const showSuccessToast = () => {
+  Toast.show({
+    type: 'success',        
+    text1: 'Collector assigned Successfully',
+    visibilityTime: 4000,
+    position: 'bottom', 
+  });
+}
+
+
+const showFailedToast = () => {
+  Toast.show({
+    type: 'error',        
+    text1: 'Unable to assign collector',
+    text2: 'Please check your connection and try again.',
+    visibilityTime: 4000,
+    position: 'bottom', 
+  });
+}
 
 
 type AssignCollectorProps = {
@@ -71,23 +91,9 @@ export default function AssignCollectorList(props: AssignCollectorProps){
           console.log("Contract ID: " + contract_id);
 
           if(!error){
-            Alert.alert('Collector Assignment', 'Successful!', [
-                {
-                  text: 'Close',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ]);
+            showSuccessToast();
           }else{
-            Alert.alert('Collector Assignment', 'Failed!', [
-                {
-                  text: 'Close',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ]);
+            showFailedToast();
           }
 
     }

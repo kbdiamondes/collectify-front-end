@@ -78,7 +78,7 @@ export default function CollectorDashboard(){
                             }}>
                         <View style={{alignItems:'flex-start'}}>
 
-                                <Text style={{ color:'#141414', fontSize:hp(1.5)}}>Your total active contracts</Text>
+                                <Text style={{ color:'#141414', fontSize:hp(1.5)}}>Your total active payment transactions</Text>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 {shown ? (
                                     totalActiveContracts && totalActiveContracts > 0 ? (

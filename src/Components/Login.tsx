@@ -7,6 +7,27 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { AuthContext } from "../Context/AuthContext";
 import Toast from "react-native-toast-message";
 
+
+const showSuccessToast = () => {
+    Toast.show({
+      type: 'success',        
+      text1: 'Login Success',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
+  
+  
+  const showFailedToast = () => {
+    Toast.show({
+      type: 'error',        
+      text1: 'Login Error',
+      text2: 'Please check your username and password',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
+
 export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     const [userName, setUserName] = useState<string>('');
@@ -40,10 +61,11 @@ export default function Login(){
             await auth?.login(userName, passWord);
 
           } catch (error) {
+            showFailedToast();
             console.error('Login error:', error);
           } finally {
             setLoading(false);
-            setLoginAttempted(true)
+            setLoginAttempted(true)        
           }
     }
         

@@ -9,9 +9,9 @@ import Toast from "react-native-toast-message";
 type CollectionAssignmentProps = {
     key:number, 
     clientName:String; 
-    requiredCollectible: number; 
-    collectionStatus: boolean;
-    contractId: number; 
+    amountdue: number; 
+    paymentStatus: boolean;
+    paymentTransactionId: number; 
 }
 
   const showFailedToast = () => {
@@ -28,15 +28,15 @@ export default function CollectionAssignmentLists(props: CollectionAssignmentPro
     const navigation = useNavigation<CheckScreenNavigationprop>();
 
     const gotoCollectPayments =()=>{
-        if(!props.collectionStatus){
+        if(!props.paymentStatus){
             showFailedToast();
-        }else if(props.collectionStatus){
-            navigation.navigate('CollectorCollectPaymentForm', { contractId: props.contractId});
+        }else if(props.paymentStatus){
+            navigation.navigate('CollectorCollectPaymentForm', { paymentTransactionId: props.paymentTransactionId});
         }
         
     }
 
-    const statusText = props.collectionStatus ? 'Ready to Collect' : 'Unpaid';
+    const statusText = props.paymentStatus ? 'Ready to Collect' : 'Unpaid';
 
     return(
         <SafeAreaView style={styles.item}>
@@ -45,10 +45,10 @@ export default function CollectionAssignmentLists(props: CollectionAssignmentPro
                     
                         <View style={styles.itemText}>
                             <Text style={{color:'#363636',fontSize: 14}}>{props.clientName}</Text>
-                            <Text style={{ color: props.collectionStatus ? '#00B761' : '#FF0000', fontSize: 12 }}>{statusText}</Text>                               
+                            <Text style={{ color: props.paymentStatus ? '#00B761' : '#FF0000', fontSize: 12 }}>{statusText}</Text>                               
                         </View>
                     <View style={styles.priceContainer}>
-                                <Text style={styles.priceLabel}>Php {props.requiredCollectible}</Text>
+                                <Text style={styles.priceLabel}>Php {props.amountdue}</Text>
                     </View>
                 </View>
             </Pressable>

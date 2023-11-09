@@ -10,9 +10,10 @@ import { BASE_URL } from '../../../config';
 import CollectionAssignmentLists from './Lists/CollectionAssignmentLists';
 import { RestAPI } from '../../Services/RestAPI';
 import DashboardHeader from '../DashboardHeader';
+import {Ionicons} from '@expo/vector-icons'
 
 export default function Collection(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, paymentTransaction] = RestAPI(); 
     const auth = useContext(AuthContext); 
     
     const navigation = useNavigation <CheckScreenNavigationprop>();
@@ -21,7 +22,7 @@ export default function Collection(){
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: BASE_URL+"/collection/" + auth?.user.entityId + "/assigned-uncollected-contracts"
+            url: BASE_URL+"/collection/" + auth?.user.entityId + "/assigned-uncollected-transactions"
         })
         console.log(auth?.user.entityId)
 
@@ -35,7 +36,7 @@ export default function Collection(){
                         <ActivityIndicator style={{margin: hp(25)}}size="large" />
                     </View>
                 )
-                :(
+                :paymentTransaction && paymentTransaction.length > 0 ?(
                     <View style={styles.container}>
                     <View style={styles.header}>
                         <Pressable onPress={()=>navigation.navigate('CollectorDashboard')}>
@@ -45,20 +46,28 @@ export default function Collection(){
                     <Text style={styles.textHeader} >Recent Tasks</Text>
                     
                     <FlatList
-                        data={contract} // Use contracts instead of client_user
-                        keyExtractor={(contract) => contract.contract_id.toString()} // Adjust keyExtractor
-                        renderItem={({ item: contract }) => (
+                        data={paymentTransaction} // Use contracts instead of client_user
+                        keyExtractor={(item) => item.payment_transactionid.toString()} // Adjust keyExtractor
+                        renderItem={({ item }) => (
                             <CollectionAssignmentLists
-                            key={contract.contract_id.toString()} 
-                            contractId={contract.contract_id} 
-                            clientName={contract.username} 
-                            requiredCollectible={contract.dueAmount} 
-                            collectionStatus={contract.paid}
+                            key={item.payment_transactionid.toString()} 
+                            paymentTransactionId={item.payment_transactionid} 
+                            clientName={item.clientName} 
+                            amountdue={item.amountdue} 
+                            paymentStatus={item.paid}
                             />                    
                         )}
                     />
                 </View>
-                )}
+                ):(
+                    <View style={styles.container}>
+                    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No assigned collections yet.</Text>
+                    </View>
+                 </View>
+                )
+                }
         </View>        
 
     );

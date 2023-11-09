@@ -83,7 +83,7 @@ export type RootStackParamList = {
   FollowUp: undefined;
   Assurance: undefined; 
   TellUsMoreAboutYourself: undefined; 
-  CollectorCollectPaymentForm: {contractId: any};
+  CollectorCollectPaymentForm: {paymentTransactionId: any};
   CollectAllPaymentForm: undefined;
 
   //Reseller

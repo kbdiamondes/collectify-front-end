@@ -10,9 +10,29 @@ import { AuthContext } from '../../Context/AuthContext';
 import { BASE_URL } from '../../../config';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
+import Toast from 'react-native-toast-message';
+const showSuccessToast = () => {
+  Toast.show({
+    type: 'success',        
+    text1: 'Collection success',
+    visibilityTime: 4000,
+    position: 'bottom', 
+  });
+}
+
+
+const showFailedToast = () => {
+  Toast.show({
+    type: 'error',        
+    text1: 'Unable to collect',
+    text2: 'Please check your connection and try again.',
+    visibilityTime: 4000,
+    position: 'bottom', 
+  });
+}
 
 export default function CollectPaymentForm() {
-    const contractIdprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
+    const contractIdprop= useRoute<RouteProp<RootStackParamList, 'CollectorCollectPaymentForm'>>().params.paymentTransactionId;
 
     const [requiredCollectible, setrequiredCollectible] = useState()
     const [contractId, setContractId] = useState(contractIdprop)
@@ -30,6 +50,7 @@ export default function CollectPaymentForm() {
 
     const auth = useContext(AuthContext); 
 
+    const navigation = useNavigation<CheckScreenNavigationprop>();
      //checks passed data from console
      const continueButton = () => {
         console.log(contractId)
@@ -42,8 +63,15 @@ export default function CollectPaymentForm() {
     const confirmContract = () => {
         handleSubmit();
       
-        alert("Success");
-        handleModal();
+        if(!error){
+          showSuccessToast();
+          handleModal();        
+        }else{
+          showFailedToast();
+          handleModal();
+          navigation.goBack();
+        }
+      
 
       };
       
@@ -68,7 +96,7 @@ export default function CollectPaymentForm() {
         formData.append('fileName', uniqueFilename);
         formData.append('contentType', 'image/png');
         formData.append('paymentType', paymentType);
-        axios.post(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
+        axios.post(BASE_URL+`/collector/collectPayment/${auth?.user.entityId}/transactions/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
@@ -169,7 +197,7 @@ export default function CollectPaymentForm() {
     if(startCamera) {
     return(
           <SafeAreaView style={{flex:1, justifyContent:"center", alignItems:"center"}}>
-            <Modal animationType="slide" transparent={false} visible={showImagePreview}>
+            <Modal animationType="fade" transparent={false} visible={showImagePreview}>
                 <SafeAreaView style={image_preview.container}>
                 <Image
                     source={{ uri: `data:image/png;base64,${CapturedImage}`}}
@@ -254,7 +282,13 @@ export default function CollectPaymentForm() {
                         <Text style={{fontSize: hp(1.2), fontWeight: '300', flexWrap: 'wrap', padding: hp(1.2)}}>Are you sure about this purchase?</Text>
                         <View style={styles.modalButtonConfirmation}>
                             <Pressable onPressIn={confirmContract}>
-                                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
+                                <Text style={{fontSize: hp(1.7), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
+                            </Pressable>
+                        </View> 
+
+                        <View style={styles.modalButtonCancel}>
+                            <Pressable onPressIn={handleModal}>
+                                <Text style={{fontSize: hp(1.7), fontWeight: 'bold', color: '#fff'}}>Cancel</Text>
                             </Pressable>
                         </View>         
                     </View>
@@ -408,14 +442,23 @@ const styles = StyleSheet.create({
         width: '50%'
     },
     modalButtonConfirmation:{
-        marginTop: hp(2), 
-        backgroundColor: '#2C85E7',
-        width: wp(35),
-        height: hp(6.5),
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        borderRadius: 5, 
-    }, 
+      marginTop: hp(2), 
+      backgroundColor: '#2C85E7',
+      width: wp(60),
+      height: hp(5),
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      borderRadius: 5, 
+  }, 
+  modalButtonCancel:{
+    marginTop: hp(1), 
+    backgroundColor: '#707070',
+    width: wp(60),
+    height: hp(5),
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    borderRadius: 5, 
+}, 
     modalView: {
         alignItems: 'center', 
         justifyContent: 'center', 
