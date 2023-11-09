@@ -11,7 +11,7 @@ import { BASE_URL } from '../../../config';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
 export default function CollectPayments() {
-    const contractIdprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
+    const contractIdprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.paymentTransactionId;
     const dueAmountprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.dueAmount;
     
     const [requiredCollectible, setrequiredCollectible] = useState(dueAmountprop)
@@ -33,10 +33,11 @@ export default function CollectPayments() {
 
      //checks passed data from console
      const continueButton = () => {
-        console.log(contractId)
-        console.log(requiredCollectible);
-        console.log(paymentType);
+
         console.log(CapturedImage);
+        console.log("Contract ID:" + contractId)
+        console.log("Amount Due"+requiredCollectible);
+        console.log("PaymentType" + paymentType);
         handleModal() //shows the modal
     }
 
@@ -64,13 +65,11 @@ export default function CollectPayments() {
         const fileExtension = 'png'; // Change this to the actual file extension
         const uniqueFilename = generateUniqueFilename(fileExtension);
 
-
-        formData.append('amount', requiredCollectible);
         formData.append('base64Image', CapturedImage);
         formData.append('fileName', uniqueFilename);
         formData.append('contentType', 'image/png');
         formData.append('paymentType', paymentType);
-        axios.post(BASE_URL+`/collectPayments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
+        axios.post(BASE_URL+`/collectPayments/${auth?.user.entityId}/paymentTransactions/${contractId}/collect?paymentType=`+ paymentType, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
@@ -256,6 +255,12 @@ export default function CollectPayments() {
                                 <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
                             </Pressable>
                         </View>         
+                        <View style={styles.modalButtonConfirmation}>
+                            <Pressable onPressIn={()=>(navigation.goBack())}>
+                                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#fff'}}>Go Back</Text>
+                            </Pressable>
+                        </View>   
+
                     </View>
                 </View>
             </Modal>

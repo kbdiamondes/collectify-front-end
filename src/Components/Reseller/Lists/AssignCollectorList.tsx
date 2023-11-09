@@ -42,7 +42,7 @@ export default function AssignCollectorList(props: AssignCollectorProps){
         
             
         // Construct the URL with the collectorId as a query parameter
-        const url = BASE_URL + `/assigncollectors/${reseller_id}/contracts/${contract_id}/assign-collector?collectorId=${props.collector_id}`;
+        const url = BASE_URL + `/assigncollectors/${reseller_id}/paymenttransactions/${contract_id}/assign-collector?collectorId=${props.collector_id}`;
         
         const config = {
           headers: {

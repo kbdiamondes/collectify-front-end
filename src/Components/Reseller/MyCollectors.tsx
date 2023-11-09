@@ -15,7 +15,7 @@ import { CheckScreenNavigationprop } from '../../../App';
 import {Ionicons} from '@expo/vector-icons';
 
 export default function MyCollectors(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, paymentTransaction] = RestAPI(); 
     const auth = useContext(AuthContext); 
 
     const navigation = useNavigation<CheckScreenNavigationprop>();
@@ -23,7 +23,7 @@ export default function MyCollectors(){
     useEffect(() => {
         sendRequest({
           method: 'GET',
-          url: BASE_URL + "/my-collectors/assigned/" + auth?.user.entityId,
+          url: BASE_URL + "/my-collectors/" + auth?.user.entityId + "/assigned",
         });
       }, [auth]);
     
@@ -35,27 +35,24 @@ export default function MyCollectors(){
             </View>
           ) : error?(
             <Text>{error}</Text>
-          ) : collector_user? (
+          ) : paymentTransaction && paymentTransaction.length >0? (
             <View style={styles.container}>
               <Pressable style={styles.header} onPress={() => navigation.navigate('ResellerDashboardTabNavigator')}>
                   <DashboardHeader username={auth?.user?.username ?? ''}/>
               </Pressable>
               <Text style={styles.textHeader}>Assigned Collectors</Text>
-              {collector_user && Object.keys(collector_user).map((collectorUsername) => (
-                <FlatList
-                  key={collectorUsername}
-                  data={collector_user[collectorUsername]}
-                  keyExtractor={(item) => item.contract_id.toString()}
-                  renderItem={({ item }) => (
-                    <MyCollectorList
-                      key={item.contract_id}
-                      personName= {collectorUsername}
-                      itemCollectible={item.dueAmount}
-                      collectionStatus="Collection"
-                    />
-                  )}
-                />
-              ))}
+             <FlatList
+                data={paymentTransaction}
+                keyExtractor={(item) => item.payment_transactionid.toString()}
+                renderItem={({ item }) => (
+                  <MyCollectorList
+                    key={item.payment_transactionid}
+                    collectorName={item.collectorName}
+                    itemCollectible={item.amountdue}
+                    collectionStatus={item.collected ? "Collected" : "Not Collected"}
+                  />
+                )}
+              />            
             </View>
           ):(
             <View style={styles.container}>

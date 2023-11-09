@@ -3,6 +3,7 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { CheckScreenNavigationprop } from '../../../../App';
+import Toast from "react-native-toast-message";
 
 
 type ActiveContractProps = {
@@ -11,16 +12,33 @@ type ActiveContractProps = {
     itemName: String; 
     requiredCollectible: number; 
     paymentType: String; 
-    contractId: number
+    paymentTransactionId: number;
+    paid: boolean;
 
 }
+
+const showFailedToast = () => {
+    Toast.show({
+      type: 'error',        
+      text1: 'Unable to collect payments',
+      text2: 'Client has not yet paid the required collectible.',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
+
+
 export default function ActiveContractsList(props: ActiveContractProps){
 
 
     const navigation = useNavigation <CheckScreenNavigationprop>();
 
     const gotoCollectPayments =()=>{
-        navigation.navigate('CollectPayments', { contractId: props.contractId, dueAmount: props.requiredCollectible});
+        if(props.paid===false){
+        navigation.navigate('CollectPayments', { paymentTransactionId: props.paymentTransactionId, dueAmount: props.requiredCollectible});
+        }else{
+            showFailedToast();
+        }
     }
     
     return(

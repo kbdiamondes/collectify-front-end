@@ -34,7 +34,7 @@ export default function ClientDashboard(){
     useEffect(() => {
         const fetchTotalDueAmount = async () => {
           try {
-            const response = await axios.get(BASE_URL+ `/clients/${auth?.user.entityId}/total-due-amount`);
+            const response = await axios.get(BASE_URL+ `/payment-transactions/client/${auth?.user.entityId}/total-unpaid-amount`);
             setTotalDueAmount(response.data);
           } catch (error) {
             // Handle error, e.g., set error state

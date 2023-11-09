@@ -14,14 +14,14 @@ import { CheckScreenNavigationprop } from '../../../App';
 import {Ionicons} from '@expo/vector-icons';
 
 export default function CollectorCollection(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, transaction] = RestAPI(); 
     const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext)
 
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: BASE_URL+"/contracts/unpaid/" + auth?.user.entityId
+            url: BASE_URL+"/payment-transactions/reseller/uncollected-unassigned/" + auth?.user.entityId
         })
     },[auth] )
 
@@ -33,21 +33,21 @@ export default function CollectorCollection(){
             </View>
           ) : error? (
             <Text>{error}</Text> 
-            ) : contract? (
+            ) : transaction && transaction.length>0? (
             <View style={styles.container}>
             <Pressable style={styles.header} onPress={() => navigation.navigate('ResellerDashboardTabNavigator')}>
                 <DashboardHeader username={auth?.user?.username ?? ''}/>
             </Pressable>
             <Text style={styles.textHeader}>Clients with Debt</Text>
             <FlatList
-              data={contract} // Use contracts instead of client_user
-              keyExtractor={(contract) => contract.contract_id.toString()} // Adjust keyExtractor
-              renderItem={({ item: contract }) => (
+              data={transaction} // Use contracts instead of client_user
+              keyExtractor={(transaction) => transaction.payment_transactionid.toString()} // Adjust keyExtractor
+              renderItem={({ item }) => (
                 <CollectorCollectionList
-                  key={contract.contract_id.toString()}
-                  contract_id={contract.contract_id}
-                  fullname={contract.username} // Use contract.username
-                  requiredCollectible={contract.dueAmount}
+                  key={item.payment_transactionid.toString()}
+                  contract_id={item.payment_transactionid}
+                  fullname={item.clientName} // Use contract.username
+                  requiredCollectible={item.amountdue}
                 />
               )}
             />
@@ -56,7 +56,7 @@ export default function CollectorCollection(){
             <View style={styles.container}>
             <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
                 <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
-                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active contracts yet.</Text>
+                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active transactions yet.</Text>
             </View>
             </View>
         

@@ -49,7 +49,7 @@ export default function DuePayments(){
                     </View>
                 ): error? (
                     <Text>{error}</Text>
-                ): client_user?( 
+                ): paymentTransaction?( 
                     <View style={styles.container}>
                         <Pressable style={styles.header} onPress={() => navigation.navigate('ClientTabNavigator')}>
                             <DashboardHeader username={auth?.user?.username ?? ''}/>

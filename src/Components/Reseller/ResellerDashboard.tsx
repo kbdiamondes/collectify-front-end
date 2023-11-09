@@ -34,7 +34,7 @@ export default function ResellerDashboard(){
     useEffect(() => {
         const fetchTotalActiveContract = async () => {
           try {
-            const response = await axios.get(BASE_URL+ `/resellers/${auth?.user.entityId}/active-unpaid-contracts/count`);
+            const response = await axios.get(BASE_URL+ `/payment-transactions/reseller/${auth?.user.entityId}/total-unpaid-amount`);
             setTotalActiveContracts(response.data);
           } catch (error) {
             // Handle error, e.g., set error state
@@ -78,12 +78,12 @@ export default function ResellerDashboard(){
                             }}>
                         <View style={{alignItems:'flex-start'}}>
 
-                                <Text style={{ color:'#141414', fontSize:hp(1.5)}}>Your total active contracts</Text>
+                                <Text style={{ color:'#141414', fontSize:hp(1.5)}}>Your total incoming revenue</Text>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 {shown ? (
                                     totalActiveContracts && totalActiveContracts > 0 ? (
                                         <Text style={{marginTop: hp(.5), color: '#141414', fontSize: hp(5), fontWeight: 'bold'}}>
-                                        {formatNumberWithCommas(totalActiveContracts)}
+                                        P{formatNumberWithCommas(totalActiveContracts)}
                                         </Text>
                                     ) : (
                                         <Text style={{marginTop: hp(.5), color: '#141414', fontSize: hp(5), fontWeight: 'bold'}}>
@@ -152,7 +152,7 @@ export default function ResellerDashboard(){
                     <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                         
                         <View style={{marginTop: hp(2), marginBottom: hp(2),  alignItems:'flex-start'}}>
-                            <Text style={{fontSize: hp(2)}}> Recent Contracts</Text>
+                            <Text style={{fontSize: hp(2)}}> Recent Payment Transaction</Text>
                         </View>                
 
                     </View>
@@ -184,7 +184,7 @@ function RecentContracts(){
         if (auth?.user.entityId) {
             sendRequest({
                 method: 'GET',
-                url: BASE_URL + "/contracts/reseller/" + auth?.user.entityId
+                url: BASE_URL + "/payment-transactions/reseller/" + auth?.user.entityId
             });
         } else {
             alert("Error: Missing user entityId");
@@ -200,20 +200,20 @@ function RecentContracts(){
                 </View>
             ) : error ? (
                 <Text>{error}</Text>
-            ) : contract? (
+            ) : transaction? (
                 <View style={{height: hp(40)}}>
                 <FlatList
-                  data={contract}
-                  keyExtractor={(contract) => contract.contract_id.toString()}
-                  renderItem={({ item: contract }) => (
+                  data={transaction}
+                  keyExtractor={(transaction) => transaction.payment_transactionid.toString()}
+                  renderItem={({ item}) => (
                         <RecentContractList
-                        key={contract.contract_id.toString()}
-                        orderId={contract.orderId}
-                        clientName={contract.clientName}
-                        paymentType={contract.isMonthly ? "Installment" : "Full"}
-                        requiredCollectible={contract.dueAmount}
-                        productName={contract.itemName}
-                        paymentStatus={contract.paid ? "Paid" : "Unpaid"}
+                        key={item.payment_transactionid.toString()}
+                        orderId={item.orderid}
+                        clientName={item.clientName}
+                        paymentType={(item.installmentNumber === null || item.installmentNumber === 0) ? "Full" : "Installment"}
+                        requiredCollectible={item.amountdue}
+                        productName={item.itemName}
+                        paymentStatus={item.paid? "Paid" : "Unpaid"}
                         />
                   )}
                 />

@@ -39,7 +39,7 @@ export default function ActiveContractListScreen(){
                     </View>
                 ): error?(
                     <Text>{error}</Text>
-                ):contract? (
+                ):paymentTransaction? (
                     <View style={styles.container}>
                         <Pressable style={styles.header} onPress={() => navigation.navigate('ResellerDashboardTabNavigator')}>
                             <DashboardHeader username={auth?.user?.username ?? ''}/>
@@ -52,11 +52,12 @@ export default function ActiveContractListScreen(){
                         renderItem={({ item }) => (
                             <ActiveContractsList 
                             key={item.payment_transactionid.toString()} 
-                            contractId={item.payment_transactionid} 
+                            paymentTransactionId={item.payment_transactionid} 
                             clientName={item.clientName} // Use username from contracts
                             itemName={item.itemName} // Use itemName from contracts
                             requiredCollectible={item.amountdue} // Use amountdue from transaction
                             paymentType={(item.installmentNumber === null || item.installmentNumber === 0) ? "Full" : "Installment"}
+                            paid={item.isPaid} // Use isPaid from transaction
                             />                    
                         )}
                     />

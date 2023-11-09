@@ -3,8 +3,7 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 type MyCollectorListProps = {
-    key:number, 
-    personName:String; 
+    collectorName:String; 
     itemCollectible: number; 
     collectionStatus: String; 
 }
@@ -15,8 +14,8 @@ export default function MyCollectorList(props: MyCollectorListProps){
             <View style={styles.itemLeft}>
                 <View style={styles.square}/>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636', fontSize: hp(1.8)}}>{props.personName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.4)}}>Collectibles: Php{props.itemCollectible}</Text>                                  
+                        <Text style={{color:'#363636', fontSize: hp(1.8)}}>{props.collectorName}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.4)}}>Php {props.itemCollectible}</Text>                                  
                     </View>
                 <View style={styles.textRightContainer}>
                     <View style={styles.textRightContainer}>

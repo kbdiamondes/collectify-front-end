@@ -32,7 +32,7 @@ export interface ICollector{
     fullName: String, 
     address: String, 
     email: String, 
-    contracts: Contract[]
+    paymentTransaction: PaymentTransaction[]
 }
 
 export interface IReseller{
@@ -108,6 +108,7 @@ export interface PaymentTransaction{
   };
   isPaid: boolean,
   isCollected: boolean
+  collectorName: string, 
 }
 
 
