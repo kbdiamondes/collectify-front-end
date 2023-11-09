@@ -242,22 +242,22 @@ export default function CollectPayments() {
 
     return(
         <SafeAreaView>
-            <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+            <Modal animationType="fade" transparent={true} visible={isModalVisible}>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex:1, backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
 
                     <View style={styles.modalView}>
 
                         <Ionicons name="warning-sharp" color="grey" size={hp(12)}></Ionicons>
                         <Text style={{fontSize: hp(2.5)}}>Confirm Purchase?</Text>
-                        <Text style={{fontSize: hp(1.2), fontWeight: '300', flexWrap: 'wrap', padding: hp(1.2)}}>Are you sure about this purchase?</Text>
+                        <Text style={{fontSize: hp(1.5), fontWeight: '300', flexWrap: 'wrap', marginTop: hp(1)}}>Are you sure about this purchase?</Text>
                         <View style={styles.modalButtonConfirmation}>
                             <Pressable onPressIn={confirmContract}>
-                                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
+                                <Text style={{fontSize: hp(1.7), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
                             </Pressable>
                         </View>         
-                        <View style={styles.modalButtonConfirmation}>
-                            <Pressable onPressIn={()=>(navigation.goBack())}>
-                                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#fff'}}>Go Back</Text>
+                        <View style={styles.modalButtonCancel}>
+                            <Pressable onPressIn={handleModal}>
+                                <Text style={{fontSize: hp(1.7), fontWeight: 'bold', color: '#fff'}}>Cancel</Text>
                             </Pressable>
                         </View>   
 
@@ -412,14 +412,23 @@ const styles = StyleSheet.create({
         width: '50%'
     },
     modalButtonConfirmation:{
-        marginTop: hp(2), 
-        backgroundColor: '#2C85E7',
-        width: wp(35),
-        height: hp(6.5),
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        borderRadius: 5, 
-    }, 
+      marginTop: hp(2), 
+      backgroundColor: '#2C85E7',
+      width: wp(60),
+      height: hp(5),
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      borderRadius: 5, 
+  }, 
+    modalButtonCancel:{
+      marginTop: hp(1), 
+      backgroundColor: '#707070',
+      width: wp(60),
+      height: hp(5),
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      borderRadius: 5, 
+  }, 
     modalView: {
         alignItems: 'center', 
         justifyContent: 'center', 

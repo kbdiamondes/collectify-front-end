@@ -30,11 +30,11 @@ const showFailedToast = () => {
 
 export default function ActiveContractsList(props: ActiveContractProps){
 
-
+    const borderColors = props.paid ? 'green' : 'red';
     const navigation = useNavigation <CheckScreenNavigationprop>();
 
     const gotoCollectPayments =()=>{
-        if(props.paid===false){
+        if(props.paid===true){            
         navigation.navigate('CollectPayments', { paymentTransactionId: props.paymentTransactionId, dueAmount: props.requiredCollectible});
         }else{
             showFailedToast();
@@ -42,7 +42,7 @@ export default function ActiveContractsList(props: ActiveContractProps){
     }
     
     return(
-        <SafeAreaView style={styles.item}>
+        <SafeAreaView style={[styles.item, {borderColor: borderColors}]}>
             <Pressable onPress={gotoCollectPayments}>
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
@@ -61,9 +61,6 @@ export default function ActiveContractsList(props: ActiveContractProps){
         </SafeAreaView>
     );
 }
-
-
-
 
 const styles = StyleSheet.create({
     item:{

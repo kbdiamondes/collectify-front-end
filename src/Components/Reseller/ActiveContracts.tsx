@@ -39,7 +39,7 @@ export default function ActiveContractListScreen(){
                     </View>
                 ): error?(
                     <Text>{error}</Text>
-                ):paymentTransaction? (
+                ):paymentTransaction && paymentTransaction.length > 0? (
                     <View style={styles.container}>
                         <Pressable style={styles.header} onPress={() => navigation.navigate('ResellerDashboardTabNavigator')}>
                             <DashboardHeader username={auth?.user?.username ?? ''}/>
@@ -57,7 +57,7 @@ export default function ActiveContractListScreen(){
                             itemName={item.itemName} // Use itemName from contracts
                             requiredCollectible={item.amountdue} // Use amountdue from transaction
                             paymentType={(item.installmentNumber === null || item.installmentNumber === 0) ? "Full" : "Installment"}
-                            paid={item.isPaid} // Use isPaid from transaction
+                            paid={item.paid} // Use isPaid from transaction
                             />                    
                         )}
                     />
