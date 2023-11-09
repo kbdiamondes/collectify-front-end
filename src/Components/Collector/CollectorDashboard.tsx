@@ -12,7 +12,7 @@ import DashboardHeader from "../DashboardHeader";
 import { BASE_URL } from "../../../config";
 import { RestAPI } from "../../Services/RestAPI";
 import RecentCollectionList from "./Lists/RecentCollectionList";
-
+import axios from "axios";
 
 export default function CollectorDashboard(){
     const [shown, setShown] = useState(false);
@@ -30,11 +30,11 @@ export default function CollectorDashboard(){
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
 
-/*
+
     useEffect(() => {
         const fetchTotalActiveContract = async () => {
           try {
-            const response = await axios.get(BASE_URL+ `/resellers/${auth?.user.entityId}/active-unpaid-contracts/count`);
+            const response = await axios.get(BASE_URL+ `/collectors/${auth?.user.entityId}/total-assigned-transactions`);
             setTotalActiveContracts(response.data);
           } catch (error) {
             // Handle error, e.g., set error state
@@ -44,7 +44,7 @@ export default function CollectorDashboard(){
     
         fetchTotalActiveContract(); 
       }, [auth?.user?.entityId]);
-    */
+    
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.secondaryContainer}>
@@ -209,7 +209,7 @@ function RecentCollections(){
                         <ScrollView>
                             <RecentCollectionList
                                 key={item.id.toString()}
-                                resellerName={item.reseller_username}
+                                resellerName={item.resellerName}
                                 itemName={item.itemName}
                                 collectedAmount={item.collectedAmount}
                                 collectionDate={formatDate(item.collectionDate)}                    

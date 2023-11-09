@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     }, 
     priceContainer: {
         flex: .7, 
+        margin: hp(2), 
         justifyContent: 'center', 
         alignItems: 'flex-end',
     }, 

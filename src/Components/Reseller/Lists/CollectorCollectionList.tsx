@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     }, 
     buttonMainContainer:{
-        flex:.8, 
+        flex:.5, 
         width: wp(19), 
         height: hp(5.5),
         margin: hp(1.5), 

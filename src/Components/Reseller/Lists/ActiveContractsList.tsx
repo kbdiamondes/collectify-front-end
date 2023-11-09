@@ -46,11 +46,11 @@ export default function ActiveContractsList(props: ActiveContractProps){
             <Pressable onPress={gotoCollectPayments}>
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636', fontSize: hp(2) }}>{props.clientName}</Text>
+                        <Text style={{color:'#363636', fontSize: hp(1.8) }}>{props.clientName}</Text>
                         <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.itemName}</Text>                                  
                     </View>
                 <View style={styles.textRightContainer}>
-                    <View style={styles.textRight}>
+                    <View style={styles.textRightContainer}>
                         <Text style={{color: '#363636', fontWeight: 'bold'}}>Php {props.requiredCollectible}</Text>
                         <Text style={styles.textRightText}>{props.paymentType}</Text>
                     </View>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         flex:1, 
         backgroundColor: '#FFFFFF',
         borderRadius: 10, 
-        marginBottom: 20,
+        marginBottom: hp(2),
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000',
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     },
     itemLeft:{
         flex:1, 
-        marginRight: hp(1),
+        marginRight: hp(1.5),
         marginLeft: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     square:{
         flex: .5, 
         width: 100,
-        height: 50,
+        height: 60,
         margin: hp(1.5), 
         backgroundColor: '#92A0A8', 
         borderRadius: 5,

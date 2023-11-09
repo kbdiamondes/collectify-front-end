@@ -7,10 +7,9 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 type PaymentRecordListProps = {
     key:number, 
     clientName: String; 
-    itemName: String; 
     requiredCollectible: number; 
     paymentType: String; 
-    paymentStatus: String;
+    collectionStatus: String;
     contractId: number 
 }
 
@@ -20,7 +19,7 @@ export default function PaymentRecordList(props: PaymentRecordListProps){
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
                         <Text style={{color:'#363636',fontSize: hp(2)}}>{props.clientName}</Text>
-                        <Text style={{fontSize: hp(1.2),  color: props.paymentStatus === 'Paid' ? 'green' : 'red' }}>{props.paymentStatus}</Text>                                  
+                        <Text style={{fontSize: hp(1.2),  color: props.collectionStatus === 'Collected' ? 'green' : 'red' }}>{props.collectionStatus}</Text>                                  
                     </View>
                     <View style={styles.textRightContainer}>
                     <View style={styles.textRight}>

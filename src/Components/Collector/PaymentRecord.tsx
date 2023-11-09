@@ -16,14 +16,14 @@ import { RestAPI } from '../../Services/RestAPI';
 
 
 export default function PaymentRecord(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, paymentTransaction] = RestAPI(); 
     const auth = useContext(AuthContext); 
 
 
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: BASE_URL+"/collector-payment-records/collector/" + auth?.user.entityId
+            url: BASE_URL+"/collector-payment-records/" + auth?.user.entityId + "/collected-transactions"
         })
         console.log(auth?.user.entityId)
 
@@ -38,25 +38,24 @@ export default function PaymentRecord(){
                 </View>
             ): error?(
                 <Text>{error}</Text>
-            ): contract?(
+            ): paymentTransaction && paymentTransaction.length > 0? (
                 <View style={styles.container}>
-                <Pressable style={styles.header} onPress={() => navigation.navigate('ResellerDashboardTabNavigator')}>
+                <Pressable style={styles.header} onPress={() => navigation.navigate('CollectorDashboardTabNavigator')}>
                     <DashboardHeader username={auth?.user?.username ?? ''}/>
                 </Pressable>
             <Text style={styles.textHeader} >Contract Records</Text>
             
             <FlatList
-                data={contract} // Use contracts instead of client_user
-                keyExtractor={(contract) => contract.contract_id.toString()} // Adjust keyExtractor
-                renderItem={({ item: contract }) => (
+                data={paymentTransaction} // Use contracts instead of client_user
+                keyExtractor={(item) => item.payment_transactionid.toString()} // Adjust keyExtractor
+                renderItem={({ item}) => (
                     <PaymentRecordList 
-                    key={contract.contract_id.toString()} 
-                    contractId={contract.contract_id} 
-                    clientName={contract.username} 
-                    itemName={contract.itemName} 
-                    requiredCollectible={contract.dueAmount} 
-                    paymentType={contract.isMonthly? "Installment" : "Full"}
-                    paymentStatus={contract.paid? "Paid" : "Unpaid"}
+                    key={item.payment_transactionid.toString()} 
+                    contractId={item.payment_transactionid} 
+                    clientName={item.clientName} 
+                    requiredCollectible={item.amountdue} 
+                    paymentType={item.installmentnumber > 0? "Installment" : "Full"}
+                    collectionStatus={item.paid? "Collected" : "Not collected"}
                     />                    
                 )}
             />
@@ -65,7 +64,7 @@ export default function PaymentRecord(){
                 <View style={styles.container}>
                 <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
                     <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
-                    <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active contracts yet.</Text>
+                    <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No collections yet.</Text>
                 </View>
              </View>
             )}
