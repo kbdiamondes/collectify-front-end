@@ -5,7 +5,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 type PaymentRecordProps = {
     orderId: string;
     amountPaid: number;
-    paymentDate: string;
+    paymentStatus: string;
     productName: string;
     clientName: string;
     collectorName: string;
@@ -23,7 +23,7 @@ export default function PaymentRecordLists(props: PaymentRecordProps){
 
                     
                     <View style={styles.dateContainer}>
-                        <Text style={styles.dateLabel}>{props.paymentDate}</Text>        
+                        <Text style={[styles.dateLabel, {color: props.paymentStatus === 'Collected' ? 'green' : 'red'}]}>{props.paymentStatus}</Text>        
                     </View>                       
                     
             </View>            

@@ -20,7 +20,7 @@ function formatDate(dateString:string): string {
 
 
 export default function PaymentRecords(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, transaction] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, paymentTransaction] = RestAPI(); 
     const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext);
 
@@ -28,7 +28,7 @@ export default function PaymentRecords(){
         if (auth?.user.entityId) {
             sendRequest({
                 method: 'GET',
-                url: BASE_URL + "/payment-records/client/" + auth?.user.entityId
+                url: BASE_URL + "/payment-records/clients/"+auth?.user.entityId + "/paid-and-collected-transactions" 
             });
         } else {
             alert("Error: Missing user entityId");
@@ -44,22 +44,22 @@ export default function PaymentRecords(){
                 </View>
             ) : error ? (
                 <Text>{error}</Text>
-            ) : transaction && transaction.length> 0 ? (
+            ) : paymentTransaction && paymentTransaction.length> 0 ? (
                 <View style={styles.container}>
                     <Pressable style={styles.header} onPress={() => navigation.navigate('ClientTabNavigator')}>
                         <DashboardHeader username={auth?.user?.username ?? ''}/>
                     </Pressable>
                 <Text style={styles.textHeader}>Payment Records</Text>
                 <FlatList
-                  data={transaction}
-                  keyExtractor={(item) => item.orderId}
+                  data={paymentTransaction}
+                  keyExtractor={(item) => item.payment_transactionid.toString()}
                   renderItem={({ item }) => (
                     <PaymentRecordLists
                       orderId={item.orderId}
                       clientName={item.clientName}
-                      paymentDate={formatDate(item.paymentDate)}
-                      amountPaid={item.amountPaid}
-                      productName={item.productName}
+                      paymentStatus = {item.collected? "Collected" : "Uncollected"}
+                      amountPaid={item.amountdue}
+                      productName={item.itemName}
                       collectorName={item.collectorName}
                     />
                   )}
