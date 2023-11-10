@@ -7,7 +7,7 @@
     "icon": "./assets/collectify-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash-screen.jpeg",
+      "image": "./assets/splash-white.jpg",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
