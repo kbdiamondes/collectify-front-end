@@ -7,7 +7,7 @@
     "icon": "./assets/collectify-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash-white.jpg",
+      "image": "./assets/splash-white.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
@@ -17,10 +17,11 @@
     "ios": {
       "supportsTablet": true,
       "splash": {
-        "image": "./assets/splash-screen.jpg",
+        "image": "./assets/splash-white.png",
         "resizeMode": "cover",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "bundleIdentifier": "com.kbdiamondes.collectify.test"
     },
     "android": {
       "adaptiveIcon": {
@@ -35,8 +36,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "e79ee197-e553-4435-9ab0-68ff3f0f6cb2"
+        "projectId": "93f04057-877f-4cca-8870-9c3630754818"
       }
-    }
+    },
+    "owner": "kbdiamondes"
   }
 }
