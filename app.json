@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Collectify",
-    "slug": "capstone-v1",
+    "slug": "collectify",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/collectify-icon.png",
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "splash": {
-        "image": "./assets/splash-screen.jpeg",
+        "image": "./assets/splash-screen.jpg",
         "resizeMode": "cover",
         "backgroundColor": "#ffffff"
       }
