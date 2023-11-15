@@ -28,7 +28,7 @@
         "backgroundColor": "#ffffff"
       },
       "androidUsesCleartextTraffic": true,
-      "package": "com.kbdiamondes.capstonev1.test"
+      "package": "com.kbdiamondes.collectify.test"
     },
     "web": {
       "favicon": "./assets/collectify-icon.png"
