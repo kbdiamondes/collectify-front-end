@@ -64,7 +64,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         // Handle the error here
         console.log(error);
         setLoading(false)
-
+        showFailedToast()
       });
       
   };

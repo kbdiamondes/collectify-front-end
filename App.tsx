@@ -46,8 +46,6 @@ import ResellerProfileModals from './src/Components/Reseller/Modals/ResellerProf
 import CollectorProfileModals from './src/Components/Collector/Modals/CollectorProfileModal';
 import { CollectorDashboardTabNavigator } from './src/Components/Collector/CollectorDashboardTabNavigator';
 
-
-
 export type RootStackParamList = {
   Login: undefined;
   GetStarted: undefined;
@@ -178,7 +176,6 @@ export default function App(){
 
       
     </Stack.Navigator>
-
   </NavigationContainer>
 
   <Toast/>

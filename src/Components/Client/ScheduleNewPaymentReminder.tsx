@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../../config";
 import { AuthContext } from "../../Context/AuthContext";
-import {Picker, PickerIOS} from '@react-native-picker/picker';
+//import {Picker, PickerIOS} from '@react-native-picker/picker';
 import { Contract, PaymentTransaction } from "../../Services/RestAPI";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Toast from "react-native-toast-message";
@@ -190,6 +190,7 @@ export default function ScheduleNewPaymentReminder(){
                                 <View>
                                     <Text style={{textAlign: 'center', fontSize: hp(2),color: '#203949', fontWeight: 'bold', marginBottom: hp(2)}}> Select your mode of payment</Text>
                                 </View>
+                                {/*
                                     <PickerIOS
                                         selectedValue={selectedPaymentTransaction}
                                         onValueChange={(itemValue, itemIndex) =>
@@ -205,12 +206,16 @@ export default function ScheduleNewPaymentReminder(){
                                         
                                         ))}
                                     </PickerIOS>
+                                     */}
                                     </View>
+                                   
                                     </Modal>
+                                        
                         </View>
 
                     )
                     :(
+                        <View>{/*
                         <Picker
                             dropdownIconColor={'#2C85E7'}
                             selectedValue={selectedPaymentTransaction}
@@ -226,6 +231,8 @@ export default function ScheduleNewPaymentReminder(){
                             
                             ))}
                         </Picker>
+                            */}
+                        </View>
                     )}
 
 

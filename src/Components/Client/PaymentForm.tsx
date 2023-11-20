@@ -4,7 +4,7 @@ import CameraCapture from './Camera';
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import axios from 'axios';
 import { CheckScreenNavigationprop, RootStackParamList } from '../../../App';
-import { Picker, PickerIOS } from '@react-native-picker/picker';
+//import { Picker, PickerIOS } from '@react-native-picker/picker';
 import {Ionicons} from '@expo/vector-icons'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { BASE_URL } from '../../../config';
@@ -131,7 +131,7 @@ export default function PaymentForm(){
                     <TextInput defaultValue = {referenceNumber ? referenceNumber : null} editable={false} style={styles.textInput}></TextInput>
                     
                     <Text style={styles.textLabel}>Type of Payment</Text>
-
+{/*
                     {Platform.OS === 'ios' ? (
                       <View style={styles.textInput}>
                       <Pressable onPress={()=> (setIsModalVisible2(true))}>
@@ -174,7 +174,7 @@ export default function PaymentForm(){
                         <Picker.Item label='Over the Counter' value={'Over the Counter'}/> 
                       </Picker>
                     )}  
-
+                    */}
 
 
                     <View style={styles.buttonUnfilled}>
