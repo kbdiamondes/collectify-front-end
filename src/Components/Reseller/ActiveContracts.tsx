@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, Pressable, FlatList, ActivityIndicator} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, Pressable, FlatList, ActivityIndicator, RefreshControl} from 'react-native';
 import ActiveContractsList from './Lists/ActiveContractsList';
 
 import React, { useContext, useEffect, useState } from 'react';
@@ -18,6 +18,14 @@ export default function ActiveContractListScreen(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, paymentTransaction] = RestAPI(); 
     const auth = useContext(AuthContext); 
 
+    const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
     useEffect(() => {
         sendRequest({ 
@@ -71,7 +79,7 @@ export default function ActiveContractListScreen(){
                  </View>
                 )}
             </View>    
-   
+
 
     );
 }
