@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator, Pressable} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator, Pressable, RefreshControl} from 'react-native';
 
 
 import React, { useContext, useEffect, useState } from 'react';
@@ -20,12 +20,28 @@ export default function MyCollectors(){
 
     const navigation = useNavigation<CheckScreenNavigationprop>();
 
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        sendRequest({ 
+            method: 'GET', 
+            url: BASE_URL+"/my-collectors/" + auth?.user.entityId + "/assigned"
+        });
+        setTimeout(() => setRefreshing(false), 1000);
+    }, [auth]);
+
+    useEffect(() => {
+        onRefresh();
+    },[onRefresh]);
+    
+    /*
     useEffect(() => {
         sendRequest({
           method: 'GET',
           url: BASE_URL + "/my-collectors/" + auth?.user.entityId + "/assigned",
         });
-      }, [auth]);
+      }, [auth]);*/
     
       return (
         <View style={styles.container}>
@@ -52,14 +68,21 @@ export default function MyCollectors(){
                     collectionStatus={item.collected ? "Collected" : "Not Collected"}
                   />
                 )}
+                refreshControl={
+                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
               />            
             </View>
           ):(
             <View style={styles.container}>
-            <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
-                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No assigned collectors.</Text>
-            </View>
+            <ScrollView style={{flex:1, alignContent: 'center', marginVertical: hp(30)}}               
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } >   
+                    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No assigned collectors.</Text>
+                    </View>
+            </ScrollView>
          </View>
           )}
         </View>

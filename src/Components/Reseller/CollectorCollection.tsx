@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator, Pressable} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator, Pressable, RefreshControl} from 'react-native';
 import DuePaymentList from './Lists/CollectorCollectionList';
 
 import React, { Key, useContext, useEffect, useState } from 'react';
@@ -18,12 +18,30 @@ export default function CollectorCollection(){
     const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext)
 
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        sendRequest({ 
+            method: 'GET', 
+            url: BASE_URL+"/payment-transactions/reseller/uncollected-unassigned/" + auth?.user.entityId
+        });
+        setTimeout(() => setRefreshing(false), 1000);
+    }, [auth]);
+
+    useEffect(() => {
+        onRefresh();
+    },[onRefresh]);
+    
+    /*
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
             url: BASE_URL+"/payment-transactions/reseller/uncollected-unassigned/" + auth?.user.entityId
         })
-    },[auth] )
+    },[auth] )*/
+
+    
 
     return (
         <View style={styles.container}>
@@ -50,14 +68,21 @@ export default function CollectorCollection(){
                   requiredCollectible={item.amountdue}
                 />
               )}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             />
           </View>
             ):(
             <View style={styles.container}>
-            <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
-                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active transactions yet.</Text>
-            </View>
+                <ScrollView style={{flex:1, alignContent: 'center', marginVertical: hp(30)}}               
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } > 
+                            <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                                <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active transactions yet.</Text>
+                            </View>
+                </ScrollView>
             </View>
         
           )}

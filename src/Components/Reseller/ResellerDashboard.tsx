@@ -231,14 +231,18 @@ function RecentContracts(){
 
 
             ) : (
+                <ScrollView                  
+                    refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } >
                 <View style={styles3.container}>
                     <View style={{alignItems:'center', justifyContent:'center'}}>
-                      
+ 
                         <Ionicons name="alert" size={hp(10)} color="#9F9F9F" />
                         <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No recent transactions yet.</Text>
-
+                        
                     </View>
                  </View>
+                 </ScrollView>
                  
             )}
         </View>

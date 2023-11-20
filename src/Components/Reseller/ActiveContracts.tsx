@@ -87,13 +87,18 @@ export default function ActiveContractListScreen(){
                         }
                     />
                 </View>
-                ):(
+                ):(       
                 <View style={styles.container}>
-                    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
-                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active contracts yet.</Text>
-                    </View>
-                 </View>
+                    <ScrollView style={{flex:1, alignContent: 'center', marginVertical: hp(30)}}               
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } >                             
+                                <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                                    <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                                    <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active contracts yet.</Text>
+                                </View>  
+                    </ScrollView>
+                </View>
+
                 )}
             </View>    
 
