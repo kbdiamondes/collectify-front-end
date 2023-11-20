@@ -1,4 +1,4 @@
-import { View, StyleSheet,Text, ActivityIndicator, FlatList, ScrollView } from "react-native";
+import { View, StyleSheet,Text, ActivityIndicator, FlatList, ScrollView, RefreshControl } from "react-native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthContext } from "../../Context/AuthContext";
@@ -13,6 +13,7 @@ import { BASE_URL } from "../../../config";
 import { RestAPI } from "../../Services/RestAPI";
 import axios from "axios";
 import RecentContractList from "./Lists/RecentContractList";
+import React from "react";
 
 export default function ResellerDashboard(){
     const [shown, setShown] = useState(false);
@@ -30,6 +31,7 @@ export default function ResellerDashboard(){
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
 
+      
 
     useEffect(() => {
         const fetchTotalActiveContract = async () => {
@@ -180,16 +182,21 @@ function RecentContracts(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, transaction] = RestAPI(); 
     const auth = useContext(AuthContext);
  
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        sendRequest({ 
+            method: 'GET', 
+            url: BASE_URL+"/payment-transactions/reseller/" + auth?.user.entityId
+        });
+        setTimeout(() => setRefreshing(false), 1000);
+    }, [auth]);
+
     useEffect(() => {
-        if (auth?.user.entityId) {
-            sendRequest({
-                method: 'GET',
-                url: BASE_URL + "/payment-transactions/reseller/" + auth?.user.entityId
-            });
-        } else {
-            alert("Error: Missing user entityId");
-        }
-    },[auth?.user.entityId]);
+        onRefresh();
+    },[onRefresh]);
+    
 
     return(
 
@@ -216,6 +223,9 @@ function RecentContracts(){
                         paymentStatus={item.paid? "Paid" : "Unpaid"}
                         />
                   )}
+                  refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
                 />
               </View>
 
@@ -229,6 +239,7 @@ function RecentContracts(){
 
                     </View>
                  </View>
+                 
             )}
         </View>
 
