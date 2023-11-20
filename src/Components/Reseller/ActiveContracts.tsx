@@ -20,6 +20,20 @@ export default function ActiveContractListScreen(){
 
     const [refreshing, setRefreshing] = React.useState(false);
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        sendRequest({ 
+            method: 'GET', 
+            url: BASE_URL+"/payment-transactions/reseller/uncollected-unassigned/" + auth?.user.entityId
+        });
+        setTimeout(() => setRefreshing(false), 1000);
+    }, [auth]);
+
+    useEffect(() => {
+        onRefresh();
+    },[onRefresh]);
+
+    /*
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -35,7 +49,7 @@ export default function ActiveContractListScreen(){
         console.log(auth?.user.entityId)
 
     },[auth] )
-
+*/
     const navigation = useNavigation<CheckScreenNavigationprop>();
     
     return(
@@ -68,6 +82,9 @@ export default function ActiveContractListScreen(){
                             paid={item.paid} // Use isPaid from transaction
                             />                    
                         )}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
                     />
                 </View>
                 ):(
