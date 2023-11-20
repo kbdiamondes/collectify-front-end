@@ -8,6 +8,7 @@ import {SafeAreaView, View, StyleSheet, Platform, Button} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import ActiveContracts from "./ActiveContracts";
 import ActiveContractListScreen from "./ActiveContracts";
+import CreateNewContractScreen from "./CreateNewContract";
 
 
 
@@ -19,29 +20,127 @@ export function ResellerTabNavigator() {
   return (
       <View style={styles.TabNavStyle}>
          
-         <Tab.Navigator screenOptions={{headerShown:true, 
-            headerTitleAlign: 'center', 
-            tabBarInactiveBackgroundColor: '#0A1C34',
-            tabBarInactiveTintColor: '#A7ACB2',
-            tabBarActiveTintColor: '#fff',
-            tabBarStyle: {backgroundColor:'rgb(10,28,52)',
-            borderTopLeftRadius: hp(2),
-            borderTopRightRadius: hp(2), 
-            borderLeftWidth:hp(.5), 
-            borderRightWidth: hp(.5), 
-            position: 'relative', 
-            overflow: 'hidden'}}}>
-           <Tab.Screen name='ActiveContracts' component={ActiveContractListScreen} options={{headerTitle: 'Your Contracts',title: 'Contracts', tabBarIcon: ()=>(<Ionicons name="clipboard" color='#fff' size={20}></Ionicons>)}}/>
-           <Tab.Screen name='ItemsSold' component={ResellerSoldItems} options={{headerTitle: 'Sold Items',title: 'Items Sold', tabBarIcon: ()=>(<Ionicons name="cart" color='#fff' size={20}></Ionicons>)}}/>
-           <Tab.Screen name='CreateNewContract' component={PlaceHolder}
-                      listeners={({navigation}) => 
-                      ({tabPress: (e) => {
-                         e.preventDefault(); 
-                         navigation.push('CreateNewContractModal')}})}  
-                         options={{title:'New Contract', 
-                         tabBarIcon: ()=>(<Ionicons name="add-circle-sharp" color='#fff'  size={35}></Ionicons>)}}/>
-           <Tab.Screen name='MyCollector' component={MyCollectors} options={{headerTitle: 'My Collectors',title: 'My Collectors', tabBarIcon: ()=>(<Ionicons name="people" color='#fff' size={20}></Ionicons>)}}/>
-           <Tab.Screen name='CollectorCollection' component={CollectorCollection} options={{headerTitle: 'Collector Collections',title: 'Send Collectors', tabBarIcon: ()=>(<Ionicons name="send" color='#fff' size={20}></Ionicons>)}}/>          
+         <Tab.Navigator
+         screenOptions={({route}) => ({
+            tabBarHideOnKeyboard: true,
+            tabBarStyle: {
+               display: 'flex',
+               position: 'absolute',
+               bottom: 20,
+               left: 10,
+               right: 10,
+               elevation: 5,
+               backgroundColor: '#0A1C34',
+               borderRadius: 30,
+               height: 80,
+            },
+            tabBarShowLabel: false,
+            headerShown: false,
+         })}>
+            <Tab.Screen
+               name="ActiveContracts"
+               component={ActiveContracts}
+               options={{
+                  tabBarIcon: ({focused}) => (
+                  <View
+                     style={{
+                        top: Platform.OS === 'ios' ? 10 : 0,
+                     }}>
+                           <Ionicons
+                              name='clipboard'
+                              size={Platform.OS === 'ios' ? 30 : 30}                     
+                              color={focused ? '#7CB1EC' : '#fff'}
+                           />
+                  </View>
+                  ),
+               }}
+            />
+            <Tab.Screen
+               name="ItemsSold"
+               component={ResellerSoldItems}
+               options={{
+                  tabBarIcon: ({focused}) => (
+                  <View
+                     style={{
+                        top: Platform.OS === 'ios' ? 10 : 0,
+                     }}>
+                           <Ionicons
+                              name='cart'
+                              size={Platform.OS === 'ios' ? 30 : 30}                     
+                              color={focused ? '#7CB1EC' : '#fff'}
+                           />
+                  </View>
+                  ),
+               }}
+            />
+         <Tab.Screen
+            name="Create"
+            component={CreateNewContractScreen}
+            options={{
+               tabBarIcon: ({focused}) => (
+               <View
+                  style={{
+                     top: Platform.OS === 'ios' ? hp(-1) : hp(-3),
+                     width: Platform.OS === 'ios' ? wp(15) : wp(15),
+                     height: Platform.OS === 'ios' ? hp(7) : hp(7),
+                     borderRadius: Platform.OS === 'ios' ? hp(25): hp(25),
+                     elevation: 0,
+                     shadowColor: '#000',
+                     shadowOpacity: 0.1,
+                     shadowRadius: 20,
+                     backgroundColor: '#2C85E7',
+                     alignContent: 'center', 
+                     justifyContent: 'center',
+                  }}>
+                  <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
+                     <Ionicons
+                        name="add"
+                        size={Platform.OS === 'ios' ? 30 : 30}                     
+                        color={'#fff'}
+                     />
+                  </View>
+               </View>
+               ),
+               tabBarIconStyle: {},
+               tabBarStyle: {display:'none'}
+            }}
+         />
+            <Tab.Screen
+               name="MyCollectors"
+               component={MyCollectors}
+               options={{
+                  tabBarIcon: ({focused}) => (
+                  <View
+                     style={{
+                        top: Platform.OS === 'ios' ? 10 : 0,
+                     }}>
+                           <Ionicons
+                              name='people'
+                              size={Platform.OS === 'ios' ? 30 : 30}                     
+                              color={focused ? '#7CB1EC' : '#fff'}
+                           />
+                  </View>
+                  ),
+               }}
+            />
+            <Tab.Screen
+               name="CollectorCollection"
+               component={CollectorCollection}
+               options={{
+                  tabBarIcon: ({focused}) => (
+                  <View
+                     style={{
+                        top: Platform.OS === 'ios' ? 10 : 0,
+                     }}>
+                           <Ionicons
+                              name='send'
+                              size={Platform.OS === 'ios' ? 30 : 30}                     
+                              color={focused ? '#7CB1EC' : '#fff'}
+                           />
+                  </View>
+                  ),
+               }}
+            />
         </Tab.Navigator>
       </View>
    )

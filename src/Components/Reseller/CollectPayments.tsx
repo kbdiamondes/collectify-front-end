@@ -11,7 +11,7 @@ import { BASE_URL } from '../../../config';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
 export default function CollectPayments() {
-    const contractIdprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.contractId;
+    const contractIdprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.paymentTransactionId;
     const dueAmountprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.dueAmount;
     
     const [requiredCollectible, setrequiredCollectible] = useState(dueAmountprop)
@@ -33,10 +33,11 @@ export default function CollectPayments() {
 
      //checks passed data from console
      const continueButton = () => {
-        console.log(contractId)
-        console.log(requiredCollectible);
-        console.log(paymentType);
+
         console.log(CapturedImage);
+        console.log("Contract ID:" + contractId)
+        console.log("Amount Due"+requiredCollectible);
+        console.log("PaymentType" + paymentType);
         handleModal() //shows the modal
     }
 
@@ -65,13 +66,11 @@ export default function CollectPayments() {
 
         
 
-
-        formData.append('amount', requiredCollectible);
         formData.append('base64Image', CapturedImage);
         formData.append('fileName', fileName);
         formData.append('contentType', 'image/png');
         formData.append('paymentType', paymentType);
-        axios.post(BASE_URL+`/collectPayments/${auth?.user.entityId}/contracts/${contractId}/collect-payment?paymentType=`+ paymentType, formData, {
+        axios.post(BASE_URL+`/collectPayments/${auth?.user.entityId}/paymentTransactions/${contractId}/collect?paymentType=`+ paymentType, formData, {
           headers: {
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
@@ -244,19 +243,25 @@ export default function CollectPayments() {
 
     return(
         <SafeAreaView>
-            <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+            <Modal animationType="fade" transparent={true} visible={isModalVisible}>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex:1, backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
 
                     <View style={styles.modalView}>
 
                         <Ionicons name="warning-sharp" color="grey" size={hp(12)}></Ionicons>
                         <Text style={{fontSize: hp(2.5)}}>Confirm Purchase?</Text>
-                        <Text style={{fontSize: hp(1.2), fontWeight: '300', flexWrap: 'wrap', padding: hp(1.2)}}>Are you sure about this purchase?</Text>
+                        <Text style={{fontSize: hp(1.5), fontWeight: '300', flexWrap: 'wrap', marginTop: hp(1)}}>Are you sure about this purchase?</Text>
                         <View style={styles.modalButtonConfirmation}>
                             <Pressable onPressIn={confirmContract}>
-                                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
+                                <Text style={{fontSize: hp(1.7), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
                             </Pressable>
                         </View>         
+                        <View style={styles.modalButtonCancel}>
+                            <Pressable onPressIn={handleModal}>
+                                <Text style={{fontSize: hp(1.7), fontWeight: 'bold', color: '#fff'}}>Cancel</Text>
+                            </Pressable>
+                        </View>   
+
                     </View>
                 </View>
             </Modal>
@@ -418,14 +423,23 @@ const styles = StyleSheet.create({
         width: '50%'
     },
     modalButtonConfirmation:{
-        marginTop: hp(2), 
-        backgroundColor: '#2C85E7',
-        width: wp(35),
-        height: hp(6.5),
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        borderRadius: 5, 
-    }, 
+      marginTop: hp(2), 
+      backgroundColor: '#2C85E7',
+      width: wp(60),
+      height: hp(5),
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      borderRadius: 5, 
+  }, 
+    modalButtonCancel:{
+      marginTop: hp(1), 
+      backgroundColor: '#707070',
+      width: wp(60),
+      height: hp(5),
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      borderRadius: 5, 
+  }, 
     modalView: {
         alignItems: 'center', 
         justifyContent: 'center', 

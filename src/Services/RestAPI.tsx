@@ -22,6 +22,7 @@ export interface Contract{
     fullPrice: number, 
     isPaid: Boolean,
     isMonthly: Boolean,
+    paymenttransactions: PaymentTransaction[]
 }
 
 export interface ICollector{
@@ -31,7 +32,7 @@ export interface ICollector{
     fullName: String, 
     address: String, 
     email: String, 
-    contracts: Contract[]
+    paymentTransaction: PaymentTransaction[]
 }
 
 export interface IReseller{
@@ -41,6 +42,7 @@ export interface IReseller{
     fullName: String, 
     address: String, 
     email: String, 
+    contracts: Contract[]
 }
 
 export interface IData{
@@ -58,7 +60,60 @@ export interface ScheduledReminder {
   paid: Boolean;
 }
 
-export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any] => {
+export interface Transaction {
+  orderId: string;
+  amountPaid: number;
+  paymentDate: string;
+  transactionProof: {
+    id: string;
+    name: string;
+    type: string;
+    data: string; // This might be a file path, URL, or some form of data representation
+  };
+  productName: string;
+  clientName: string;
+}
+
+export interface CollectionHistory{
+  orderId: string; 
+  collectedAmount: number; 
+  collectionDate: string;
+  paymentType: string; 
+  itemName: string;
+  reseller_name: string;
+  client_username: string;
+  collector_username: string;
+  transactionProof:{
+    id: string;
+    name: string;
+    type: string;
+    data: string;
+  };
+}
+
+export interface PaymentTransaction{
+  payment_transactionid: string;
+  orderid: string;
+  paymenttransactionid: string,
+  amountdue:  number,
+  startingDate: string,
+  endDate: string,
+  installmentNumber: number,
+  itemName: string, 
+  transactionProof:{
+    id: string;
+    name: string;
+    type: string;
+    data: string;
+  };
+  isPaid: boolean,
+  isCollected: boolean
+  collectorName: string, 
+}
+
+
+
+export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:IData) => void, boolean, string, IClient | any, IReseller | any, ICollector | any, Contract | any, ScheduledReminder | any, Transaction | any, CollectionHistory | any, PaymentTransaction | any] => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [client_user, setClientUser] = useState<IClient[]>([]); 
@@ -67,7 +122,10 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
     const [contract, setContract] = useState<Contract[]>([]);
     const [scheduledReminders, setScheduledReminders] = useState<ScheduledReminder[]>([]); 
     const [data, setData] = useState<IData[]>();
+    const [transaction, setTransaction] = useState<Transaction[]>([]);
+    const [collectionHistory, setCollectionHistory] = useState<CollectionHistory[]>([]);
 
+    const [paymentTransaction, setPaymentTransaction] = useState<PaymentTransaction[]>([]);
     const navigation = useNavigation<CheckScreenNavigationprop>();
     function sendRequest(config: AxiosRequestConfig<any>) {
         setLoading(true);
@@ -81,8 +139,12 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
                 setCollectorUser(response.data);
                 setContract(response.data);
                 setScheduledReminders(response.data);
+                setTransaction(response.data);
+                setCollectionHistory(response.data);
+                setPaymentTransaction(response.data);
                 if (Array.isArray(response.data)) {
-                  console.log("Scheduled Reminders Log:", response.data);
+                  
+                  //console.log("Collection Log:", response.data.collectionHistory);
               } else {
                   console.log("Response data is not an array:", response.data);
               }
@@ -136,6 +198,6 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
 
 
 
-    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders];
+    return [sendRequest, assignCollector,loading, error, client_user, reseller_user, collector_user, contract, scheduledReminders, transaction, collectionHistory, paymentTransaction];
 
 }

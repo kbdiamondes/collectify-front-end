@@ -13,7 +13,7 @@ import { AuthContext } from "../../Context/AuthContext";
 import { BASE_URL } from "../../../config";
 
 
-//naa ni siyay parameter dapat (client_id)
+
 export default function AssignCollectorScreen(){
     
     const auth = useContext(AuthContext);

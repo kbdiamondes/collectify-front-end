@@ -3,8 +3,7 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 type MyCollectorListProps = {
-    key:number, 
-    personName:String; 
+    collectorName:String; 
     itemCollectible: number; 
     collectionStatus: String; 
 }
@@ -13,10 +12,9 @@ export default function MyCollectorList(props: MyCollectorListProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
-                <View style={styles.square}/>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636', fontSize: hp(1.8)}}>{props.personName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.4)}}>Collectibles: Php{props.itemCollectible}</Text>                                  
+                        <Text style={{color:'#363636', fontSize: hp(1.8)}}>{props.collectorName}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.4)}}>Php {props.itemCollectible}</Text>                                  
                     </View>
                 <View style={styles.textRightContainer}>
                     <View style={styles.textRightContainer}>
@@ -33,13 +31,13 @@ export default function MyCollectorList(props: MyCollectorListProps){
 const styles = StyleSheet.create({
     item:{
         flex:1, 
-        backgroundColor: '#F5F7F9',
-        padding: 20, 
+        backgroundColor: '#FFFFFF',
         borderRadius: 10, 
         marginBottom: hp(2),
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000', 
+        shadowOpacity: 0.10,
         shadowOffset: {
             width:0,
             height: 2,
@@ -49,12 +47,14 @@ const styles = StyleSheet.create({
     },
     itemLeft:{
         flex: 1,
+        marginLeft: hp(1.5),
+        marginRight: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
     },
     square:{
-        flex: .8, 
+        flex: .5, 
         width: 100,
         height: 60,
         margin: hp(1.5),
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     }, 
     itemText: {
         flex:1, 
-        maxWidth: '80%', 
+        maxWidth: '85%', 
         marginRight: hp(1.5), 
         justifyContent: 'center', 
         alignItems: 'flex-start',
@@ -71,7 +71,8 @@ const styles = StyleSheet.create({
     }, 
     textRightContainer: {
         margin: hp(1.5), 
-        justifyContent: 'center'
+        justifyContent: 'center',
+            alignItems: 'flex-end',
     }, 
     textRight:{
         alignItems: 'flex-start', 

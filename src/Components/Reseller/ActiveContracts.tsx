@@ -10,21 +10,12 @@ import { useNavigation } from '@react-navigation/native';
 import { IClient, RestAPI } from '../../Services/RestAPI';
 import { BASE_URL } from '../../../config';
 import { AuthContext } from '../../Context/AuthContext';
-
-
-/*
-const  activeContractData = [
-    {
-        clientName: 'Marilyn Monroe', 
-        itemName: 'iPhone 14 Pro Max', 
-        requiredCollectible: 5600, 
-        paymentType: "Installment" 
-    }
-]*/
+import DashboardHeader from '../DashboardHeader';
+import {Ionicons} from '@expo/vector-icons';
 
 
 export default function ActiveContractListScreen(){
-    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract] = RestAPI(); 
+    const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, paymentTransaction] = RestAPI(); 
     const auth = useContext(AuthContext); 
 
     const [refreshing, setRefreshing] = React.useState(false);
@@ -39,17 +30,13 @@ export default function ActiveContractListScreen(){
     useEffect(() => {
         sendRequest({ 
             method: 'GET', 
-            url: BASE_URL+"/contracts/unpaid/" + auth?.user.entityId
+            url: BASE_URL+"/payment-transactions/reseller/uncollected-unassigned/" + auth?.user.entityId
         })
         console.log(auth?.user.entityId)
 
-    },[] )
+    },[auth] )
 
     const navigation = useNavigation<CheckScreenNavigationprop>();
-    const toLogout = () => {
-        auth?.logout;
-        navigation.navigate('Login');
-    }
     
     return(
 
@@ -58,32 +45,38 @@ export default function ActiveContractListScreen(){
                     <View style={{justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
                         <ActivityIndicator style={{margin: hp(25)}}size="large" />
                     </View>
-                )
-                :(  
-                    
+                ): error?(
+                    <Text>{error}</Text>
+                ):paymentTransaction && paymentTransaction.length > 0? (
                     <View style={styles.container}>
-                    <Text style={styles.textHeader} >Active Contracts</Text>
+                        <Pressable style={styles.header} onPress={() => navigation.navigate('ResellerDashboardTabNavigator')}>
+                            <DashboardHeader username={auth?.user?.username ?? ''}/>
+                        </Pressable>
+                    <Text style={styles.textHeader} >Active Payment Transactions</Text>
                     
                     <FlatList
-                    refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                      }
-                        data={contract} // Use contracts instead of client_user
-                        keyExtractor={(contract) => contract.contract_id.toString()} // Adjust keyExtractor
-                        renderItem={({ item: contract }) => (
+                        data={paymentTransaction} // Use paymenttransactions instead of transaction
+                        keyExtractor={(item) => item.payment_transactionid.toString()} // Adjust keyExtractor
+                        renderItem={({ item }) => (
                             <ActiveContractsList 
-                            key={contract.contract_id.toString()} 
-                            contractId={contract.contract_id} 
-                            clientName={contract.username} 
-                            itemName={contract.itemName} 
-                            requiredCollectible={contract.dueAmount} 
-                            paymentType={contract.isMonthly? "Installment" : "Full"}
-                            
+                            key={item.payment_transactionid.toString()} 
+                            paymentTransactionId={item.payment_transactionid} 
+                            clientName={item.clientName} // Use username from contracts
+                            itemName={item.itemName} // Use itemName from contracts
+                            requiredCollectible={item.amountdue} // Use amountdue from transaction
+                            paymentType={(item.installmentNumber === null || item.installmentNumber === 0) ? "Full" : "Installment"}
+                            paid={item.paid} // Use isPaid from transaction
                             />                    
                         )}
                     />
                 </View>
-                
+                ):(
+                <View style={styles.container}>
+                    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No active contracts yet.</Text>
+                    </View>
+                 </View>
                 )}
             </View>    
 
@@ -125,7 +118,14 @@ const styles = StyleSheet.create({
     container:{
         flex:1, 
         paddingTop: hp(2), 
-        paddingHorizontal: hp(1.5)
+        paddingHorizontal: hp(1.5),
+        backgroundColor: '#F5F7F9'
+    }, 
+    header:{
+        justifyContent: 'flex-start',
+        flexDirection: 'row', 
+        height:hp(10), 
+        marginTop: hp(3), 
     }, 
     textHeader:{
         fontSize: hp(2),

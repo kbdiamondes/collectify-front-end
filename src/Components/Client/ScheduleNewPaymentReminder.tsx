@@ -1,5 +1,5 @@
 
-import { Pressable, SafeAreaView, Text, TextInput, View, Button,StyleSheet, KeyboardAvoidingView, Modal} from "react-native";
+import { Pressable, SafeAreaView, Text, TextInput, View, Button,StyleSheet, KeyboardAvoidingView, Modal, Platform} from "react-native";
 import { CheckScreenNavigationprop } from "../../../App";
 import { useNavigation } from "@react-navigation/native";
 
@@ -9,9 +9,10 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../../config";
 import { AuthContext } from "../../Context/AuthContext";
-import {Picker} from '@react-native-picker/picker';
-import { Contract } from "../../Services/RestAPI";
+import {Picker, PickerIOS} from '@react-native-picker/picker';
+import { Contract, PaymentTransaction } from "../../Services/RestAPI";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import Toast from "react-native-toast-message";
 
 
 
@@ -23,23 +24,25 @@ export default function ScheduleNewPaymentReminder(){
     const [dateReminderPreview, setDateReminderPreview] = useState<String>(""); 
 
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [isModalVisible2, setIsModalVisible2] = useState(false)
 
     const auth = useContext(AuthContext);
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
 
-    const [unpaidContracts, setUnpaidContracts] = useState<Contract[]>([]);
-    const [selectedContract, setSelectedContract] = useState<String>("");
+    const [unpaidPaymentTransaction, setUnpaidPaymentTransaction] = useState<PaymentTransaction[]>([]);
+    const [selectedPaymentTransaction, setSelectedPaymentTransaction] = useState<string>('');
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    
 
     useEffect(() => {
       const clientId = auth?.user.entityId; // Replace this with the actual client ID
-      axios.get(BASE_URL+`/due-payments/client/${clientId}/unpaid-contracts`)
+      axios.get(BASE_URL+`/due-payments/client/${clientId}/unpaid-transactions`)
         .then((response) => {
-          setUnpaidContracts(response.data.contracts);
+          setUnpaidPaymentTransaction(response.data);
         })
         .catch((error) => {
-          alert('Failed to fetch unpaid contracts');
+          alert('Failed to fetch unpaid transactions');
           console.error(error);
         });
     }, []);
@@ -54,7 +57,7 @@ export default function ScheduleNewPaymentReminder(){
         const clientId = auth?.user.entityId; // Replace with your actual client ID
         const formData = new FormData();
         formData.append('clientId', clientId.toString());
-        formData.append('contractId', selectedContract.toString());
+        formData.append('paymentTransactionId', selectedPaymentTransaction.toString());
         formData.append('reminderTitle', reminderTitle.toString());
         formData.append('reminderDateTime', reminderDate.toString());
         
@@ -65,12 +68,12 @@ export default function ScheduleNewPaymentReminder(){
         })
           .then(response => {
             console.log('Response:', response);
-            alert('Reminder set successfully');
+            showSuccessToast()
             handleModal();
             navigation.goBack();
           })
           .catch(error => {
-            alert('Error setting reminder');
+            showFailedToast(error)
             console.error(error);
           });
         
@@ -129,9 +132,9 @@ export default function ScheduleNewPaymentReminder(){
 
     return(
         
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <View style={styles.container}>
 
-            <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+            <Modal animationType="fade" transparent={true} visible={isModalVisible}>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex:1, backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
 
                     <View style={styles.modalView}>
@@ -167,24 +170,67 @@ export default function ScheduleNewPaymentReminder(){
                 </Pressable>
                 <Text style={styles.textStyleHeader}>Set Reminders</Text>
                 <Text style={styles.textStyleSubheader}>Never miss a payment again. Set reminders for upcoming payments with our easy-to-use feature and receive notifications straight to your mobile device. </Text>
-                    <Text style={styles.textLabel}>Select Unpaid Product: </Text>
-                    <View style={styles.textBoxPickerStyle}>
-                    <Picker
-                        dropdownIconColor={'#2C85E7'}
-                        selectedValue={selectedContract}
-                        onValueChange={(itemValue, itemIndex) =>
-                        setSelectedContract(itemValue)
-                        }>
-                        {unpaidContracts.map((contract) => (
-                        <Picker.Item
-                            key={contract.contract_id}
-                            label={contract.itemName.toString()}
-                            value={contract.contract_id.toString()}
-                        />
-                        
-                        ))}
-                    </Picker>
-                    </View>
+                    <Text style={styles.textLabel}>Select Contract for your Reminder: </Text>
+                    
+
+                    
+                    {Platform.OS === 'ios' ? (
+                        <View style={styles.textInput}>
+                            <Pressable onPress={()=>(setIsModalVisible2(true))}>
+                                <Text style={{textAlignVertical: 'center', alignItems: 'center', paddingTop: hp(1.2)}}>{selectedPaymentTransaction}</Text>
+                            </Pressable>
+                            <Modal                 
+                                animationType="slide"
+                                transparent={false}
+                                visible={isModalVisible2}
+                                onRequestClose={() => setIsModalVisible2(false)}
+                                >
+                                
+                                <View style={{justifyContent: 'center', alignContent: 'center', marginHorizontal: hp(2), marginVertical: hp(25)}}>
+                                <View>
+                                    <Text style={{textAlign: 'center', fontSize: hp(2),color: '#203949', fontWeight: 'bold', marginBottom: hp(2)}}> Select your mode of payment</Text>
+                                </View>
+                                    <PickerIOS
+                                        selectedValue={selectedPaymentTransaction}
+                                        onValueChange={(itemValue, itemIndex) =>
+                                        {setSelectedPaymentTransaction(itemValue.toString())
+                                        setIsModalVisible2(false)                            
+                                        }}>
+                                        {unpaidPaymentTransaction.map((paymenttransaction) => (
+                                        <Picker.Item
+                                            key={paymenttransaction.payment_transactionid}
+                                            label={paymenttransaction.itemName.toString()}
+                                            value={paymenttransaction.payment_transactionid.toString()}
+                                        />
+                                        
+                                        ))}
+                                    </PickerIOS>
+                                    </View>
+                                    </Modal>
+                        </View>
+
+                    )
+                    :(
+                        <Picker
+                            dropdownIconColor={'#2C85E7'}
+                            selectedValue={selectedPaymentTransaction}
+                            onValueChange={(itemValue, itemIndex) =>
+                            setSelectedPaymentTransaction(itemValue)
+                            }>
+                            {unpaidPaymentTransaction.map((paymenttransaction) => (
+                            <Picker.Item
+                                key={paymenttransaction.payment_transactionid}
+                                label={paymenttransaction.itemName.toString()}
+                                value={paymenttransaction.payment_transactionid.toString()}
+                            />
+                            
+                            ))}
+                        </Picker>
+                    )}
+
+
+                    
+
                     <Text style={styles.textLabel}>Set Reminder Name</Text>
                     <TextInput onChangeText={(name)=>setReminderTitle(name)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter your reminder title" ></TextInput>
                     <Text style={styles.textLabel}>Set Reminder Date</Text>
@@ -209,11 +255,28 @@ export default function ScheduleNewPaymentReminder(){
             </View> 
             
         
-        </KeyboardAvoidingView>
+        </View>
     ); 
 }
 
 
+const showSuccessToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Successfully scheduled payment reminder!',
+      visibilityTime: 4000, 
+    });
+  }
+  
+  const showFailedToast = (error:any) => {
+    Toast.show({
+      type: 'error',        
+      text1: 'Payment reminder setup failed!',
+      text2: error,
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
 const styles = StyleSheet.create({
     container:{
         flex: 1,
@@ -263,6 +326,15 @@ const styles = StyleSheet.create({
         marginBottom: hp(1), 
         marginTop: hp(1)
     }, 
+    textInput:{
+        height: Platform.OS === 'ios' ? hp(5) : hp(5),
+        paddingLeft: hp(3),
+        marginBottom: Platform.OS === 'ios' ? hp(1) : hp(1.5), 
+        borderColor: '#F0F2F4', 
+        borderWidth: 2,
+        color:'#363636',
+
+    },
 
     textSmallestContainer:{ 
         flex:1,

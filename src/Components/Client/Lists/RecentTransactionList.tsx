@@ -2,27 +2,25 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-
-type ScheduledPaymentProps = {
-    itemName:String; 
-    itemCollectible: number; 
-    paymentStatus: String; 
-    scheduledDate: String;
+type RecentTransactionProps = { 
+    orderId: string;
+    amountPaid: number;
+    paymentDate: string;
+    productName: string;
+    clientName: string;
 }
 
-export default function ScheduledPaymentsList(props: ScheduledPaymentProps){
+export default function RecentTransactionList(props: RecentTransactionProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636', fontSize: hp(1.7) }}>{props.itemName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.paymentStatus}</Text>                                  
+                        <Text style={{color:'#363636',fontSize: hp(2), fontWeight: 'normal'}}>{props.productName}</Text>
+                        <Text style={styles.paymentLabel}>Paid</Text>
                     </View>
-                <View style={styles.textRightContainer}>
-                    <View style={styles.textRight}>
-                        <Text style={{color: '#363636', fontWeight: 'bold'}}>Php {props.itemCollectible}</Text>
-                        <Text style={styles.textRightText}>{props.scheduledDate}</Text>
-                    </View>
+                <View style={styles.priceContainer}>
+                        <Text style={styles.priceLabel}>Php {props.amountPaid}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.paymentDate}</Text>                                  
                 </View>
             </View>
             
@@ -32,10 +30,10 @@ export default function ScheduledPaymentsList(props: ScheduledPaymentProps){
 
 const styles = StyleSheet.create({
     item:{
-        flex:1, 
+        flex: 1, 
         backgroundColor: '#FFFFFF',
-        borderRadius: 10, 
-        marginBottom: 20,
+        borderRadius: 15, 
+        marginBottom: hp(2),
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000', 
@@ -45,12 +43,12 @@ const styles = StyleSheet.create({
             height: 2,
         },
         shadowRadius: 4,
-        elevation: 2
+        elevation: 2,
     },
     itemLeft:{
         flex:1, 
-        marginRight: hp(1),
-        marginLeft: hp(1.5), 
+        marginRight: hp(1), 
+        marginLeft: hp(2),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
@@ -71,15 +69,24 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start', 
         textAlign: 'center'
     }, 
-    textRightContainer: {
-        margin: hp(1.5),
-        justifyContent: 'center'
+    priceContainer: {
+        flex: .8,
+        width: wp(19), 
+        height: hp(5.5), 
+        margin: hp(1.5), 
+        justifyContent:'space-evenly',
+        alignItems:'flex-end',
+        borderRadius: 5,
+        maxWidth: '80%'
     }, 
-    textRight:{
-        alignItems: 'flex-start', 
+    priceLabel:{
+        color: '#2C85E7', 
+        fontSize: hp(1.6),
+        fontWeight: 'bold'
     },
-    textRightText:{
-        color: '#363636', 
-        fontSize: hp(1.1)
+    paymentLabel:{
+        color: '#2C85E7', 
+        fontSize: hp(1.5),
+        fontWeight: 'bold'
     },
 }); 

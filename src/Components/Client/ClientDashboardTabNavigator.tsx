@@ -11,13 +11,14 @@ import {SafeAreaView, View, StyleSheet, Platform} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import ScheduleNewPaymentReminder from "./ScheduleNewPaymentReminder";
 import ClientDashboard from "./ClientDashboard";
+import { AuthContext } from "../../Context/AuthContext";
+import { useContext } from "react";
 
 
 const Tab = createBottomTabNavigator()
 
-const PlaceHolder = () => <View/>
-
-export function TabNavigator() {
+export function ClientDashboardTabNavigator() {
+  const auth = useContext(AuthContext)
   return (
       <View style={styles.TabNavStyle} >             
          <Tab.Navigator
@@ -33,16 +34,13 @@ export function TabNavigator() {
                backgroundColor: '#0A1C34',
                borderRadius: 30,
                height: 80,
-               shadowColor: '#000',
-               shadowOpacity: 0.1,
-               shadowRadius: 20,
             },
             tabBarShowLabel: false,
             headerShown: false,
          })}>
-         <Tab.Screen
-          name="Home"
-          component={ClientDashboard}
+          <Tab.Screen
+          name="Dues"
+          component={DuePayments}
           options={{
             tabBarIcon: ({focused}) => (
               <View
@@ -50,7 +48,25 @@ export function TabNavigator() {
                   top: Platform.OS === 'ios' ? 10 : 0,
                 }}>
                      <Ionicons
-                        name='home'
+                        name='calendar'
+                        size={Platform.OS === 'ios' ? 30 : 30}                     
+                        color={focused ? '#7CB1EC' : '#fff'}
+                     />
+              </View>
+            ),
+          }}
+        />
+         <Tab.Screen
+          name="Schedule"
+          component={SchedulePayments}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View
+                style={{
+                  top: Platform.OS === 'ios' ? 10 : 0,
+                }}>
+                     <Ionicons
+                        name='time'
                         size={Platform.OS === 'ios' ? 30 : 30}                     
                         color={focused ? '#7CB1EC' : '#fff'}
                      />
@@ -93,34 +109,47 @@ export function TabNavigator() {
             }}
          />
 
-
           <Tab.Screen
-            name="Profile"
-            component={PlaceHolder}
-            listeners={({ navigation }) => ({
-              tabPress: (e) => {
-                e.preventDefault();
-                navigation.push('ClientProfileModal');
-              },
-            })}
-            options={{
-              title: 'My Profile',
-              tabBarIcon: ({ focused }) => (
-                <View
-                  style={{
-                    top: Platform.OS === 'ios' ? 10 : 0,
-                  }}
-                >
-                  <Ionicons
-                    name="person"
-                    size={Platform.OS === 'ios' ? 30 : 30}
-                    color={focused ? '#7CB1EC' : '#fff'}
-                  />
-                </View>
-              ),
-            }}
-          />
+          name="Transaction History"
+          component={TransactionHistory}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View
+                style={{
+                  top: Platform.OS === 'ios' ? 10 : 0,
+                }}>
+                     <Ionicons
+                        name='list'
+                        size={Platform.OS === 'ios' ? 30 : 30}                     
+                        color={focused ? '#7CB1EC' : '#fff'}
+                     />
+              </View>
+            ),
+            title: 'Transaction History',
+            headerTitle: 'Transaction History'
+          }}
+        />
+         <Tab.Screen
+          name="Records"
+          component={PaymentRecords}
+          options={{
+            tabBarIcon: ({focused}) => (
+              <View
+                style={{
+                  top: Platform.OS === 'ios' ? 10 : 0,
+                }}>
+                     <Ionicons
+                        name='card'
+                        size={Platform.OS === 'ios' ? 30 : 30}                     
+                        color={focused ? '#7CB1EC' : '#fff'}
+                     />
+              </View>
+            ),
+          }}
+        />
          </Tab.Navigator>
+
+
       </View>
 
       

@@ -3,6 +3,7 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { CheckScreenNavigationprop } from '../../../../App';
+import Toast from "react-native-toast-message";
 
 
 type ActiveContractProps = {
@@ -11,28 +12,45 @@ type ActiveContractProps = {
     itemName: String; 
     requiredCollectible: number; 
     paymentType: String; 
-    contractId: number
+    paymentTransactionId: number;
+    paid: boolean;
 
 }
+
+const showFailedToast = () => {
+    Toast.show({
+      type: 'error',        
+      text1: 'Unable to collect payments',
+      text2: 'Client has not yet paid the required collectible.',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
+
+
 export default function ActiveContractsList(props: ActiveContractProps){
 
-
+    const borderColors = props.paid ? 'green' : 'red';
     const navigation = useNavigation <CheckScreenNavigationprop>();
 
     const gotoCollectPayments =()=>{
-        navigation.navigate('CollectPayments', { contractId: props.contractId, dueAmount: props.requiredCollectible});
+        if(props.paid===true){            
+        navigation.navigate('CollectPayments', { paymentTransactionId: props.paymentTransactionId, dueAmount: props.requiredCollectible});
+        }else{
+            showFailedToast();
+        }
     }
     
     return(
-        <SafeAreaView style={styles.item}>
+        <SafeAreaView style={[styles.item, {borderColor: borderColors}]}>
             <Pressable onPress={gotoCollectPayments}>
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636', fontSize: hp(2) }}>{props.clientName}</Text>
+                        <Text style={{color:'#363636', fontSize: hp(1.8) }}>{props.clientName}</Text>
                         <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.itemName}</Text>                                  
                     </View>
                 <View style={styles.textRightContainer}>
-                    <View style={styles.textRight}>
+                    <View style={styles.textRightContainer}>
                         <Text style={{color: '#363636', fontWeight: 'bold'}}>Php {props.requiredCollectible}</Text>
                         <Text style={styles.textRightText}>{props.paymentType}</Text>
                     </View>
@@ -44,19 +62,16 @@ export default function ActiveContractsList(props: ActiveContractProps){
     );
 }
 
-
-
-
 const styles = StyleSheet.create({
     item:{
         flex:1, 
-        backgroundColor: '#F5F7F9',
-        padding: 20, 
+        backgroundColor: '#FFFFFF',
         borderRadius: 10, 
-        marginBottom: 20,
+        marginBottom: hp(2),
         marginLeft: hp(1), 
         marginRight: hp(1), 
-        shadowColor: '#000', 
+        shadowColor: '#000',
+        shadowOpacity: 0.10, 
         shadowOffset: {
             width:0,
             height: 2,
@@ -66,7 +81,8 @@ const styles = StyleSheet.create({
     },
     itemLeft:{
         flex:1, 
-        marginRight: hp(1),
+        marginRight: hp(1.5),
+        marginLeft: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
@@ -74,7 +90,7 @@ const styles = StyleSheet.create({
     square:{
         flex: .5, 
         width: 100,
-        height: 50,
+        height: 60,
         margin: hp(1.5), 
         backgroundColor: '#92A0A8', 
         borderRadius: 5,

@@ -1,14 +1,13 @@
 {
   "expo": {
     "name": "Collectify",
-    "slug": "capstone-v1",
+    "slug": "collectify",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/collectify-icon.png",
     "userInterfaceStyle": "light",
-    
     "splash": {
-      "image": "./assets/splash-screen.jpeg",
+      "image": "./assets/splash-white.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
@@ -16,25 +15,30 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true, 
+      "supportsTablet": true,
       "splash": {
-        "image": "./assets/splash-screen.jpeg",
+        "image": "./assets/splash-white.png",
         "resizeMode": "cover",
         "backgroundColor": "#ffffff"
       },
-
-    
+      "bundleIdentifier": "com.kbdiamondes.collectify.test"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/collectify-icon.png",
-        "backgroundColor": "#ffffff",
-        "androidUsesCleartextTraffic": true
-      }
+        "backgroundColor": "#ffffff"
+      },
+      "androidUsesCleartextTraffic": true,
+      "package": "com.kbdiamondes.collectify.test"
     },
     "web": {
       "favicon": "./assets/collectify-icon.png"
-    }   
-    
+    },
+    "extra": {
+      "eas": {
+        "projectId": "93f04057-877f-4cca-8870-9c3630754818"
+      }
+    },
+    "owner": "kbdiamondes"
   }
 }

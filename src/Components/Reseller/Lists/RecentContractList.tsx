@@ -2,24 +2,28 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-type TransactionHistoryProps = { 
+type RecentContractProps = { 
     orderId: string;
-    amountPaid: number;
-    paymentDate: string;
+    requiredCollectible: number;
+    paymentType: string; 
     productName: string;
     clientName: string;
+    paymentStatus: string; 
 }
 
-export default function TransactionHistoryList(props: TransactionHistoryProps){
+export default function RecentContractList(props: RecentContractProps){
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636',fontSize: hp(2), fontWeight: 'bold'}}>{props.clientName}</Text>
-                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.paymentDate}</Text>                                  
+                        <Text style={{color:'#363636',fontSize: hp(1.7), fontWeight: 'normal'}}>{props.productName}</Text>
+                        <Text style={[styles.paymentLabel, { color: props.paymentStatus === 'Paid' ? 'green' : 'red' }]}>
+                            {props.paymentStatus}
+                        </Text>
                     </View>
                 <View style={styles.priceContainer}>
-                        <Text style={styles.priceLabel}>Php {props.amountPaid}</Text>
+                        <Text style={styles.priceLabel}>Php {props.requiredCollectible}</Text>
+                        <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.paymentType}</Text>                                  
                 </View>
             </View>
             
@@ -31,8 +35,8 @@ const styles = StyleSheet.create({
     item:{
         flex: 1, 
         backgroundColor: '#FFFFFF',
-        borderRadius: 10, 
-        marginBottom: 20,
+        borderRadius: 15, 
+        marginBottom: hp(2),
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000', 
@@ -42,12 +46,12 @@ const styles = StyleSheet.create({
             height: 2,
         },
         shadowRadius: 4,
-        elevation: 2
+        elevation: 2,
     },
     itemLeft:{
         flex:1, 
         marginRight: hp(1), 
-        marginLeft: hp(1.5),
+        marginLeft: hp(2),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
@@ -70,17 +74,22 @@ const styles = StyleSheet.create({
     }, 
     priceContainer: {
         flex: .8,
-        width: wp(15), 
+        width: wp(19), 
         height: hp(5.5), 
         margin: hp(1.5), 
         justifyContent:'space-evenly',
         alignItems:'flex-end',
         borderRadius: 5,
-        maxWidth: '100%'
+        maxWidth: '80%'
     }, 
     priceLabel:{
-        color: '#363636', 
-        fontSize: hp(1.8),
+        color: '#2C85E7', 
+        fontSize: hp(1.6),
+        fontWeight: 'bold'
+    },
+    paymentLabel:{
+        color: '#2C85E7', 
+        fontSize: hp(1.5),
         fontWeight: 'bold'
     },
 }); 

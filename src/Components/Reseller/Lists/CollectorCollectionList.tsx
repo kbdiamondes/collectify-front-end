@@ -23,7 +23,6 @@ export default function CollectorCollectionList(props: CollectorCollectionListPr
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
-                <View style={styles.square}/>
 
                 <View style={styles.itemText}>
                     <Text style={{color:'#363636', fontSize:hp(1.4)}}>{props.fullname}</Text>
@@ -47,13 +46,13 @@ export default function CollectorCollectionList(props: CollectorCollectionListPr
 const styles = StyleSheet.create({
     item:{
         flex: 1,
-        backgroundColor: '#F5F7F9',
-        padding: 20, 
+        backgroundColor: '#FFFFFF',
         borderRadius: 10, 
         marginBottom: hp(2),
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000', 
+        shadowOpacity: 0.10,
         shadowOffset: {
             width:0,
             height: 2,
@@ -63,6 +62,8 @@ const styles = StyleSheet.create({
     },
     itemLeft:{
         flex: 1,
+        marginLeft: hp(1.5),
+        marginRight: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     }, 
     buttonMainContainer:{
-        flex:.8, 
+        flex:.5, 
         width: wp(19), 
         height: hp(5.5),
         margin: hp(1.5), 

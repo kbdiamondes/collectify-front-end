@@ -30,11 +30,21 @@ import { AuthContext, AuthContextProvider } from './src/Context/AuthContext';
 import CameraShot from './src/Components/Client/Camera';
 import CollectPayments from './src/Components/Reseller/CollectPayments';
 import ImagePreview2 from './src/Components/Client/ImagePreview2';
-import DefaultDashboard from './src/Components/Dashboard';
+import DefaultDashboard from './src/Components/Client/ClientDashboard';
 import CollectPaymentForm from './src/Components/Collector/CollectPaymentForm';
 import CollectAllPaymentForm from './src/Components/Collector/CollectAllPaymentForm';
 import ScheduleNewPaymentReminder from './src/Components/Client/ScheduleNewPaymentReminder';
+import ClientDashboard from './src/Components/Client/ClientDashboard';
+import { ClientDashboardTabNavigator } from './src/Components/Client/ClientDashboardTabNavigator';
+import PaymentReminders from './src/Components/Client/PaymentReminders';
+import ClientProfileModals from './src/Components/Client/Modals/ClientProfileModal';
 
+import Toast from 'react-native-toast-message';
+import ResellerDashboard from './src/Components/Reseller/ResellerDashboard';
+import { ResellerDashboardTabNavigator } from './src/Components/Reseller/ResellerDashboardTabNavigator';
+import ResellerProfileModals from './src/Components/Reseller/Modals/ResellerProfileModal';
+import CollectorProfileModals from './src/Components/Collector/Modals/CollectorProfileModal';
+import { CollectorDashboardTabNavigator } from './src/Components/Collector/CollectorDashboardTabNavigator';
 
 
 
@@ -44,15 +54,19 @@ export type RootStackParamList = {
   Register: undefined;
 
   //Client
+  ClientProfileModal: undefined; 
+  ClientDashboardTabNavigator: {screen: any};
+  ClientDashboard: undefined; 
   DuePayments: undefined; 
-  PaymentForm: {nameprop: any, priceprop: any, contractId:any,photo?:any,clientId:any, orderId: any, dueAmount: any};
-  CameraShot: {nameprop: any, priceprop: any, contractId:any, clientId:any}
-  ImageScreenPreview: {imageprop: any, nameprop: any, priceprop: any, contractId:any, clientId:any};
+  PaymentForm: {nameprop: any, paymentTransactionId:any,photo?:any, orderId: any, dueAmount: any};
+  CameraShot: {nameprop: any, priceprop: any, paymentTransactionId:any}
+  ImageScreenPreview: {imageprop: any, nameprop: any, priceprop: any, paymentTransactionId:any};
   TabNavigator: undefined; 
+  ClientTabNavigator: undefined; 
   ScheduledPayments: undefined; 
   PaymentReminders: undefined; 
   TransactionHistory: undefined; 
-  PaymentRecrods: undefined; 
+  PaymentRecords: undefined; 
   ScheduleNewPaymentReminders: undefined; 
   
   
@@ -61,18 +75,26 @@ export type RootStackParamList = {
  
 
   //Collector
+  CollectorProfileModal: undefined; 
+  CollectorTabNavigator: {screen: any};
+  CollectorDashboardTabNavigator: undefined; 
+  CollectorDashboard: undefined; 
   Collect: undefined; 
   FollowUp: undefined;
   Assurance: undefined; 
   TellUsMoreAboutYourself: undefined; 
-  CollectorCollectPaymentForm: {contractId: any};
+  CollectorCollectPaymentForm: {paymentTransactionId: any};
   CollectAllPaymentForm: undefined;
 
   //Reseller
+  ResellerProfileModal: undefined; 
+  ResellerTabNavigator: {screen: any}; 
+  ResellerDashboardTabNavigator: undefined;
+  ResellerDashboard: undefined; 
   CreateNewContractModal: undefined; 
   SoldItems: undefined; 
   MyCollector: undefined; 
-  CollectPayments: {contractId: any,  dueAmount: any};
+  CollectPayments: {paymentTransactionId: Number,  dueAmount: any};
   ImageScreenPreview2: {imageprop: any};
 
   //assigned AssignCollector to receive data from SendCollector
@@ -112,15 +134,31 @@ export default function App(){
       <Stack.Screen name="GetStarted" component={GetStarted} options={{headerShown:false}}/>
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
-      <Stack.Screen name="DuePayments" component={TabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
-      <Stack.Screen name="ScheduledPayments" component={TabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="PaymentReminders" component={TabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="TransactionHistory" component={TabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="Collect" component={CollectorTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="FollowUp" component={CollectorTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="Assurance" component={CollectorTabNavigator} options={{headerShown: false}}/>
-      <Stack.Screen name="ScheduleNewPaymentReminders" component={ScheduleNewPaymentReminder} options={{headerShown: false}}/>
       
+      <Stack.Screen name="ClientProfileModal" component={ClientProfileModals} options={{headerShown: false}}/>
+      <Stack.Screen name="ClientTabNavigator" component={TabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="ClientDashboardTabNavigator" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="ClientDashboard" component={TabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
+      <Stack.Screen name="DuePayments" component={ClientDashboardTabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
+      <Stack.Screen name="ScheduledPayments" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="PaymentReminders" component={PaymentReminders} options={{headerShown: false}}/>
+      <Stack.Screen name="TransactionHistory" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="PaymentRecords" component={ClientDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="ScheduleNewPaymentReminders" component={ScheduleNewPaymentReminder} options={{headerShown: false}}/>
+
+
+      <Stack.Screen name="CollectorDashboard" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="CollectorProfileModal" component={CollectorProfileModals} options={{headerShown: false}}/>
+      <Stack.Screen name="CollectorTabNavigator" component={CollectorTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="CollectorDashboardTabNavigator" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="Collect" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="FollowUp" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="Assurance" component={CollectorDashboardTabNavigator} options={{headerShown: false}}/>
+
+      <Stack.Screen name="ResellerProfileModal" component={ResellerProfileModals} options={{headerShown: false}}/>
+      <Stack.Screen name="ResellerTabNavigator" component={ResellerTabNavigator} options={{headerShown: false}}/> 
+      <Stack.Screen name="ResellerDashboardTabNavigator" component={ResellerDashboardTabNavigator} options={{headerShown: false}}/>
+      <Stack.Screen name="ResellerDashboard" component={ResellerDashboardTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="ActiveContractScreen" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="SoldItems" component={ResellerTabNavigator} options={{headerShown: false}}/>
       <Stack.Screen name="CreateNewContractModal" component={CreateNewContractModal} options={{headerShown: false}}/>
@@ -138,18 +176,23 @@ export default function App(){
       <Stack.Screen name="CollectorCollectPaymentForm" component={CollectPaymentForm} options={{ headerShown: false}}/>
       <Stack.Screen name="CollectAllPaymentForm" component={CollectAllPaymentForm} options={{ headerShown: false}}/>
 
+      
     </Stack.Navigator>
 
   </NavigationContainer>
+
+  <Toast/>
   </AuthContextProvider>
+
+  
   );
 }
 
 //Theme for the STACK
 const MyTheme = {
-  flex:1,
   dark: false,
   colors: {
+    flex:1,
     primary: 'rgb(255, 45, 85)',
     background: 'rgb(255, 255, 255)',
     card: 'rgb(21,98,199)',
@@ -159,7 +202,7 @@ const MyTheme = {
   },
 };
 /*
-
+<Stack.Screen name="DuePayments" component={TabNavigator} options={{headerShown: false, headerBackButtonMenuEnabled: true}}/>
 <Stack.Screen name="CreateNewContract" component={CreateNewContract} options={{headerShown: false}}/> -> add to stack if planning to open modal through bottom nav
 <Stack.Screen name="AssignCollector" component={AssignCollectorScreen} options={{headerShown: false}}/>
 */

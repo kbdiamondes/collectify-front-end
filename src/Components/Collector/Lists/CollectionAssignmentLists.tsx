@@ -4,28 +4,39 @@ import { CheckScreenNavigationprop } from '../../../../App';
 import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
 import { AuthContext } from '../../../Context/AuthContext';
+import Toast from "react-native-toast-message";
 
 type CollectionAssignmentProps = {
     key:number, 
     clientName:String; 
-    requiredCollectible: number; 
-    collectionStatus: boolean;
-    contractId: number; 
+    amountdue: number; 
+    paymentStatus: boolean;
+    paymentTransactionId: number; 
 }
+
+  const showFailedToast = () => {
+    Toast.show({
+      type: 'error',        
+      text1: 'Unable to collect payments',
+      text2: 'Client has not yet paid the required collectible.',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
 
 export default function CollectionAssignmentLists(props: CollectionAssignmentProps){
     const navigation = useNavigation<CheckScreenNavigationprop>();
 
     const gotoCollectPayments =()=>{
-        if(!props.collectionStatus){
-            alert('Client has not yet paid the required collectible');
-        }else if(props.collectionStatus){
-            navigation.navigate('CollectorCollectPaymentForm', { contractId: props.contractId});
+        if(!props.paymentStatus){
+            showFailedToast();
+        }else if(props.paymentStatus){
+            navigation.navigate('CollectorCollectPaymentForm', { paymentTransactionId: props.paymentTransactionId});
         }
         
     }
 
-    const statusText = props.collectionStatus ? 'Ready to Collect' : 'Unpaid';
+    const statusText = props.paymentStatus ? 'Ready to Collect' : 'Unpaid';
 
     return(
         <SafeAreaView style={styles.item}>
@@ -34,10 +45,10 @@ export default function CollectionAssignmentLists(props: CollectionAssignmentPro
                     
                         <View style={styles.itemText}>
                             <Text style={{color:'#363636',fontSize: 14}}>{props.clientName}</Text>
-                            <Text style={{ color: props.collectionStatus ? '#00B761' : '#FF0000', fontSize: 12 }}>{statusText}</Text>                               
+                            <Text style={{ color: props.paymentStatus ? '#00B761' : '#FF0000', fontSize: 12 }}>{statusText}</Text>                               
                         </View>
                     <View style={styles.priceContainer}>
-                                <Text style={styles.priceLabel}>Php {props.requiredCollectible}</Text>
+                                <Text style={styles.priceLabel}>Php {props.amountdue}</Text>
                     </View>
                 </View>
             </Pressable>
@@ -49,13 +60,13 @@ export default function CollectionAssignmentLists(props: CollectionAssignmentPro
 const styles = StyleSheet.create({
     item:{
         flex:1, 
-        backgroundColor: '#F5F7F9',
-        padding: 20, 
+        backgroundColor: '#FFFFFF',
         borderRadius: 10, 
         marginBottom: 20,
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000', 
+        shadowOpacity: 0.10,
         shadowOffset: {
             width:0,
             height: 2,
@@ -65,6 +76,9 @@ const styles = StyleSheet.create({
     },
     itemLeft:{
         flex:1, 
+        padding: hp(1.5),
+        marginLeft: hp(1), 
+        marginRight: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
@@ -79,7 +93,7 @@ const styles = StyleSheet.create({
     }, 
     itemText: {
         flex:1, 
-        maxWidth: '80%', 
+        maxWidth: '75%', 
         marginRight: hp(1.5), 
         justifyContent: 'center', 
         alignItems: 'flex-start', 
@@ -87,12 +101,13 @@ const styles = StyleSheet.create({
     }, 
     priceContainer: {
         flex: .7, 
+        margin: hp(2), 
         justifyContent: 'center', 
         alignItems: 'flex-end',
     }, 
     priceLabel:{
         color: '#363636', 
-        fontSize: 15,
+        fontSize: hp(1.5),
         fontWeight: 'bold'
     },
 }); 

@@ -1,16 +1,39 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { KeyboardAvoidingView, SafeAreaView, Text, View, StyleSheet, Pressable, TextInput, ActivityIndicator} from "react-native";
 import { CheckScreenNavigationprop } from "../../App";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { AuthContext } from "../Context/AuthContext";
+import Toast from "react-native-toast-message";
+
+
+const showSuccessToast = () => {
+    Toast.show({
+      type: 'success',        
+      text1: 'Login Success',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
+  
+  
+  const showFailedToast = () => {
+    Toast.show({
+      type: 'error',        
+      text1: 'Login Error',
+      text2: 'Please check your username and password',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
 
 export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     const [userName, setUserName] = useState<string>('');
     const [passWord, setPassword] = useState<string>('');
     const [loading, setLoading] = useState(false); 
+    const [loginAttempted, setLoginAttempted] = useState(false);
     const auth = useContext(AuthContext);
 
     useFocusEffect(
@@ -19,27 +42,30 @@ export default function Login(){
         }, [])
       );
 
+    useEffect(() => {
+    if (auth?.user.tableName === "Client") {
+        navigation.navigate('ClientDashboard');
+    } else if (auth?.user.tableName === "Reseller") {
+        navigation.navigate('ResellerDashboard');
+    } else if (auth?.user.tableName === "Collector") {
+        navigation.navigate('CollectorDashboard');
+    } else if (auth?.user.tableName === "Not Found") {
+    }
+        console.log("Login: "+ auth?.user.isLoggedIn)
+    }, [auth?.user.tableName, loginAttempted, auth?.user.isLoggedIn]);
+      
     const handleLogin = async () => {
         setLoading(true);
-        await auth?.login(userName, passWord);
-        
-        try {
 
-            
-            if (auth?.user.tableName === "Client") {
-              navigation.navigate('DuePayments');
-            } else if (auth?.user.tableName === "Reseller") {
-              navigation.navigate('ActiveContractScreen');
-            } else if (auth?.user.tableName === "Collector") {
-              navigation.navigate('Collect');
-            } else if (auth?.user.tableName === "Not Found") {
-              alert('User not found');
-            }
+        try {
+            await auth?.login(userName, passWord);
+
           } catch (error) {
-            // Handle any login errors here
+            showFailedToast();
             console.error('Login error:', error);
           } finally {
             setLoading(false);
+            setLoginAttempted(true)        
           }
     }
         
@@ -66,21 +92,21 @@ export default function Login(){
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                        <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
+                        <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" clearButtonMode="always"></TextInput>
                         <TextInput onChangeText={(passWordAuth)=>setPassword(passWordAuth)}placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
                     {loading?(
-                        <View style={styles.buttonLoading}>                        
-                                    <ActivityIndicator size="large" color="#0000ff" />                     
+                        <View style={{justifyContent: 'center', alignItems: 'center', marginVertical: hp(25)}}>
+                    <View style={styles.buttonLoading}>                        
+                                <ActivityIndicator size="large" color="#0000ff" />                     
+                    </View>
                         </View>
                     ):(
                         <View style={styles.button}>                        
                         <Pressable onPress={handleLogin}>
                                 <Text style={styles.buttonLabel}>Login</Text>
                         </Pressable>
-                    
                     </View>
                     )}
-
 
 
                 </View>

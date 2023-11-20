@@ -1,23 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import DuePayments from "./DuePayments"
 import {Ionicons} from '@expo/vector-icons'; 
-import SchedulePayments from "./SchedulePayments";
-import PaymentReminders from "./PaymentReminders";
-import TransactionHistory from "./TransactionHistory";
-import PaymentRecords from "./PaymentRecords";
 
 
 import {SafeAreaView, View, StyleSheet, Platform} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import ScheduleNewPaymentReminder from "./ScheduleNewPaymentReminder";
-import ClientDashboard from "./ClientDashboard";
+import CollectAllPaymentForm from "./CollectAllPaymentForm";
+import CollectorDashboard from "./CollectorDashboard";
 
 
 const Tab = createBottomTabNavigator()
 
 const PlaceHolder = () => <View/>
 
-export function TabNavigator() {
+export function CollectorDashboardTabNavigator() {
   return (
       <View style={styles.TabNavStyle} >             
          <Tab.Navigator
@@ -42,7 +37,7 @@ export function TabNavigator() {
          })}>
          <Tab.Screen
           name="Home"
-          component={ClientDashboard}
+          component={CollectorDashboard}
           options={{
             tabBarIcon: ({focused}) => (
               <View
@@ -61,8 +56,8 @@ export function TabNavigator() {
         
 
          <Tab.Screen
-            name="Create"
-            component={ScheduleNewPaymentReminder}
+            name="CollectAllPaymentForm"
+            component={CollectAllPaymentForm}
             options={{
                tabBarIcon: ({focused}) => (
                <View
@@ -100,7 +95,7 @@ export function TabNavigator() {
             listeners={({ navigation }) => ({
               tabPress: (e) => {
                 e.preventDefault();
-                navigation.push('ClientProfileModal');
+                navigation.push('CollectorProfileModal');
               },
             })}
             options={{

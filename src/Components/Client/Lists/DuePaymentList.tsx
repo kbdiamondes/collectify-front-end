@@ -7,36 +7,36 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 
 type PaymentProps = {
-    key:number, 
-    itemName:String; 
-    requiredCollectible: number; 
-    dueAmount: number; 
-    fullPrice: number;
-    contractId: number;
-    clientId: number;
-    orderId: String;
-}
+    payment_transactionid: number;
+    orderid: string;
+    amountdue: number;
+    startingDate: string;
+    endDate: string;
+    installmentNumber: number;
+    isPaid: boolean;
+    isCollected: boolean;
+    itemName: string;
+};
+
 
 
 export default function DuePaymentList(props: PaymentProps){
 
-    const [amountCollectible, setamountCollectible] = useState(props.requiredCollectible);
+    const [amountCollectible, setamountCollectible] = useState(props.amountdue);
     const navigation = useNavigation<CheckScreenNavigationprop>();
     return(
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
-                <View style={styles.square}/>
-
                 <View style={styles.itemText}>
-                    <Text style={{color:'#363636', fontSize:hp(1.4)}}>{props.itemName}</Text>
-                    <Text style={{color: '#92A0A8', fontSize: hp(1.2)}}>Php {props.requiredCollectible}</Text>                                  
+                    <Text style={{color:'#363636', fontSize:hp(1.7), fontWeight: 'bold'}}>{props.itemName}</Text>
+                    <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>Php {props.amountdue}</Text>                                  
                 </View>
 
                 <View style={styles.buttonMainContainer}>
                     <View style={styles.buttonContainer}>
 
                     <Pressable style={styles.button}  onPress={() => {
-                        navigation.navigate("PaymentForm", { nameprop: props.itemName, priceprop: props.fullPrice, contractId: props.contractId,clientId: props.clientId, orderId: props.orderId, dueAmount: props.dueAmount});
+                        navigation.navigate("PaymentForm", { nameprop: props.itemName, paymentTransactionId: props.payment_transactionid, orderId: props.orderid, dueAmount: props.amountdue});
     
                         }}
                         >
@@ -53,13 +53,13 @@ export default function DuePaymentList(props: PaymentProps){
 const styles = StyleSheet.create({
     item:{
         flex: 1,
-        backgroundColor: '#F5F7F9',
-        padding: 20, 
+        backgroundColor: '#FFFFFF',
         borderRadius: 10, 
-        marginBottom: hp(2),
+        marginBottom: 20,
         marginLeft: hp(1), 
         marginRight: hp(1), 
         shadowColor: '#000', 
+        shadowOpacity: 0.10,
         shadowOffset: {
             width:0,
             height: 2,
@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
     },
     itemLeft:{
         flex: 1,
+        marginRight: hp(1),
+        marginLeft: hp(1.5),
         flexDirection:'row',
         aligntItems: 'center', 
         flexWrap:'wrap'
@@ -83,21 +85,22 @@ const styles = StyleSheet.create({
     }, 
     itemText: {
         flex:1, 
-        maxWidth: '80%', 
+        maxWidth: '75%', 
         marginRight: hp(1.5), 
         justifyContent: 'center', 
         alignItems: 'flex-start',
-        textAlign: 'left'
+        textAlign: 'center'
     }, 
     buttonMainContainer:{
-        flex:.8, 
-        width: wp(19), 
+        width: wp(20), 
         height: hp(5.5),
         margin: hp(1.5), 
         justifyContent: 'center', 
+        alignItems:'flex-end'
     }, 
     buttonContainer: {
         flex:.8,
+        width: wp(15),
         backgroundColor:'#2C85E7',
         borderRadius: 5
     }, 
