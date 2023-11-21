@@ -32,13 +32,15 @@ export default function Login(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
     const [userName, setUserName] = useState<string>('');
     const [passWord, setPassword] = useState<string>('');
-    const [loading, setLoading] = useState(false); 
+
+    const auth:any = useContext(AuthContext);
+    const {loading} = auth; 
     const [loginAttempted, setLoginAttempted] = useState(false);
-    const auth = useContext(AuthContext);
+    
 
     useFocusEffect(
         React.useCallback(() => {
-          setLoading(false);
+          loading
         }, [])
       );
 
@@ -52,10 +54,10 @@ export default function Login(){
     } else if (auth?.user.tableName === "Not Found") {
     }
         console.log("Login: "+ auth?.user.isLoggedIn)
-    }, [auth?.user.tableName, loginAttempted, auth?.user.isLoggedIn]);
+    }, [auth?.user.tableName, loginAttempted, auth?.user.isLoggedIn, loading]);
       
     const handleLogin = async () => {
-        setLoading(true);
+        loading
 
         try {
             await auth?.login(userName, passWord);
@@ -64,7 +66,7 @@ export default function Login(){
             showFailedToast();
             console.error('Login error:', error);
           } finally {
-            setLoading(false);
+            loading
             setLoginAttempted(true)        
           }
     }
@@ -95,10 +97,9 @@ export default function Login(){
                         <TextInput onChangeText={(userNameAuth)=>setUserName(userNameAuth)} placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" clearButtonMode="always"></TextInput>
                         <TextInput onChangeText={(passWordAuth)=>setPassword(passWordAuth)}placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter password" secureTextEntry={true}></TextInput>
                     {loading?(
-                        <View style={{justifyContent: 'center', alignItems: 'center', marginVertical: hp(25)}}>
-                    <View style={styles.buttonLoading}>                        
-                                <ActivityIndicator size="large" color="#0000ff" />                     
-                    </View>
+                        <View style={styles.buttonLoading}>                       
+                                <ActivityIndicator size="large" color="#0000ff" />    
+                                                                         
                         </View>
                     ):(
                         <View style={styles.button}>                        

@@ -21,6 +21,7 @@ type AuthContextType = {
   user: UserCredentials;
   login: (username: string, password: string) => void;
   logout: () => void;
+  loading: boolean;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -47,7 +48,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         setLoading(false)
         // Check if the response status is successful (e.g., 200 OK)
         if (response.status === 200 && response.data.tableName !== "Not Found") {
-          console.log(response.data)
+          console.log(response.data)          
           setUser({
             username: username,
             password: '', // Set the password as needed
@@ -58,6 +59,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           showSuccessToast()
         }else{
           showFailedToast()
+          setLoading(false)
         }
       })
       .catch(function (error) {
@@ -106,14 +108,12 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     user,
     login,
     logout,
+    loading,
   };
 
   return (
     <AuthContext.Provider value={authValue}>
       {children}
-      <Modal visible={loading} transparent={true}>
-        <ActivityIndicator size="large" />
-      </Modal>
     </AuthContext.Provider>
   );
 };
