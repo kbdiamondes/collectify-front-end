@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, FlatList} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, FlatList, RefreshControl} from 'react-native';
 
 import React, { useContext, useEffect, useState } from 'react';
 import PaymentRecordLists from './Lists/PaymentRecordList';
@@ -23,17 +23,20 @@ export default function PaymentRecords(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, paymentTransaction] = RestAPI(); 
     const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext);
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        sendRequest({
+            method: 'GET', 
+            url: BASE_URL + "/payment-records/clients/"+auth?.user.entityId + "/paid-and-collected-transactions" 
+        });
+        setTimeout(() => setRefreshing(false), 1000);
+    }, [auth]); 
 
     useEffect(() => {
-        if (auth?.user.entityId) {
-            sendRequest({
-                method: 'GET',
-                url: BASE_URL + "/payment-records/clients/"+auth?.user.entityId + "/paid-and-collected-transactions" 
-            });
-        } else {
-            alert("Error: Missing user entityId");
-        }
-    },[]);
+        onRefresh();
+    },[onRefresh]);
 
     return(
 
@@ -61,18 +64,26 @@ export default function PaymentRecords(){
                       amountPaid={item.amountdue}
                       productName={item.itemName}
                       collectorName={item.collectorName}
+                      resellerName={item.resellerName}
                     />
                   )}
+                  refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
                 />
               </View>
 
 
             ) : (
                 <View style={styles.container}>
-                    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
-                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No transactions yet.</Text>
-                    </View>
+                    <ScrollView style={{flex:1, alignContent: 'center', marginVertical: hp(30)}}               
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } >                            
+                                <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                                    <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                                    <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No transactions yet.</Text>
+                                </View>
+                    </ScrollView>
                  </View>
             )}
         </View>

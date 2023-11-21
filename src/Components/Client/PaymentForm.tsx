@@ -22,7 +22,7 @@ export default function PaymentForm(){
     const dueAmountProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.dueAmount;
 
     const [itemName, setitemName] = useState('')
-    const [itemPrice, setitemPrice] = useState(dueAmountProp)
+    const [itemPrice, setitemPrice] = useState<any>(dueAmountProp)
     const [requiredCollectible, setrequiredCollectible] = useState(dueAmountProp) 
     const [referenceNumber, setreferenceNumber] = useState(orderIdProp)
     const [paymentType, setpaymentType] = useState('')
@@ -34,8 +34,19 @@ export default function PaymentForm(){
     const [error, setError] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
     
+    const [fileName, setfileName] = useState('')
+
+    const isPhotoExist = () => {setPhotoExist(()=>photoProp!='' ? true : false)}
+    const [photoExist, setPhotoExist] = useState<boolean>(); 
+
     useEffect((
      )=>{console.log("\nOrder ID: " + orderIdProp + "\nFull Price: "+ dueAmountProp + "\nMode of Payment: " + selectedValue)  },[])
+
+
+     const generateUniqueFilename = (fileExtension: string) => {
+      const uniqueId = new Date().getTime(); // Use a timestamp as a unique identifier
+      return `${uniqueId}.${fileExtension}`;
+    };
 
 
 
@@ -52,7 +63,7 @@ export default function PaymentForm(){
         const formData = new FormData();
         formData.append('amount', requiredCollectible);
         formData.append('base64Image', photoProp);
-        formData.append('fileName', '3.png');
+        formData.append('fileName', fileName);
         formData.append('contentType', 'image/png');
         //console.log(BASE_URL+`/paydues/client/${clientidProp}/contracts/${contractIdProp}/pay`)
         axios.post(BASE_URL+`/paydues/transaction/${contractIdProp}/pay`, formData, {
@@ -176,15 +187,30 @@ export default function PaymentForm(){
                     )}  
 
 
-
-                    <View style={styles.buttonUnfilled}>
-                        <Pressable style={styles.button} onPressIn={()=>navigation.navigate('CameraShot',{nameprop:nameProp, paymentTransactionId: contractIdProp, priceprop: dueAmountProp})}>
+                    {photoExist?(
+                      <View style={styles.buttonUnfilled}>
+                        <View style={styles.button} >
                         <Text style={styles.buttonUnfilledLabel}>
-                            <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
+                        <Ionicons name="image" color="#000000" size={15} style={{ marginRight: 5 }} />
+                        {fileName}
                         </Text>
-                        </Pressable>
-                     
+                      </View>
+                 
                     </View>
+                    ):(
+                      <View style={styles.buttonUnfilled}>
+                        <Pressable style={styles.button} onPressIn={()=>{
+                          isPhotoExist();
+                          setfileName(generateUniqueFilename('png'));
+                          navigation.navigate('CameraShot',{nameprop:nameProp, paymentTransactionId: contractIdProp, priceprop: dueAmountProp})}}>
+                          <Text style={styles.buttonUnfilledLabel}>
+                              <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
+                          </Text>
+                        </Pressable>
+                   
+                      </View>
+                    )}  
+
                     <View style={styles.buttonContainer}>
                     <Pressable style={styles.button} onPressIn={handleModal}>
                         <Text style={styles.buttonLabel}>

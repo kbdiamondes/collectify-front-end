@@ -9,6 +9,7 @@ type PaymentRecordProps = {
     productName: string;
     clientName: string;
     collectorName: string;
+    resellerName:string; 
     
 }
 
@@ -17,7 +18,9 @@ export default function PaymentRecordLists(props: PaymentRecordProps){
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636', fontSize: hp(1.7), fontWeight: 'bold'}}>{props.collectorName}</Text>
+                        <Text style={{color:'#363636', fontSize: hp(1.7), fontWeight: 'bold'}}>
+                         {props.resellerName ? props.resellerName : props.collectorName}    
+                        </Text>
                         <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>Php {props.amountPaid}</Text>                                  
                     </View>
 

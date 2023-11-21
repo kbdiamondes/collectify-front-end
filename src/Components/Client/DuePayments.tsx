@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator, Pressable} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator, Pressable, RefreshControl} from 'react-native';
 import DuePaymentList from './Lists/DuePaymentList';
 
 import React, { useContext, useEffect, useState } from 'react';
@@ -24,21 +24,20 @@ export default function DuePayments(){
     const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext);
 
+    const [refreshing, setRefreshing] = React.useState(false);
 
-      useEffect(() => {
-        if(auth?.user.entityId){
-            sendRequest({ 
-                method: 'GET', 
-                url: BASE_URL + "/due-payments/client/"+ auth?.user.entityId+"/unpaid-transactions"
-            })
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        sendRequest({ 
+            method: 'GET', 
+            url: BASE_URL + "/due-payments/client/"+ auth?.user.entityId+"/unpaid-transactions"
+        });
+        setTimeout(() => setRefreshing(false), 1000);
+    }, [auth]);
 
-            setUnpaidContracts(paymentTransaction)
-            console.log(paymentTransaction)
-        }else{
-            alert("error")
-        }
+    useEffect(() => {
+        onRefresh(); },[onRefresh]);
 
-    },[auth] )
 
 
     return(
@@ -59,7 +58,7 @@ export default function DuePayments(){
                     <FlatList
                             data={paymentTransaction}
                             keyExtractor={(item) => item.payment_transactionid.toString()}
-                            renderItem={({ item }) => (
+                            renderItem={({ item }) => (  
                                 <ScrollView>
                                     <DuePaymentList
                                         payment_transactionid={item.payment_transactionid}
@@ -72,17 +71,24 @@ export default function DuePayments(){
                                         isPaid={item.isPaid}
                                         isCollected={item.isCollected}
                                     />
-                                </ScrollView>
+                                </ScrollView>                            
                             )}
+                            refreshControl={
+                                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                            }
                             />
 
                   </View>
                 ):(
                     <View style={styles.container}>
-                    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
-                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No payments due yet.</Text>
-                    </View>
+                        <ScrollView style={{flex:1, alignContent: 'center', marginVertical: hp(30)}}               
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } >                                 
+                                <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                                    <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                                    <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No payments due yet.</Text>
+                                </View>
+                        </ScrollView>
                  </View>
                 )
 

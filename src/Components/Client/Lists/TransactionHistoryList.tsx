@@ -7,7 +7,8 @@ type TransactionHistoryProps = {
     amountPaid: number;
     paymentDate: string;
     productName: string;
-    clientName: string;
+    resellerName: string;
+    collectorName: string; 
 }
 
 export default function TransactionHistoryList(props: TransactionHistoryProps){
@@ -15,7 +16,9 @@ export default function TransactionHistoryList(props: TransactionHistoryProps){
         <SafeAreaView style={styles.item}>
             <View style={styles.itemLeft}>
                     <View style={styles.itemText}>
-                        <Text style={{color:'#363636',fontSize: hp(2), fontWeight: 'bold'}}>{props.clientName}</Text>
+                    <Text style={{color:'#363636',fontSize: hp(2), fontWeight: 'bold'}}>
+                        {props.resellerName ? props.resellerName : props.collectorName}
+                    </Text>
                         <Text style={{color: '#92A0A8', fontSize: hp(1.5)}}>{props.paymentDate}</Text>                                  
                     </View>
                 <View style={styles.priceContainer}>

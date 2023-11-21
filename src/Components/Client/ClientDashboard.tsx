@@ -1,4 +1,4 @@
-import { View, StyleSheet,Text, ActivityIndicator, FlatList, ScrollView } from "react-native";
+import { View, StyleSheet,Text, ActivityIndicator, FlatList, ScrollView, RefreshControl } from "react-native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthContext } from "../../Context/AuthContext";
@@ -14,6 +14,7 @@ import TransactionHistoryList from "./Lists/TransactionHistoryList";
 import { RestAPI } from "../../Services/RestAPI";
 import RecentTransactionList from "./Lists/RecentTransactionList";
 import axios from "axios";
+import React from "react";
 
 export default function ClientDashboard(){
     const [shown, setShown] = useState(false);
@@ -188,6 +189,7 @@ function RecentTransaction(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, transaction] = RestAPI(); 
     const auth = useContext(AuthContext);
  
+    /*
     useEffect(() => {
         if (auth?.user.entityId) {
             sendRequest({
@@ -197,7 +199,22 @@ function RecentTransaction(){
         } else {
             alert("Error: Missing user entityId");
         }
-    },[]);
+    },[]);*/
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        sendRequest({ 
+            method: 'GET', 
+            url: BASE_URL + "/transaction-history/client/" + auth?.user.entityId
+        });
+        setTimeout(() => setRefreshing(false), 1000);
+    }, [auth]);
+
+    useEffect(() => {
+        onRefresh();
+    },[onRefresh]);
 
     return(
 
@@ -223,19 +240,27 @@ function RecentTransaction(){
                         productName={item.productName}
                         />
                   )}
+                  refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
                 />
               </View>
 
 
             ) : (
-                <View style={styles3.container}>
-                    <View style={{alignItems:'center', justifyContent:'center'}}>
-                      
-                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" />
-                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No recent transactions yet.</Text>
+                <ScrollView                  
+                refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } >
+                    <View style={styles3.container}>
+                        <View style={{alignItems:'center', justifyContent:'center'}}>
+                        
+                            <Ionicons name="alert" size={hp(10)} color="#9F9F9F" />
+                            <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No recent transactions yet.</Text>
 
+                        </View>
                     </View>
-                 </View>
+                </ScrollView>
+                 
             )}
         </View>
 

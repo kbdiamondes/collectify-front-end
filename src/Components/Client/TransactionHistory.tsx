@@ -1,4 +1,4 @@
-import {SafeAreaView, View, Text, StyleSheet, ScrollView, ActivityIndicator, FlatList, Pressable} from 'react-native';
+import {SafeAreaView, View, Text, StyleSheet, ScrollView, ActivityIndicator, FlatList, Pressable, RefreshControl} from 'react-native';
 
 import React, { useContext, useEffect, useState } from 'react';
 import TransactionHistoryList from './Lists/TransactionHistoryList';
@@ -21,18 +21,24 @@ function formatDate(dateString:string): string {
 export default function TransactionHistory(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, transaction] = RestAPI(); 
     const auth = useContext(AuthContext);
+    const [refreshing, setRefreshing] = React.useState(false);
 
     const navigation = useNavigation<CheckScreenNavigationprop>();  
+
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        sendRequest({
+            method: 'GET',
+            url: BASE_URL + "/transaction-history/client/" + auth?.user.entityId
+        });
+        setTimeout(() => setRefreshing(false), 1000);
+    }, [auth]);
+
     useEffect(() => {
-        if (auth?.user.entityId) {
-            sendRequest({
-                method: 'GET',
-                url: BASE_URL + "/transaction-history/client/" + auth?.user.entityId
-            });
-        } else {
-            alert("Error: Missing user entityId");
-        }
-    },[]);
+        onRefresh();
+    },[onRefresh]);
+
 
     return(
 
@@ -56,22 +62,30 @@ export default function TransactionHistory(){
                     <TransactionHistoryList
                       key = {item.orderId || Math.random().toString()}
                       orderId={item.orderId}
-                      clientName={item.clientName}
+                      resellerName={item.resellerName}
+                      collectorName={item.collectorName}
                       paymentDate={formatDate(item.paymentDate)}
                       amountPaid={item.amountPaid}
                       productName={item.productName}
                     />
                   )}
+                  refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
                 />
               </View>
 
 
             ) : (
                 <View style={styles.container}>
-                    <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-                        <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
-                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No transactions yet.</Text>
-                    </View>
+                    <ScrollView style={{flex:1, alignContent: 'center', marginVertical: hp(30)}}               
+                        refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } > 
+                            <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                                <Ionicons name="alert" size={hp(10)} color="#9F9F9F" style={{marginBottom: hp(5)}}/>
+                                <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>No transactions yet.</Text>
+                            </View>
+                    </ScrollView>
                  </View>
             )}
         </View>

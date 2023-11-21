@@ -9,6 +9,7 @@ import { Camera } from 'expo-camera';
 import { AuthContext } from '../../Context/AuthContext';
 import { BASE_URL } from '../../../config';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
+import Toast from 'react-native-toast-message';
 
 export default function CollectPayments() {
     const contractIdprop= useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.paymentTransactionId;
@@ -43,10 +44,6 @@ export default function CollectPayments() {
 
     const confirmContract = () => {
         handleSubmit();
-      
-        alert("Success");
-        handleModal();
-        navigation.goBack(); 
 
       };
       
@@ -56,7 +53,26 @@ export default function CollectPayments() {
         return `${uniqueId}.${fileExtension}`;
       };
   
-
+      const showSuccessToast = () => {
+        Toast.show({
+          type: 'success',        
+          text1: 'Collection Successful',
+          visibilityTime: 4000,
+          position: 'bottom', 
+        });
+      }
+      
+      
+      const showFailedToast = () => {
+        Toast.show({
+          type: 'error',        
+          text1: 'Collection Failed',
+          text2: 'Check your internet connection',
+          visibilityTime: 4000,
+          position: 'bottom', 
+        });
+      }
+    
 
       const handleSubmit = async () => {
         const formData = new FormData();
@@ -80,11 +96,16 @@ export default function CollectPayments() {
           console.log("Filename: " + fileName);
           console.log("Collectible:" + requiredCollectible); 
           console.log(response);
+          showSuccessToast
+          handleModal();
+          navigation.goBack(); 
           setError(false); 
         })
         .catch(function (error) {
           console.log(error);
           setError(!error)
+          showFailedToast
+          
          
         });
         
@@ -309,9 +330,9 @@ export default function CollectPayments() {
             {showImagePreview ? (
              
              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Ionicons name="image" color="#000000" size={15} style={{ marginRight: 5 }} />
-      <Text style={{ fontSize: 15 }}>{fileName}</Text>
-    </View>
+              <Ionicons name="image" color="#000000" size={15} style={{ marginRight: 5 }} />
+              <Text style={{ fontSize: 15 }}>{fileName}</Text>
+            </View>
              
             ) : (
               <Pressable style={styles.button} onPress={requestCameraPermissions}>
