@@ -50,6 +50,8 @@ export default function CollectPaymentForm() {
 
     const auth = useContext(AuthContext); 
 
+    const [fileName, setFileName] = useState('');
+
     const navigation = useNavigation<CheckScreenNavigationprop>();
      //checks passed data from console
      const continueButton = () => {
@@ -157,7 +159,7 @@ export default function CollectPaymentForm() {
               // Now you have the base64Image without the data URL prefix
               console.log(manipResult);
               setCapturedImage(base64Image);
-  
+              setFileName(generateUniqueFilename('png'));
               setImagePreview(true)
             }
           };
@@ -333,14 +335,27 @@ export default function CollectPaymentForm() {
                 </View>
 
                 <Text style={styles.textLabel}>Transaction Proof</Text>
-                <View style={styles.buttonUnfilled}>
-                        <Pressable style={styles.button} onPress={requestCameraPermissions}>
+
+                {CapturedImage?(
+                    <View style={styles.buttonUnfilled}>
+                      <Pressable style={styles.button} >
                         <Text style={styles.buttonUnfilledLabel}>
-                            <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
+                          <Ionicons name="image" color="#000000" size={15} style={{ marginRight: 5 }} />
+                        <Text style={{ fontSize: 15 }}>{fileName}</Text>
                         </Text>
-                        </Pressable>
-                     
+                      </Pressable>
+                
+                  </View>
+                ):(
+                    <View style={styles.buttonUnfilled}>
+                            <Pressable style={styles.button} onPress={requestCameraPermissions}>
+                            <Text style={styles.buttonUnfilledLabel}>
+                                <Ionicons name="camera" color="#000000" size={15} margin={5} /> Take a Picture
+                            </Text>
+                            </Pressable>
+                        
                     </View>
+                  )}
 
                     <View style={styles.body2}>
                         <Text style={styles.messageStyle}><Ionicons name="checkmark-circle" color='#8FC152' size={15}/>  Must have the correct and valid collectibles.</Text>
