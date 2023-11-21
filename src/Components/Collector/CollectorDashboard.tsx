@@ -1,4 +1,4 @@
-import { View, StyleSheet,Text, ActivityIndicator, FlatList, ScrollView } from "react-native";
+import { View, StyleSheet,Text, ActivityIndicator, FlatList, ScrollView, RefreshControl } from "react-native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthContext } from "../../Context/AuthContext";
@@ -13,6 +13,7 @@ import { BASE_URL } from "../../../config";
 import { RestAPI } from "../../Services/RestAPI";
 import RecentCollectionList from "./Lists/RecentCollectionList";
 import axios from "axios";
+import React from "react";
 
 export default function CollectorDashboard(){
     const [shown, setShown] = useState(false);
@@ -179,17 +180,22 @@ function formatDate(dateString:string): string {
 function RecentCollections(){
     const [sendRequest, assignCollector, loading, error,client_user, reseller_user, collector_user, contract, scheduledReminders, transaction, collectionHistory] = RestAPI(); 
     const auth = useContext(AuthContext);
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
  
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        sendRequest({
+            method: 'GET',
+            url: BASE_URL + "/collection-history/collector/" + auth?.user.entityId
+        });
+        setTimeout(() => setRefreshing(false), 1000);
+    }, [auth]);
+
     useEffect(() => {
-        if (auth?.user.entityId) {
-            sendRequest({
-                method: 'GET',
-                url: BASE_URL + "/collection-history/collector/" + auth?.user.entityId
-            });
-        } else {
-            alert("Error: Missing user entityId");
-        }
-    },[auth?.user.entityId]);
+        onRefresh();
+    },[onRefresh]);
 
     return(
 
@@ -216,12 +222,18 @@ function RecentCollections(){
                             />
                             </ScrollView>
                     )}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
                     />
 
               </View>
 
 
             ) : (
+                <ScrollView                  
+                refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } >
                 <View style={styles3.container}>
                     <View style={{alignItems:'center', justifyContent:'center'}}>
                       
@@ -230,6 +242,7 @@ function RecentCollections(){
 
                     </View>
                  </View>
+                 </ScrollView>
             )}
         </View>
 
