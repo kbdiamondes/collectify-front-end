@@ -46,7 +46,8 @@ import ResellerProfileModals from './src/Components/Reseller/Modals/ResellerProf
 import CollectorProfileModals from './src/Components/Collector/Modals/CollectorProfileModal';
 import { CollectorDashboardTabNavigator } from './src/Components/Collector/CollectorDashboardTabNavigator';
 
-
+import 'react-native-gesture-handler';
+import 'expo-dev-client';
 
 export type RootStackParamList = {
   Login: undefined;
