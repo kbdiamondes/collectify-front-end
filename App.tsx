@@ -48,6 +48,8 @@ import { CollectorDashboardTabNavigator } from './src/Components/Collector/Colle
 
 import 'react-native-gesture-handler';
 import 'expo-dev-client';
+import 'react-native-safe-area-context'; 
+import 'react-native-screens';
 
 export type RootStackParamList = {
   Login: undefined;
