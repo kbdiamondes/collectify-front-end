@@ -54,7 +54,7 @@ import 'react-native-screens';
 export type RootStackParamList = {
   Login: undefined;
   GetStarted: undefined;
-  Register: undefined;
+  Register: {screen: any};
 
   //Client
   ClientProfileModal: undefined; 

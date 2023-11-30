@@ -1,7 +1,7 @@
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { View, Text, Image, StyleSheet, Pressable, ScrollView} from "react-native";
-import { CheckScreenNavigationprop } from "../../App";
-import { useNavigation } from "@react-navigation/native";
+import { CheckScreenNavigationprop, RootStackParamList } from "../../App";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 
 const ResellImagePlaceHolder = require('../../assets/vector-2-scaled.png');
 const ClientImagePlaceHolder = require('../../assets/vector-3-scaled.png');
@@ -13,6 +13,7 @@ import { AuthContext } from "../Context/AuthContext";
 export default function TellMeAboutYourself(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
 
+    
     //handles logout
     const auth = useContext(AuthContext);
 
@@ -32,8 +33,7 @@ export default function TellMeAboutYourself(){
 
                 <View style={styles.header}>
                     <Text style={styles.textStyleHeader}>Tell us about yourself</Text>
-                    <Text style={styles.textStyleSubHeader}>Select the business model that apply to you from the cards below</Text>
-                    <Pressable onPress={handlePress}><Text>Sign out</Text></Pressable>
+                    <Text style={styles.textStyleSubHeader}>Select the business model that apply to you from the cards below</Text>                    
                 </View>
 
                 <ScrollView style={styles.scrollStyle}>
@@ -41,7 +41,7 @@ export default function TellMeAboutYourself(){
                     <View style={styles.main}>
                         <View style={styles.body}>
 
-                            <Pressable onPress={()=>navigation.navigate('Collect')}>
+                            <Pressable onPress={()=>navigation.navigate('Register', {screen: "/resellers"} )}>
                                 <View style={styles.box}>
                                     <View style={styles.imageContainer}>
                                         <Image style={styles.image} source={ResellImagePlaceHolder}/>
@@ -51,7 +51,7 @@ export default function TellMeAboutYourself(){
                                 </View>
                             </Pressable>
 
-                            <Pressable onPress={()=>navigation.navigate('DuePayments')}>
+                            <Pressable onPress={()=>navigation.navigate('Register', {screen: "/clients"})}>
                                 <View style={styles.box}>
                                     <View style={styles.imageContainer}>
                                         <Image style={styles.image} source={ClientImagePlaceHolder}/>
@@ -61,7 +61,7 @@ export default function TellMeAboutYourself(){
                                 </View>
                             </Pressable>
 
-                            <Pressable onPress={()=>navigation.navigate('SoldItems')}>
+                            <Pressable onPress={()=>navigation.navigate('Register', {screen: "/collectors"})}>
                                 <View style={styles.box}>
                                     <View style={styles.imageContainer}>
                                         <Image style={styles.image} source={CollectorImagePlaceHolder}/>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     header:{
         flex: 0.5, 
         height:hp(70), 
-        paddingTop: hp(15),
+        paddingTop: hp(10),
         paddingLeft: hp(5), 
         paddingRight: hp(5),
         alignItems:'center', 

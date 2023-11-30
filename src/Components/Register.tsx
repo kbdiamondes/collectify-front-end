@@ -1,17 +1,70 @@
-import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import React, { useState } from "react";
 import { SafeAreaView, Text, View, StyleSheet, Pressable, TextInput, KeyboardAvoidingView} from "react-native";
-import { CheckScreenNavigationprop } from "../../App";
+import { CheckScreenNavigationprop, RootStackParamList } from "../../App";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import axios from "axios";
+import { BASE_URL } from "../../config";
+import Toast from "react-native-toast-message";
 
+
+const showSuccessToast = () => {
+    Toast.show({
+      type: 'success',        
+      text1: 'Welcome to Collectify',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
+  
+  
+  const showFailedToast = () => {
+    Toast.show({
+      type: 'error',        
+      text1: 'Registration Error',
+      text2: 'Please check your connection and try again',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
+  
 
 export default function Register(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
+    const screen = useRoute<RouteProp<RootStackParamList, 'Register'>>().params.screen;
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
 
-    function registerComplete(){
-        alert("Registered")
-        navigation.push('TellUsMoreAboutYourself')
+    const handlePress = async () => {
+        const apiURL = `${BASE_URL}${screen}`; // convert screen to lowercase and append 's' to match your API endpoints
+        console.log(apiURL)
+        const nameParts = fullName.split(' ');
+        const firstname = nameParts[0];
+        const middlename = nameParts.length > 2 ? nameParts[1] : '';
+        const lastname = nameParts.length > 2 ? nameParts[2] : nameParts[1];
+
+        const data = {
+            username,
+            fullName,
+            address: null,
+            email,
+            firstname,
+            middlename,
+            lastname,
+        };
+
+        try {
+            const response = await axios.post(apiURL, data);
+            console.log(response.data);  
+            showSuccessToast();   
+            navigation.goBack();       
+            navigation.goBack();
+        } catch (error) {
+            showFailedToast();
+        }
     }
 
     return(
@@ -24,13 +77,13 @@ export default function Register(){
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} secureTextEntry={true} placeholder="Enter password" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Full Name" ></TextInput>
-                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Email Address" ></TextInput>
+                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Enter username" onChangeText={setUsername}></TextInput>
+                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} secureTextEntry={true} placeholder="Enter password" onChangeText={setPassword}></TextInput>
+                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Full Name" onChangeText={setFullName}></TextInput>
+                    <TextInput placeholderTextColor="#C2C6CC" style={styles.textBoxStyle} placeholder="Email Address" onChangeText={setEmail} ></TextInput>
                     
                     <View style={styles.button}>
-                        <Pressable onPressIn={registerComplete}>
+                        <Pressable onPress={handlePress}>
                             <Text style={styles.buttonLabel}>Register</Text>
                         </Pressable>
                     </View>               

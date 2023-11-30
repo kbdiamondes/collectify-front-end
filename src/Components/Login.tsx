@@ -81,7 +81,7 @@ export default function Login(){
             <Text onPress={()=>navigation.goBack()}>Back</Text>
                     <Text style={styles.textStyleHeader}>Login</Text>
 
-                    <Pressable style={styles.buttonUnfilled} onPress={()=>navigation.push('Register')}>
+                    <Pressable style={styles.buttonUnfilled} onPress={()=>navigation.push('TellUsMoreAboutYourself')}>
                         <Text style={styles.buttonUnfilledLabel}>No account yet? Register Now!</Text>
                     </Pressable> 
 
