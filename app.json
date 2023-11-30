@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash-white.png",
       "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F9F8FD"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -25,8 +25,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/collectify-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/collectify-adaptive-icon.png",
+        "backgroundColor": "#F9F8FD"
       },
       //"androidUsesCleartextTraffic": true,
       "package": "com.kbdiamondes.collectify"
