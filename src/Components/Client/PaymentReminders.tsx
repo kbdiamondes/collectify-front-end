@@ -24,6 +24,7 @@ import DashboardHeader from '../DashboardHeader';
 import { CheckScreenNavigationprop } from '../../../App';
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../Context/AuthContext';
+import {Ionicons} from '@expo/vector-icons'
 
 export default function PaymentReminders(){
     
@@ -32,24 +33,34 @@ export default function PaymentReminders(){
 
     return(
 
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <Pressable style={styles.header} onPress={() => navigation.navigate('ClientTabNavigator')}>
                 <DashboardHeader username={auth?.user?.username ?? ''}/>
             </Pressable>
             <ScrollView>
             <View style={styles.container}>
-                <Text style={styles.textHeader}>Recent Payment Reminders</Text>
-                {
-                    scheduledReminders.map((item, index)=>{
-                        return <PaymentReminderList key={index} collectorName={item.collectorName} messageStatus={item.messageStatus}/>
-                    })
-                }
+                
+                <View style={{alignItems:'center', justifyContent:'center'}}>
+                        
+                        <Ionicons name="warning" size={hp(10)} color="#9F9F9F" />
+                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>Feature coming soon!</Text>
+
+                    </View>
+            
             </View>    
             </ScrollView>     
         </SafeAreaView>
 
     );
 }
+
+/*
+                <Text style={styles.textHeader}>Recent Payment Reminders</Text>
+                {
+                    scheduledReminders.map((item, index)=>{
+                        return <PaymentReminderList key={index} collectorName={item.collectorName} messageStatus={item.messageStatus}/>
+                    })
+                } */
 
 const styles = StyleSheet.create({
     container:{

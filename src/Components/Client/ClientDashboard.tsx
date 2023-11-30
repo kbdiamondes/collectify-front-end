@@ -13,6 +13,7 @@ import { BASE_URL } from "../../../config";
 import TransactionHistoryList from "./Lists/TransactionHistoryList";
 import { RestAPI } from "../../Services/RestAPI";
 import RecentTransactionList from "./Lists/RecentTransactionList";
+import Toast from "react-native-toast-message";
 import axios from "axios";
 import React from "react";
 
@@ -45,6 +46,16 @@ export default function ClientDashboard(){
     
         fetchTotalDueAmount();
       }, [auth?.user?.entityId]);
+
+      const showInfoToast = () => {
+        Toast.show({
+          type: 'info',
+          text1: 'We are working in this feature!',
+          visibilityTime: 4000, 
+          position: 'bottom',
+        });
+      }
+
 
     return(
         <SafeAreaView style={styles.container}>
@@ -130,7 +141,7 @@ export default function ClientDashboard(){
                     </View>
 
                     <View style={styles2.miniButtonWrapper}>
-                        <Pressable onPress={() => (navigation.navigate('PaymentReminders'))} style={styles2.miniButtonPressable}>
+                        <Pressable onPress={showInfoToast} style={styles2.miniButtonPressable}>
                         <View style={styles2.reminderMiniButton}>
                         <Ionicons name="alert-circle" color="#965E65"  size={hp(4)}/>
                         </View>
@@ -270,7 +281,6 @@ function RecentTransaction(){
 const styles3 = StyleSheet.create({
     container:{
         flex:1, 
- 
 
     }, 
     textHeader:{

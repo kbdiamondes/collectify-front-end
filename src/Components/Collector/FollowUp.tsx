@@ -8,6 +8,7 @@ import { AuthContext } from '../../Context/AuthContext';
 import DashboardHeader from '../DashboardHeader';
 import { useNavigation } from '@react-navigation/native';
 import { CheckScreenNavigationprop } from '../../../App';
+import {Ionicons} from '@expo/vector-icons'
 
 const recentTransaction= [
     {
@@ -41,12 +42,12 @@ export default function FollowUp(){
                     <DashboardHeader username={auth?.user?.username ?? ''}/>
                 </Pressable>
                 </View>
-                <Text style={styles.textHeader}>Recent Followup</Text>
-                {
-                    recentTransaction.map((item, index)=>{
-                        return <FollowUpAssignment key={index} personName={item.personName} itemStatus={item.itemStatus}/>
-                    })
-                }
+                <View style={{alignItems:'center', justifyContent:'center', marginTop: hp(25), marginBottom: hp(25)}}>
+                        
+                        <Ionicons name="warning" size={hp(10)} color="#9F9F9F" />
+                        <Text style={{fontSize: hp(2), fontWeight: 'bold', color: '#9F9F9F'}}>We are working on this feature.</Text>
+
+                </View>
             </View>      
 
 
