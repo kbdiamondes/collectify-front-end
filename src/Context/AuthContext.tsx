@@ -36,10 +36,10 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     tableName: "",
   });
 
-  const login = (username: string) => {
+  const login = (username: string, password: string) => {
     setLoading(true)
     axios
-      .post(BASE_URL+'/login', { username }, {
+      .post(BASE_URL+'/login', { username, password }, {
         headers: {
           'Content-Type': 'application/json',
         }
@@ -51,7 +51,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           console.log(response.data)          
           setUser({
             username: username,
-            password: '', // Set the password as needed
+            password: password, // Set the password as needed
             entityId: response.data.entityId,
             tableName: response.data.tableName,
             isLoggedIn: true,

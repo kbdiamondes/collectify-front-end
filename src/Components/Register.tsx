@@ -48,6 +48,7 @@ export default function Register(){
 
         const data = {
             username,
+            password,
             fullName,
             address: null,
             email,
