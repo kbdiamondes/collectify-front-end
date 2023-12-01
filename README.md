@@ -6,6 +6,9 @@ _This mobile application addresses the challenges faced by Micro, Small, and Med
 
 > This documentation serves as a guide for current developers in setting up their environment. 
 
+## Build Release v2.0.0
+https://expo.dev/accounts/kbdiamondes/projects/collectify/builds/9693e942-efd2-4edb-a188-122d3fae850d
+
 ## Front End Techstack
 - Typescript
 - Node.js
