@@ -14,7 +14,14 @@ import { Contract, PaymentTransaction } from "../../Services/RestAPI";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Toast from "react-native-toast-message";
 
-
+const showNoTransactionErrorToast = () => {
+    Toast.show({
+      type: 'error',        
+      text1: 'No unpaid dues yet!',
+      visibilityTime: 4000,
+      position: 'bottom', 
+    });
+  }
 
 export default function ScheduleNewPaymentReminder(){
     const navigation = useNavigation<CheckScreenNavigationprop>()
@@ -42,7 +49,9 @@ export default function ScheduleNewPaymentReminder(){
           setUnpaidPaymentTransaction(response.data);
         })
         .catch((error) => {
-          alert('Failed to fetch unpaid transactions');
+          showNoTransactionErrorToast();
+          navigation.goBack();
+          navigation.goBack();
           console.error(error);
         });
     }, []);
@@ -277,6 +286,8 @@ const showSuccessToast = () => {
       position: 'bottom', 
     });
   }
+
+  
 const styles = StyleSheet.create({
     container:{
         flex: 1,
