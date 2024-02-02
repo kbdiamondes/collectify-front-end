@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { CheckScreenNavigationprop } from '../../../../App';
         
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React from 'react';
 
 
 type PaymentProps = {

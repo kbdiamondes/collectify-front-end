@@ -1,6 +1,6 @@
 import {SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, ActivityIndicator, Pressable, RefreshControl} from 'react-native';
 import DuePaymentList from './Lists/DuePaymentList';
-
+import { isSameMonth, parseISO } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
 
 //import dueItems from '../../../JsonData/items.json'
@@ -23,11 +23,10 @@ export default function DuePayments(){
     const [unpaidContracts, setUnpaidContracts] = useState();
     const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext);
-
     const [refreshing, setRefreshing] = React.useState(false);
-
+    
     const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
+       setRefreshing(true);
         sendRequest({ 
             method: 'GET', 
             url: BASE_URL + "/due-payments/client/"+ auth?.user.entityId+"/unpaid-transactions"
@@ -35,11 +34,21 @@ export default function DuePayments(){
         setTimeout(() => setRefreshing(false), 1000);
     }, [auth]);
 
+
     useEffect(() => {
         onRefresh(); },[onRefresh]);
 
-
-
+    const filteredPaymentTransactions = paymentTransaction?.filter((item: {
+            startingDate: string;
+            endDate: string;
+             }) => {
+            const { startingDate, endDate } = item;
+            const startDate = parseISO(startingDate);
+            const parsedEndDate = parseISO(endDate);
+            const currentDate = new Date();
+          
+            return isSameMonth(startDate, currentDate) && currentDate <= parsedEndDate;
+          });
     return(
             <View style={styles.container}>
                 {loading?(
@@ -48,37 +57,34 @@ export default function DuePayments(){
                     </View>
                 ): error? (
                     <Text>{error}</Text>
-                ): paymentTransaction?( 
-                    <View style={styles.container}>
-                        <Pressable style={styles.header} onPress={() => navigation.navigate('ClientTabNavigator')}>
-                            <DashboardHeader username={auth?.user?.username ?? ''}/>
-                        </Pressable>
+                        ): paymentTransaction?( 
+                            <View style={styles.container}>
+                               <Pressable style={styles.header} onPress={() => navigation.navigate('ClientTabNavigator')}>
+                                 <DashboardHeader username={auth?.user?.username ?? ''}/>
+                                </Pressable>
 
-                    <Text style={styles.textHeader}>Upcoming Dues</Text>
-                    <FlatList
-                            data={paymentTransaction}
-                            keyExtractor={(item) => item.payment_transactionid.toString()}
-                            renderItem={({ item }) => (  
-                                <ScrollView>
-                                    <DuePaymentList
-                                        payment_transactionid={item.payment_transactionid}
-                                        orderid={item.orderid}
-                                        itemName={item.itemName}
-                                        amountdue={item.amountdue}
-                                        startingDate={item.startingDate}
-                                        endDate={item.endDate}
-                                        installmentNumber={item.installmentNumber}
-                                        isPaid={item.isPaid}
-                                        isCollected={item.isCollected}
-                                    />
-                                </ScrollView>                            
-                            )}
-                            refreshControl={
-                                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                            }
-                            />
+                                <Text style={styles.textHeader}>Upcoming Dues</Text>
+                                    <FlatList
+                                        data={filteredPaymentTransactions}
+                                        keyExtractor={(item) => item.payment_transactionid.toString()}
+                                        renderItem={({ item }) => (
+                                        <DuePaymentList
+                                            payment_transactionid={item.payment_transactionid}
+                                            orderid={item.orderid}
+                                            itemName={item.itemName}
+                                            amountdue={item.amountdue}
+                                            startingDate={item.startingDate}
+                                            endDate={item.endDate}
+                                            installmentNumber={item.installmentNumber}
+                                            isPaid={item.isPaid}
+                                            isCollected={item.isCollected}
+                                        />
+                                    )}
+                            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                        />
 
                   </View>
+                  
                 ):(
                     <View style={styles.container}>
                         <ScrollView style={{flex:1, alignContent: 'center', marginVertical: hp(30)}}               
