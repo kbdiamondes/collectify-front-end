@@ -39,16 +39,23 @@ export default function DuePayments(){
         onRefresh(); },[onRefresh]);
 
     const filteredPaymentTransactions = paymentTransaction?.filter((item: {
-            startingDate: string;
-            endDate: string;
-             }) => {
-            const { startingDate, endDate } = item;
-            const startDate = parseISO(startingDate);
-            const parsedEndDate = parseISO(endDate);
-            const currentDate = new Date();
+            startingdate: string;  // Correct casing here
           
-            return isSameMonth(startDate, currentDate) && currentDate <= parsedEndDate;
-          });
+        }) => {
+            const { startingdate} = item;  // Correct casing here
+        
+            // Check if startingDate and endDate are defined
+            if (startingdate) {
+                const startDate = parseISO(startingdate);
+                const currentDate = new Date();
+        
+                return isSameMonth(startDate, currentDate);
+            }
+        
+            return false; // or handle the case where startingdate or endDate is undefined
+        });
+        
+        
     return(
             <View style={styles.container}>
                 {loading?(
