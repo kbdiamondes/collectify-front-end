@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { CheckScreenNavigationprop } from "../../App";
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React from "react";
 
 
 const PlaceHolderImage = require('../../assets/vector-1-welcome.png');

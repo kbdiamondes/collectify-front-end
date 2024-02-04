@@ -6,6 +6,7 @@ import {SafeAreaView, View, StyleSheet, Platform} from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import CollectAllPaymentForm from "./CollectAllPaymentForm";
 import CollectorDashboard from "./CollectorDashboard";
+import React from "react";
 
 
 const Tab = createBottomTabNavigator()

@@ -7,6 +7,7 @@ import PaymentRecord from "./PaymentRecord";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Platform, View } from "react-native";
 import CollectAllPaymentForm from "./CollectAllPaymentForm";
+import React from "react";
 
 
 const Tab = createBottomTabNavigator()

@@ -10,6 +10,7 @@ const CollectorImagePlaceHolder = require('../../assets/vector-4-scaled.png');
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
+import React from "react";
 export default function TellMeAboutYourself(){
     const navigation = useNavigation<CheckScreenNavigationprop>(); 
 
