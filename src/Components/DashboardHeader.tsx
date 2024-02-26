@@ -3,6 +3,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { AuthContext } from "../Context/AuthContext";
 import { useContext } from "react";
 import { Avatar } from '@rneui/themed';
+import React from "react";
 
 type DashboardHeaderProps = {
     username: string; 

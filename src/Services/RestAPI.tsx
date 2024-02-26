@@ -129,7 +129,7 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
     const navigation = useNavigation<CheckScreenNavigationprop>();
     function sendRequest(config: AxiosRequestConfig<any>) {
         setLoading(true);
-
+console.log(config);
          axios(config)
             .then((response) => {
                 setError('');
@@ -147,7 +147,8 @@ export const RestAPI = (): [(config: AxiosRequestConfig<any>) => void, (idata:ID
                   //console.log("Collection Log:", response.data.collectionHistory);
               } else {
                   console.log("Response data is not an array:", response.data);
-              }
+               
+;              }
                 
             })
             .catch((error) => {

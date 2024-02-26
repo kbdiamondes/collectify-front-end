@@ -2,6 +2,7 @@ import {SafeAreaView, View, Text, StyleSheet, Pressable, GestureResponderEvent} 
 import {Ionicons} from '@expo/vector-icons'; 
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React from 'react';
 
 type PaymentReminderProps = {
     key:number, 

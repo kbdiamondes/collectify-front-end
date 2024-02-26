@@ -25,7 +25,8 @@ export default function CollectAllPaymentForm() {
 
     const [CapturedImage, setCapturedImage] = useState<any>(); 
     const [showImagePreview, setImagePreview] = useState(false); 
-
+    const navigation  = useNavigation<CheckScreenNavigationprop>();
+    
     const [errors, setError] = useState(false)
 
     useEffect(() => {
@@ -80,6 +81,8 @@ export default function CollectAllPaymentForm() {
         console.log("Filename: " + uniqueFilename);
         console.log(response);
         setError(false); 
+        navigation.goBack();
+        navigation.goBack();        
       })
       .catch(function (error) {
         console.log(error);

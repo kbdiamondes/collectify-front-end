@@ -1,3 +1,4 @@
+import React from "react"
 import { ImageBackground, View } from "react-native"
 
 const CameraPreview = ({photo}: any) => {

@@ -9,6 +9,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import ActiveContracts from "./ActiveContracts";
 import ActiveContractListScreen from "./ActiveContracts";
 import CreateNewContractScreen from "./CreateNewContract";
+import React from "react";
 
 
 
