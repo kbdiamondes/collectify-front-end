@@ -26,7 +26,7 @@ export default function CollectAllPaymentForm() {
     const [CapturedImage, setCapturedImage] = useState<any>(); 
     const [showImagePreview, setImagePreview] = useState(false); 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
-    
+
     const [errors, setError] = useState(false)
 
     useEffect(() => {
@@ -92,8 +92,6 @@ export default function CollectAllPaymentForm() {
       
       console.log(CapturedImage);
     }
-      
-
     let camera: Camera | null;
 
     const requestCameraPermissions = async () => {
