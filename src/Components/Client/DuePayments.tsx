@@ -5,7 +5,6 @@ import React, { useContext, useEffect, useState } from 'react';
 
 //import dueItems from '../../../JsonData/items.json'
 
-
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import axios from 'axios';
 import { Contract, IClient, RestAPI } from '../../Services/RestAPI';
@@ -24,7 +23,10 @@ export default function DuePayments(){
     const navigation = useNavigation<CheckScreenNavigationprop>();
     const auth = useContext(AuthContext);
     const [refreshing, setRefreshing] = React.useState(false);
-    
+    const [loadings, setLoading] = useState(false);
+
+
+
     const onRefresh = React.useCallback(() => {
        setRefreshing(true);
         sendRequest({ 

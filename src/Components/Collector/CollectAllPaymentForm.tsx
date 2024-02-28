@@ -22,7 +22,7 @@ export default function CollectAllPaymentForm() {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [startCamera,setStartCamera] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
-
+    const [load, setLoading] = useState(false); 
     const [CapturedImage, setCapturedImage] = useState<any>(); 
     const [showImagePreview, setImagePreview] = useState(false); 
     const navigation  = useNavigation<CheckScreenNavigationprop>();
@@ -59,14 +59,12 @@ export default function CollectAllPaymentForm() {
 
     
     const handleSubmit = async () => {
+      setLoading(true);
       const formData = new FormData();
 
           // Generate a unique filename
       const fileExtension = 'png'; // Change this to the actual file extension
       const uniqueFilename = generateUniqueFilename(fileExtension);
-
-
-     
       formData.append('base64Image', CapturedImage);
       formData.append('fileName', uniqueFilename);
       formData.append('contentType', 'image/png');
@@ -81,12 +79,16 @@ export default function CollectAllPaymentForm() {
         console.log("Filename: " + uniqueFilename);
         console.log(response);
         setError(false); 
+        handleModal();
         navigation.goBack();
-        navigation.goBack();        
+        navigation.goBack();       
+        setLoading(false); 
       })
       .catch(function (error) {
         console.log(error);
         setError(!error)
+        handleModal();
+        setLoading(false);
        
       });
       

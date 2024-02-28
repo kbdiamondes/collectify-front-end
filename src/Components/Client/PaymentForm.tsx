@@ -10,7 +10,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { BASE_URL } from '../../../config';
 import Toast from "react-native-toast-message";
 import { AuthContext } from '../../Context/AuthContext';
-
+import CommonLoadingScreen from '../Commons/CommonLoadingScreen';
 
 export default function PaymentForm(){
     const nameProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.nameprop;
@@ -30,7 +30,7 @@ export default function PaymentForm(){
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [isModalVisible2, setIsModalVisible2] = useState(false)
     const [selectedValue, setSelectedValue] = useState('');
-
+    const [loading, setLoading] = useState(false); 
     const [error, setError] = useState(false)
     const handleModal = () => setIsModalVisible(()=>!isModalVisible)
     
@@ -60,6 +60,8 @@ export default function PaymentForm(){
     const clientidProp = auth?.user?.entityId ?? 0;
 
     const handleSubmit = async () => {
+
+        setLoading(true);
         const formData = new FormData();
         formData.append('amount', requiredCollectible);
         formData.append('base64Image', photoProp);
@@ -71,8 +73,9 @@ export default function PaymentForm(){
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
         })
+
+
         .then(function (response) {
-          
           console.log(photoProp);
           console.log(contractIdProp);
           console.log(requiredCollectible); 
@@ -82,6 +85,8 @@ export default function PaymentForm(){
           setError(false); 
           navigation.goBack();
           navigation.goBack();
+          setLoading(false);
+
         })
         .catch(function (error) {
           showFailedToast();
@@ -90,6 +95,7 @@ export default function PaymentForm(){
           console.log(clientidProp);
           setError(true); 
           handleModal();
+          setLoading(false);
          
         });
         
