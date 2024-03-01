@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
 import { AuthContext } from '../../../Context/AuthContext';
 import Toast from "react-native-toast-message";
+import React from 'react';
 
 type CollectionAssignmentProps = {
     key:number, 

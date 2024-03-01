@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import DashboardHeader from "../../DashboardHeader";
 import Toast from "react-native-toast-message";
 import {Ionicons} from '@expo/vector-icons'; 
+import React from "react";
 
 
 export default function CollectorProfileModals(){

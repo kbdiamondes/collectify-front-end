@@ -8,6 +8,7 @@ import { RestAPI } from '../../../Services/RestAPI';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { AuthContext } from '../../../Context/AuthContext';
 import axios from 'axios';
+import React from 'react';
 
 
 type CollectAllPaymentFormProps = { 

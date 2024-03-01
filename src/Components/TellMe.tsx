@@ -71,9 +71,6 @@ export default function TellMeAboutYourself(){
                                     <Text style={styles.containerTextHeader}>I want to Collect</Text>
                                 </View>
                             </Pressable>
-
-
-
                         </View>
                     </View>
                 </ScrollView>

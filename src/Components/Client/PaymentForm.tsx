@@ -10,7 +10,6 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { BASE_URL } from '../../../config';
 import Toast from "react-native-toast-message";
 import { AuthContext } from '../../Context/AuthContext';
-import CommonLoadingScreen from '../Commons/CommonLoadingScreen';
 
 export default function PaymentForm(){
     const nameProp = useRoute<RouteProp<RootStackParamList, 'PaymentForm'>>().params.nameprop;
@@ -48,8 +47,6 @@ export default function PaymentForm(){
       return `${uniqueId}.${fileExtension}`;
     };
 
-
-
     const confirmContract = () =>{
       handleSubmit()
     }
@@ -73,8 +70,6 @@ export default function PaymentForm(){
             'Content-Type': 'multipart/form-data', // Corrected header value
           }
         })
-
-
         .then(function (response) {
           console.log(photoProp);
           console.log(contractIdProp);
@@ -83,8 +78,7 @@ export default function PaymentForm(){
           showSuccessToast(); 
           handleModal();
           setError(false); 
-          navigation.goBack();
-          navigation.goBack();
+          navigation.navigate('ClientDashboardTabNavigator', {screen: 'Transaction History'});
           setLoading(false);
 
         })
@@ -117,7 +111,7 @@ export default function PaymentForm(){
                         <Text style={{fontSize: hp(2.5)}}>Confirm Payment?</Text>
                         <Text style={{fontSize: hp(1.5), fontWeight: '300', flexWrap: 'wrap', marginTop: hp(1)}}>Make sure to confirm your payment details. </Text>
                         <View style={styles.modalButtonConfirmation}>
-                            <Pressable onPressIn={confirmContract}>
+                            <Pressable onPressIn={confirmContract} >
                                 <Text style={{fontSize: hp(1.7), fontWeight: 'bold', color: '#fff'}}>Confirm</Text>
                             </Pressable>
                         </View> 

@@ -13,6 +13,8 @@ import ScheduleNewPaymentReminder from "./ScheduleNewPaymentReminder";
 import ClientDashboard from "./ClientDashboard";
 import { AuthContext } from "../../Context/AuthContext";
 import { useContext } from "react";
+import React from "react";
+import CommonLoadingScreen from "../Loading Screens/ClientLoadingScreen";
 
 
 const Tab = createBottomTabNavigator()
@@ -155,6 +157,7 @@ export function ClientDashboardTabNavigator() {
       
 
    )
+   
 }
 
 

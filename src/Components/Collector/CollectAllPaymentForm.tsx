@@ -47,8 +47,8 @@ export default function CollectAllPaymentForm() {
     const confirmContract = () => {
         handleSubmit();
       
-        alert("Success");
-        handleModal();
+        //alert("Success");
+        //handleModal();
 
       };
 
@@ -80,8 +80,7 @@ export default function CollectAllPaymentForm() {
         console.log(response);
         setError(false); 
         handleModal();
-        navigation.goBack();
-        navigation.goBack();       
+        navigation.navigate('CollectorTabNavigator', {screen: 'Record'});  
         setLoading(false); 
       })
       .catch(function (error) {
@@ -245,6 +244,7 @@ export default function CollectAllPaymentForm() {
                         
     return(
         <SafeAreaView>
+
             <Modal animationType="slide" transparent={true} visible={isModalVisible}>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex:1, backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
 
@@ -334,7 +334,7 @@ export default function CollectAllPaymentForm() {
                   </View>   
 
                   <View style={styles.buttonContainer}>
-                  <Pressable style={styles.button} onPressIn={continueButton}>
+                  <Pressable style={styles.button} onPressIn={handleModal}>
                       <Text style={styles.buttonLabel}>
                           Continue
                       </Text>

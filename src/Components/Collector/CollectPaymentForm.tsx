@@ -65,14 +65,14 @@ export default function CollectPaymentForm() {
     const confirmContract = () => {
         handleSubmit();
       
-        if(!error){
-          showSuccessToast();
-          handleModal();        
-        }else{
-          showFailedToast();
-          handleModal();
-          navigation.goBack();
-        }
+        // if(!error){
+        //   showSuccessToast();
+        //   handleModal();        
+        // }else{
+        //   showFailedToast();
+        //   handleModal();
+        //   navigation.goBack();
+        // }
       
 
       };
@@ -108,12 +108,16 @@ export default function CollectPaymentForm() {
           console.log("Filename: " + uniqueFilename);
           console.log("Collectible:" + requiredCollectible); 
           console.log(response);
+          showSuccessToast();
+          handleModal();    
           setError(false); 
+          navigation.navigate('CollectorTabNavigator', {screen: 'Record'});  
         })
         .catch(function (error) {
           console.log(error);
           setError(!error)
-         
+          showFailedToast();
+          handleModal();
         });
         
         console.log("Due Amount: " + requiredCollectible);

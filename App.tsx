@@ -39,6 +39,7 @@ import { ClientDashboardTabNavigator } from './src/Components/Client/ClientDashb
 import PaymentReminders from './src/Components/Client/PaymentReminders';
 import ClientProfileModals from './src/Components/Client/Modals/ClientProfileModal';
 
+import ClientLoadingScreen from './src/Components/Loading Screens/ClientLoadingScreen';
 import Toast from 'react-native-toast-message';
 import ResellerDashboard from './src/Components/Reseller/ResellerDashboard';
 import { ResellerDashboardTabNavigator } from './src/Components/Reseller/ResellerDashboardTabNavigator';
@@ -50,11 +51,15 @@ import 'react-native-gesture-handler';
 import 'expo-dev-client';
 import 'react-native-safe-area-context'; 
 import 'react-native-screens';
+import CollectorLoadingScreen from './src/Components/Loading Screens/CollectorLoadingScreen';
+
 
 export type RootStackParamList = {
   Login: undefined;
   GetStarted: undefined;
   Register: {screen: any};
+  // ClientLoading: undefined;
+  // CollectorLoading: undefined;
 
   //Client
   ClientProfileModal: undefined; 
@@ -137,6 +142,8 @@ export default function App(){
       <Stack.Screen name="GetStarted" component={GetStarted} options={{headerShown:false}}/>
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
+      {/* <Stack.Screen name="ClientLoading" component={ClientLoadingScreen} options={{headerShown: false}}/>
+      <Stack.Screen name="CollectorLoading" component={CollectorLoadingScreen} options={{headerShown: false}}/> */}
       
       <Stack.Screen name="ClientProfileModal" component={ClientProfileModals} options={{headerShown: false}}/>
       <Stack.Screen name="ClientTabNavigator" component={TabNavigator} options={{headerShown: false}}/>
