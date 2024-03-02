@@ -110,6 +110,28 @@ Keith Brylle Diamante
 Bil Badato
 Harvey Logroño
 
+### Quality Tester
+Francis Jasper P. Manto
+
+### Troubleshooter
+Marc Peterson Suarez
+
 ## License
 
 This project is developed in compliance for the college senior subject **Capstone 2**
+
+## To the Future Devs Assign to this Project 
+Please Contact Keith Brylle Diamante For concerns and full review from the changes Contact Francis Manto
+~ QA Jasper
+
+
+## Future plans
+- App optimization[No Delays when using app]
+- Loading Screens and Formats (Flexible Screen for multiple devices)
+- Transaction Encryption
+- In FE, need to clean up unused imports
+- In FE, need to add Credit System
+- System upgrade and Chat System CLI to COL
+
+
+
